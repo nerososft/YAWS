@@ -11,6 +11,7 @@
 #include <map>
 #include <random>
 #include <time.h>
+#include <algorithm>
 
 namespace {
 
@@ -86,12 +87,17 @@ namespace Raft {
         }
 
         void StartElection(double now) {
-            std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
+            ++sharedProperties->configuration.currentTerm;
+
+
+            sharedProperties->votedThisTerm = true;
+            sharedProperties->votedFor = sharedProperties->configuration.selfInstanceNumber;
             sharedProperties->votesForUs = 1;
+
             const auto message = Message::CreateMessage();
             message->raftMessage->type = RaftMessageImpl::Type::RequestVote;
             message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
-            message->raftMessage->requestVoteDetails.term = ++sharedProperties->configuration.currentTerm;
+            message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
             for (auto &instance:sharedProperties->instances) {
                 instance.second.awaitingVote = false;
@@ -245,45 +251,53 @@ namespace Raft {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
             case RaftMessageImpl::Type::RequestVote: {
-                if (raftServer->sharedProperties->configuration.currentTerm < message->raftMessage->requestVoteDetails.term) {
-                    raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
-                }
-
                 const auto response = Message::CreateMessage();
                 response->raftMessage->type = RaftMessageImpl::Type::RequestVoteResults;
-                response->raftMessage->requestVoteResultsDetails.term = message->raftMessage->requestVoteDetails.term;
+                response->raftMessage->requestVoteResultsDetails.term = std::max(
+                        message->raftMessage->requestVoteDetails.term,
+                        raftServer->sharedProperties->configuration.currentTerm
+                );
 
-                if (raftServer->sharedProperties->configuration.currentTerm > message->raftMessage->requestVoteDetails.term) {
+                if (raftServer->sharedProperties->configuration.currentTerm >
+                    message->raftMessage->requestVoteDetails.term) {
                     response->raftMessage->requestVoteResultsDetails.voteGranted = false;
-                } else if (raftServer->sharedProperties->votedThisTerm &&
+                } else if (raftServer->sharedProperties->configuration.currentTerm ==
+                           message->raftMessage->requestVoteDetails.term &&
+                           raftServer->sharedProperties->votedThisTerm &&
                            raftServer->sharedProperties->votedFor != senderInstanceNumber) {
                     response->raftMessage->requestVoteResultsDetails.voteGranted = false;
                 } else {
                     response->raftMessage->requestVoteResultsDetails.voteGranted = true;
                     raftServer->sharedProperties->votedThisTerm = true;
                     raftServer->sharedProperties->votedFor = senderInstanceNumber;
+                    raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
                     raftServer->RevertToFollower();
                 }
                 raftServer->SendMessage(message, senderInstanceNumber, now);
             }
                 break;
             case RaftMessageImpl::Type::RequestVoteResults: {
-
                 auto &instance = raftServer->sharedProperties->instances[senderInstanceNumber];
-                instance.awaitingVote = false;
                 if (message->raftMessage->requestVoteResultsDetails.voteGranted) {
-                    ++raftServer->sharedProperties->votesForUs;
-                    if (raftServer->sharedProperties->votesForUs >=
-                        raftServer->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
-                        raftServer->sharedProperties->isLeader = true;
+                    if (instance.awaitingVote) {
+                        ++raftServer->sharedProperties->votesForUs;
+                        if (raftServer->sharedProperties->votesForUs >=
+                            raftServer->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
+                            raftServer->sharedProperties->isLeader = true;
+                        }
                     }
                 }
             }
                 break;
 
             case RaftMessageImpl::Type::HeartBeat: {
-                if (raftServer->sharedProperties->configuration.currentTerm < message->raftMessage->requestVoteDetails.term) {
+                if (raftServer->sharedProperties->configuration.currentTerm <
+                    message->raftMessage->requestVoteDetails.term) {
+                    raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->heartBeatDetails.term;
                     raftServer->RevertToFollower();
+                } else if (raftServer->sharedProperties->configuration.currentTerm ==
+                           message->raftMessage->requestVoteDetails.term) {
+                    raftServer->ResetElectionTimer();
                 }
             }
                 break;
