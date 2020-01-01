@@ -9,10 +9,13 @@
 #include <memory>
 #include <mutex>
 #include <map>
+#include <random>
+#include <time.h>
 
 namespace {
 
     struct InstanceInfo {
+
         bool awaitingVote = false;
 
         double timeLastRequestSend = 0.0;
@@ -21,12 +24,18 @@ namespace {
     };
 
     struct ServerSharedProperties {
+
         Raft::IServer::Configuration configuration;
 
+        std::mt19937 randomGenerator;
+
         std::mutex mutex;
+
         std::shared_ptr<std::promise<void>> workerLoopCompletion;
 
-        double timeOfLastLeaderMessage;
+        double currentElectionTimeout = 0.0;
+
+        double timeOfLastLeaderMessage = 0.0;
 
         bool isLeader = false;
 
@@ -52,6 +61,10 @@ namespace Raft {
         void UpdateTimeOfLastLeaderMessage() {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
+            sharedProperties->currentElectionTimeout = std::uniform_real_distribution<>(
+                    sharedProperties->configuration.minimumElectionTimeout,
+                    sharedProperties->configuration.maximumElectionTimeout
+            )(sharedProperties->randomGenerator);
         }
 
         double GetTimeSinceLastLeaderMessage(double now) {
@@ -122,7 +135,7 @@ namespace Raft {
                 const double now = timeKeeper->GetCurrentTime();
                 const double timeSinceLastLeaderMessage = GetTimeSinceLastLeaderMessage(now);
 
-                if (timeSinceLastLeaderMessage >= sharedProperties->configuration.minimumElectionTimeout) {
+                if (timeSinceLastLeaderMessage >= sharedProperties->currentElectionTimeout) {
                     StartElection(now);
                 }
                 DoRetransmission(now);
@@ -145,7 +158,7 @@ namespace Raft {
     Server &Server::operator=(Server &&) noexcept = default;
 
     Server::Server() : impl(new Impl()) {
-
+        impl->sharedProperties->randomGenerator.seed((int) time(NULL));
     }
 
     void Server::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
@@ -153,6 +166,14 @@ namespace Raft {
     }
 
     void Server::Mobilize() {
+        if (impl->worker.joinable()) {
+            return;
+        }
+        impl->sharedProperties->instances.clear();
+        impl->sharedProperties->isLeader = false;
+        impl->sharedProperties->timeOfLastLeaderMessage = 0.0;
+        impl->sharedProperties->votesForUs = 0;
+        impl->stopWorker = std::promise<void>();
         impl->worker = std::thread(&Impl::Worker, impl.get());
     }
 
