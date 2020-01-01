@@ -45,8 +45,8 @@ namespace Raft {
         virtual bool IsLeader() override;
 
     private:
-        struct Impl;
-        std::shared_ptr<Impl> impl;
+        struct RaftServerImpl;
+        std::shared_ptr<RaftServerImpl> raftServer;
     };
 }
 #endif //RAFT_SERVER_H

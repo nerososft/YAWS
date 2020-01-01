@@ -3,7 +3,7 @@
 // Created by XingfengYang on 2020/1/1.
 //
 #include "../include/Message.h"
-#include "../include/MessageImpl.h"
+#include "../include/RaftMessageImpl.h"
 
 namespace {
     std::shared_ptr<Raft::Message> CreateBaseMessage() {
@@ -22,7 +22,7 @@ namespace Raft {
 
     std::function<std::shared_ptr<Message>()> Message::CreateMessage = CreateBaseMessage;
 
-    Message::Message() : impl(new MessageImpl()) {
+    Message::Message() : raftMessage(new RaftMessageImpl()) {
 
     }
 }

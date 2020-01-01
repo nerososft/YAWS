@@ -3,7 +3,7 @@
 //
 #include "../include/Server.h"
 #include "../include/Message.h"
-#include "../include/MessageImpl.h"
+#include "../include/RaftMessageImpl.h"
 #include <thread>
 #include <future>
 #include <memory>
@@ -52,7 +52,7 @@ namespace {
 
 namespace Raft {
 
-    struct Server::Impl {
+    struct Server::RaftServerImpl {
         std::shared_ptr<ServerSharedProperties> sharedProperties;
         std::shared_ptr<TimeKeeper> timeKeeper;
 
@@ -62,7 +62,6 @@ namespace Raft {
         std::promise<void> stopWorker;
 
         std::condition_variable workerAskedToStopOrWeakUp;
-
 
         void ResetElectionTimer() {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
@@ -90,9 +89,9 @@ namespace Raft {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             sharedProperties->votesForUs = 1;
             const auto message = Message::CreateMessage();
-            message->impl->type = MessageImpl::Type::RequestVote;
-            message->impl->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
-            message->impl->requestVoteDetails.term = ++sharedProperties->configuration.currentTerm;
+            message->raftMessage->type = RaftMessageImpl::Type::RequestVote;
+            message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
+            message->raftMessage->requestVoteDetails.term = ++sharedProperties->configuration.currentTerm;
 
             for (auto &instance:sharedProperties->instances) {
                 instance.second.awaitingVote = false;
@@ -113,8 +112,8 @@ namespace Raft {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             sharedProperties->votesForUs = 1;
             const auto message = Message::CreateMessage();
-            message->impl->type = MessageImpl::Type::HeartBeat;
-            message->impl->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
+            message->raftMessage->type = RaftMessageImpl::Type::HeartBeat;
+            message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
             for (auto instanceNumber: sharedProperties->configuration.instancesNumbers) {
                 if (instanceNumber == sharedProperties->configuration.selfInstanceNumber) {
@@ -190,101 +189,101 @@ namespace Raft {
 
     Server &Server::operator=(Server &&) noexcept = default;
 
-    Server::Server() : impl(new Impl()) {
-        impl->sharedProperties->randomGenerator.seed((int) time(NULL));
+    Server::Server() : raftServer(new RaftServerImpl()) {
+        raftServer->sharedProperties->randomGenerator.seed((int) time(NULL));
     }
 
     void Server::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
-        impl->timeKeeper = timeKeeper;
+        raftServer->timeKeeper = timeKeeper;
     }
 
     void Server::Mobilize() {
-        if (impl->worker.joinable()) {
+        if (raftServer->worker.joinable()) {
             return;
         }
-        impl->sharedProperties->instances.clear();
-        impl->sharedProperties->isLeader = false;
-        impl->sharedProperties->timeOfLastLeaderMessage = 0.0;
-        impl->sharedProperties->votesForUs = 0;
-        impl->stopWorker = std::promise<void>();
-        impl->worker = std::thread(&Impl::Worker, impl.get());
+        raftServer->sharedProperties->instances.clear();
+        raftServer->sharedProperties->isLeader = false;
+        raftServer->sharedProperties->timeOfLastLeaderMessage = 0.0;
+        raftServer->sharedProperties->votesForUs = 0;
+        raftServer->stopWorker = std::promise<void>();
+        raftServer->worker = std::thread(&RaftServerImpl::Worker, raftServer.get());
     }
 
     void Server::Demobilize() {
-        if (!impl->worker.joinable()) {
+        if (!raftServer->worker.joinable()) {
             return;
         }
 
-        std::unique_lock<decltype(impl->sharedProperties->mutex)> lock(impl->sharedProperties->mutex);
-        impl->stopWorker.set_value();
-        impl->workerAskedToStopOrWeakUp.notify_one();
+        std::unique_lock<decltype(raftServer->sharedProperties->mutex)> lock(raftServer->sharedProperties->mutex);
+        raftServer->stopWorker.set_value();
+        raftServer->workerAskedToStopOrWeakUp.notify_one();
         lock.unlock();
-        impl->worker.join();
+        raftServer->worker.join();
     }
 
     void Server::WaitForAtLeastOneWorkerLoop() {
-        std::unique_lock<decltype(impl->sharedProperties->mutex)> lock(impl->sharedProperties->mutex);
-        impl->sharedProperties->workerLoopCompletion = std::make_shared<std::promise<void>>();
-        auto workerLoopCompletion = impl->sharedProperties->workerLoopCompletion->get_future();
-        impl->workerAskedToStopOrWeakUp.notify_one();
+        std::unique_lock<decltype(raftServer->sharedProperties->mutex)> lock(raftServer->sharedProperties->mutex);
+        raftServer->sharedProperties->workerLoopCompletion = std::make_shared<std::promise<void>>();
+        auto workerLoopCompletion = raftServer->sharedProperties->workerLoopCompletion->get_future();
+        raftServer->workerAskedToStopOrWeakUp.notify_one();
         lock.unlock();
         workerLoopCompletion.wait();
     }
 
 
     bool Server::Configure(const Configuration &configuration) {
-        impl->sharedProperties->configuration = configuration;
+        raftServer->sharedProperties->configuration = configuration;
         return true;
     }
 
     void Server::SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) {
-        impl->sendMessageDelegate = sendMessageDelegate;
+        raftServer->sendMessageDelegate = sendMessageDelegate;
     }
 
     void Server::ReceiveMessage(std::shared_ptr<Message> message,
                                 unsigned int senderInstanceNumber) {
-        const double now = impl->timeKeeper->GetCurrentTime();
-        switch (message->impl->type) {
-            case MessageImpl::Type::RequestVote: {
-                if (impl->sharedProperties->configuration.currentTerm < message->impl->requestVoteDetails.term) {
-                    impl->sharedProperties->configuration.currentTerm = message->impl->requestVoteDetails.term;
+        const double now = raftServer->timeKeeper->GetCurrentTime();
+        switch (message->raftMessage->type) {
+            case RaftMessageImpl::Type::RequestVote: {
+                if (raftServer->sharedProperties->configuration.currentTerm < message->raftMessage->requestVoteDetails.term) {
+                    raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
                 }
 
                 const auto response = Message::CreateMessage();
-                response->impl->type = MessageImpl::Type::RequestVoteResults;
-                response->impl->requestVoteResultsDetails.term = message->impl->requestVoteDetails.term;
+                response->raftMessage->type = RaftMessageImpl::Type::RequestVoteResults;
+                response->raftMessage->requestVoteResultsDetails.term = message->raftMessage->requestVoteDetails.term;
 
-                if (impl->sharedProperties->configuration.currentTerm > message->impl->requestVoteDetails.term) {
-                    response->impl->requestVoteResultsDetails.voteGranted = false;
-                } else if (impl->sharedProperties->votedThisTerm &&
-                           impl->sharedProperties->votedFor != senderInstanceNumber) {
-                    response->impl->requestVoteResultsDetails.voteGranted = false;
+                if (raftServer->sharedProperties->configuration.currentTerm > message->raftMessage->requestVoteDetails.term) {
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = false;
+                } else if (raftServer->sharedProperties->votedThisTerm &&
+                           raftServer->sharedProperties->votedFor != senderInstanceNumber) {
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = false;
                 } else {
-                    response->impl->requestVoteResultsDetails.voteGranted = true;
-                    impl->sharedProperties->votedThisTerm = true;
-                    impl->sharedProperties->votedFor = senderInstanceNumber;
-                    impl->RevertToFollower();
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = true;
+                    raftServer->sharedProperties->votedThisTerm = true;
+                    raftServer->sharedProperties->votedFor = senderInstanceNumber;
+                    raftServer->RevertToFollower();
                 }
-                impl->SendMessage(message, senderInstanceNumber, now);
+                raftServer->SendMessage(message, senderInstanceNumber, now);
             }
                 break;
-            case MessageImpl::Type::RequestVoteResults: {
+            case RaftMessageImpl::Type::RequestVoteResults: {
 
-                auto &instance = impl->sharedProperties->instances[senderInstanceNumber];
+                auto &instance = raftServer->sharedProperties->instances[senderInstanceNumber];
                 instance.awaitingVote = false;
-                if (message->impl->requestVoteResultsDetails.voteGranted) {
-                    ++impl->sharedProperties->votesForUs;
-                    if (impl->sharedProperties->votesForUs >=
-                        impl->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
-                        impl->sharedProperties->isLeader = true;
+                if (message->raftMessage->requestVoteResultsDetails.voteGranted) {
+                    ++raftServer->sharedProperties->votesForUs;
+                    if (raftServer->sharedProperties->votesForUs >=
+                        raftServer->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
+                        raftServer->sharedProperties->isLeader = true;
                     }
                 }
             }
                 break;
 
-            case MessageImpl::Type::HeartBeat: {
-                if (impl->sharedProperties->configuration.currentTerm < message->impl->requestVoteDetails.term) {
-                    impl->RevertToFollower();
+            case RaftMessageImpl::Type::HeartBeat: {
+                if (raftServer->sharedProperties->configuration.currentTerm < message->raftMessage->requestVoteDetails.term) {
+                    raftServer->RevertToFollower();
                 }
             }
                 break;
@@ -295,7 +294,7 @@ namespace Raft {
     }
 
     bool Server::IsLeader() {
-        return impl->sharedProperties->isLeader;
+        return raftServer->sharedProperties->isLeader;
     }
 
 

@@ -26,7 +26,7 @@ memory
 functional
 -
 
-/Users/xingfeng.yang/project/live-code/Raft/include/MessageImpl.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
 memory
@@ -38,19 +38,13 @@ TimeKeeper.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
-/Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp
-../include/Message.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Message.h
-../include/MessageImpl.h
-/Users/xingfeng.yang/project/live-code/Raft/include/MessageImpl.h
-
 /Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp
 ../include/Server.h
 /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
 ../include/Message.h
 /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
-../include/MessageImpl.h
-/Users/xingfeng.yang/project/live-code/Raft/include/MessageImpl.h
+../include/RaftMessageImpl.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
 thread
 -
 future
