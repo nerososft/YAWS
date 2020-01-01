@@ -57,6 +57,8 @@ namespace Raft {
         std::thread worker;
         std::promise<void> stopWorker;
 
+        std::condition_variable workerAskedToStopOrWeakUp;
+
 
         void UpdateTimeOfLastLeaderMessage() {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
@@ -70,11 +72,6 @@ namespace Raft {
         double GetTimeSinceLastLeaderMessage(double now) {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             return now - sharedProperties->timeOfLastLeaderMessage;
-        }
-
-        bool MakeWorkerThreadLoopPromiseIfNeeded() {
-            std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-            return sharedProperties->workerLoopCompletion != nullptr;
         }
 
         void SendMessage(std::shared_ptr<Message> message, unsigned int instanceNumber, double now) {
@@ -124,21 +121,27 @@ namespace Raft {
 
         void Worker() {
             UpdateTimeOfLastLeaderMessage();
-            auto workerAskedToStop = stopWorker.get_future();
-
             int rpcTimeoutMilliseconds = (int) (sharedProperties->configuration.rpcTimeout * 1000.0);
+            std::future<void> workerAskedToStop = stopWorker.get_future();
+            std::unique_lock<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
+            while (workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
 
-            while (workerAskedToStop.wait_for(
-                    std::chrono::milliseconds(rpcTimeoutMilliseconds)
-            ) != std::future_status::ready) {
-                const bool signalWorkerLoopCompletion = MakeWorkerThreadLoopPromiseIfNeeded();
+                (void) workerAskedToStopOrWeakUp.wait_for(
+                        lock,
+                        std::chrono::milliseconds(rpcTimeoutMilliseconds)
+                );
+
+
+                const bool signalWorkerLoopCompletion = (sharedProperties->workerLoopCompletion != nullptr);
+
+                lock.unlock();
                 const double now = timeKeeper->GetCurrentTime();
                 const double timeSinceLastLeaderMessage = GetTimeSinceLastLeaderMessage(now);
-
                 if (timeSinceLastLeaderMessage >= sharedProperties->currentElectionTimeout) {
                     StartElection(now);
                 }
                 DoRetransmission(now);
+                lock.lock();
                 if (signalWorkerLoopCompletion) {
                     sharedProperties->workerLoopCompletion->set_value();
                     sharedProperties->workerLoopCompletion = nullptr;
@@ -181,7 +184,11 @@ namespace Raft {
         if (!impl->worker.joinable()) {
             return;
         }
+
+        std::unique_lock<decltype(impl->sharedProperties->mutex)> lock(impl->sharedProperties->mutex);
         impl->stopWorker.set_value();
+        impl->workerAskedToStopOrWeakUp.notify_one();
+        lock.unlock();
         impl->worker.join();
     }
 
@@ -189,6 +196,7 @@ namespace Raft {
         std::unique_lock<decltype(impl->sharedProperties->mutex)> lock(impl->sharedProperties->mutex);
         impl->sharedProperties->workerLoopCompletion = std::make_shared<std::promise<void>>();
         auto workerLoopCompletion = impl->sharedProperties->workerLoopCompletion->get_future();
+        impl->workerAskedToStopOrWeakUp.notify_one();
         lock.unlock();
         workerLoopCompletion.wait();
     }
