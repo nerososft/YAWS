@@ -41,6 +41,10 @@ namespace {
 
         size_t votesForUs = 0;
 
+        bool votedThisTerm = false;
+
+        unsigned int votedFor = 0;
+
         std::map<unsigned int, InstanceInfo> instances;
     };
 }
@@ -60,7 +64,7 @@ namespace Raft {
         std::condition_variable workerAskedToStopOrWeakUp;
 
 
-        void UpdateTimeOfLastLeaderMessage() {
+        void ResetElectionTimer() {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
             sharedProperties->currentElectionTimeout = std::uniform_real_distribution<>(
@@ -84,13 +88,11 @@ namespace Raft {
 
         void StartElection(double now) {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-
             sharedProperties->votesForUs = 1;
             const auto message = Message::CreateMessage();
             message->impl->type = MessageImpl::Type::RequestVote;
             message->impl->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
             message->impl->requestVoteDetails.term = ++sharedProperties->configuration.currentTerm;
-
 
             for (auto &instance:sharedProperties->instances) {
                 instance.second.awaitingVote = false;
@@ -102,6 +104,22 @@ namespace Raft {
                 auto &instance = sharedProperties->instances[instanceNumber];
                 instance.awaitingVote = true;
 
+                SendMessage(message, instanceNumber, now);
+            }
+            double timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
+        }
+
+        void SendHeartBeat(double now) {
+            std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
+            sharedProperties->votesForUs = 1;
+            const auto message = Message::CreateMessage();
+            message->impl->type = MessageImpl::Type::HeartBeat;
+            message->impl->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
+
+            for (auto instanceNumber: sharedProperties->configuration.instancesNumbers) {
+                if (instanceNumber == sharedProperties->configuration.selfInstanceNumber) {
+                    continue;
+                }
                 SendMessage(message, instanceNumber, now);
             }
             double timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
@@ -119,26 +137,38 @@ namespace Raft {
             }
         }
 
+        void RevertToFollower() {
+            for (auto &instanceEntry: sharedProperties->instances) {
+                instanceEntry.second.awaitingVote = false;
+            }
+            sharedProperties->isLeader = false;
+            ResetElectionTimer();
+        }
+
         void Worker() {
-            UpdateTimeOfLastLeaderMessage();
+            ResetElectionTimer();
             int rpcTimeoutMilliseconds = (int) (sharedProperties->configuration.rpcTimeout * 1000.0);
             std::future<void> workerAskedToStop = stopWorker.get_future();
             std::unique_lock<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
             while (workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
-
                 (void) workerAskedToStopOrWeakUp.wait_for(
                         lock,
                         std::chrono::milliseconds(rpcTimeoutMilliseconds)
                 );
-
 
                 const bool signalWorkerLoopCompletion = (sharedProperties->workerLoopCompletion != nullptr);
 
                 lock.unlock();
                 const double now = timeKeeper->GetCurrentTime();
                 const double timeSinceLastLeaderMessage = GetTimeSinceLastLeaderMessage(now);
-                if (timeSinceLastLeaderMessage >= sharedProperties->currentElectionTimeout) {
-                    StartElection(now);
+                if (sharedProperties->isLeader) {
+                    if (timeSinceLastLeaderMessage >= sharedProperties->configuration.minimumElectionTimeout / 2) {
+                        SendHeartBeat(now);
+                    }
+                } else {
+                    if (timeSinceLastLeaderMessage >= sharedProperties->currentElectionTimeout) {
+                        StartElection(now);
+                    }
                 }
                 DoRetransmission(now);
                 lock.lock();
@@ -213,7 +243,31 @@ namespace Raft {
 
     void Server::ReceiveMessage(std::shared_ptr<Message> message,
                                 unsigned int senderInstanceNumber) {
+        const double now = impl->timeKeeper->GetCurrentTime();
         switch (message->impl->type) {
+            case MessageImpl::Type::RequestVote: {
+                if (impl->sharedProperties->configuration.currentTerm < message->impl->requestVoteDetails.term) {
+                    impl->sharedProperties->configuration.currentTerm = message->impl->requestVoteDetails.term;
+                }
+
+                const auto response = Message::CreateMessage();
+                response->impl->type = MessageImpl::Type::RequestVoteResults;
+                response->impl->requestVoteResultsDetails.term = message->impl->requestVoteDetails.term;
+
+                if (impl->sharedProperties->configuration.currentTerm > message->impl->requestVoteDetails.term) {
+                    response->impl->requestVoteResultsDetails.voteGranted = false;
+                } else if (impl->sharedProperties->votedThisTerm &&
+                           impl->sharedProperties->votedFor != senderInstanceNumber) {
+                    response->impl->requestVoteResultsDetails.voteGranted = false;
+                } else {
+                    response->impl->requestVoteResultsDetails.voteGranted = true;
+                    impl->sharedProperties->votedThisTerm = true;
+                    impl->sharedProperties->votedFor = senderInstanceNumber;
+                    impl->RevertToFollower();
+                }
+                impl->SendMessage(message, senderInstanceNumber, now);
+            }
+                break;
             case MessageImpl::Type::RequestVoteResults: {
 
                 auto &instance = impl->sharedProperties->instances[senderInstanceNumber];
@@ -224,6 +278,13 @@ namespace Raft {
                         impl->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
                         impl->sharedProperties->isLeader = true;
                     }
+                }
+            }
+                break;
+
+            case MessageImpl::Type::HeartBeat: {
+                if (impl->sharedProperties->configuration.currentTerm < message->impl->requestVoteDetails.term) {
+                    impl->RevertToFollower();
                 }
             }
                 break;

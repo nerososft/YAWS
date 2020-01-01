@@ -12,6 +12,7 @@ namespace Raft {
             Unknown,
             RequestVote,
             RequestVoteResults,
+            HeartBeat,
         };
 
         struct RequestVoteDetails {
@@ -24,11 +25,16 @@ namespace Raft {
             bool voteGranted = false;
         };
 
+        struct HeartBeatDetails {
+            unsigned int term = 0;
+        };
+
         Type type = Type::Unknown;
 
         union {
             RequestVoteDetails requestVoteDetails;
             RequestVoteResultsDetails requestVoteResultsDetails;
+            HeartBeatDetails heartBeatDetails;
         };
 
         bool isElectionMessage = false;
