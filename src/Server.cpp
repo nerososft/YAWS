@@ -14,6 +14,10 @@ namespace {
 
     struct InstanceInfo {
         bool awaitingVote = false;
+
+        double timeLastRequestSend = 0.0;
+
+        std::shared_ptr<Raft::Message> lastRequest;
     };
 
     struct ServerSharedProperties {
@@ -60,6 +64,14 @@ namespace Raft {
             return sharedProperties->workerLoopCompletion != nullptr;
         }
 
+        void SendMessage(std::shared_ptr<Message> message, unsigned int instanceNumber, double now) {
+            auto &instance = sharedProperties->instances[instanceNumber];
+            instance.timeLastRequestSend = now;
+            instance.lastRequest = message;
+
+            sendMessageDelegate(message, instanceNumber);
+        }
+
         void StartElection(double now) {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
 
@@ -79,16 +91,20 @@ namespace Raft {
                 }
                 auto &instance = sharedProperties->instances[instanceNumber];
                 instance.awaitingVote = true;
-                sendMessageDelegate(message, instanceNumber);
+
+                SendMessage(message, instanceNumber, now);
             }
             double timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
         }
 
         void DoRetransmission(double now) {
             std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-            for (auto instance: sharedProperties->configuration.instancesNumbers) {
-                if (instance == sharedProperties->configuration.selfInstanceNumber) {
-                    continue;
+            for (auto &instanceEntry: sharedProperties->instances) {
+                if (instanceEntry.second.awaitingVote &&
+                    (now - instanceEntry.second.timeLastRequestSend >= sharedProperties->configuration.rpcTimeout)) {
+                    SendMessage(instanceEntry.second.lastRequest,
+                                instanceEntry.first,
+                                now);
                 }
             }
         }
@@ -147,6 +163,15 @@ namespace Raft {
         impl->stopWorker.set_value();
         impl->worker.join();
     }
+
+    void Server::WaitForAtLeastOneWorkerLoop() {
+        std::unique_lock<decltype(impl->sharedProperties->mutex)> lock(impl->sharedProperties->mutex);
+        impl->sharedProperties->workerLoopCompletion = std::make_shared<std::promise<void>>();
+        auto workerLoopCompletion = impl->sharedProperties->workerLoopCompletion->get_future();
+        lock.unlock();
+        workerLoopCompletion.wait();
+    }
+
 
     bool Server::Configure(const Configuration &configuration) {
         impl->sharedProperties->configuration = configuration;

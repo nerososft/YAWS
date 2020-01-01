@@ -32,6 +32,8 @@ namespace Raft {
 
         void Demobilize();
 
+        void WaitForAtLeastOneWorkerLoop();
+
     public:
         virtual bool Configure(const Configuration &configuration) override;
 
