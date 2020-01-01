@@ -218,11 +218,12 @@ namespace Raft {
 
                 auto &instance = impl->sharedProperties->instances[senderInstanceNumber];
                 instance.awaitingVote = false;
-
-                ++impl->sharedProperties->votesForUs;
-                if (impl->sharedProperties->votesForUs >=
-                    impl->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
-                    impl->sharedProperties->isLeader = true;
+                if (message->impl->requestVoteResultsDetails.voteGranted) {
+                    ++impl->sharedProperties->votesForUs;
+                    if (impl->sharedProperties->votesForUs >=
+                        impl->sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
+                        impl->sharedProperties->isLeader = true;
+                    }
                 }
             }
                 break;
