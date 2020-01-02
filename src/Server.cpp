@@ -3,7 +3,7 @@
 //
 #include "../include/Server.h"
 #include "../include/Message.h"
-#include "../include/RaftMessageImpl.h"
+#include "../include/RaftMessage.h"
 #include "../include/RaftCore.h"
 #include <thread>
 #include <future>
@@ -79,9 +79,9 @@ namespace Raft {
                                 unsigned int senderInstanceNumber) {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
-            case RaftMessageImpl::Type::RequestVote: {
+            case RaftMessage::Type::RequestVote: {
                 const auto response = Message::CreateMessage();
-                response->raftMessage->type = RaftMessageImpl::Type::RequestVoteResults;
+                response->raftMessage->type = RaftMessage::Type::RequestVoteResults;
                 response->raftMessage->requestVoteResultsDetails.term = std::max(
                         message->raftMessage->requestVoteDetails.term,
                         raftServer->sharedProperties->configuration.currentTerm
@@ -105,7 +105,7 @@ namespace Raft {
                 raftServer->SendMessage(message, senderInstanceNumber, now);
             }
                 break;
-            case RaftMessageImpl::Type::RequestVoteResults: {
+            case RaftMessage::Type::RequestVoteResults: {
                 auto &instance = raftServer->sharedProperties->instances[senderInstanceNumber];
                 if (message->raftMessage->requestVoteResultsDetails.voteGranted) {
                     if (instance.awaitingVote) {
@@ -119,7 +119,7 @@ namespace Raft {
             }
                 break;
 
-            case RaftMessageImpl::Type::HeartBeat: {
+            case RaftMessage::Type::HeartBeat: {
                 if (raftServer->sharedProperties->configuration.currentTerm <
                     message->raftMessage->requestVoteDetails.term) {
                     raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->heartBeatDetails.term;
@@ -139,7 +139,5 @@ namespace Raft {
     bool Server::IsLeader() {
         return raftServer->sharedProperties->isLeader;
     }
-
-
 }
 

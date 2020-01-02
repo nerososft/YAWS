@@ -28,7 +28,7 @@ namespace Raft {
         Message();
 
     public:
-        std::unique_ptr<struct RaftMessageImpl> raftMessage;
+        std::unique_ptr<struct RaftMessage> raftMessage;
     };
 }
 #endif //RAFT_MESSAGE_H

@@ -6,7 +6,7 @@
 #define RAFT_MESSAGEIMPL_H
 
 namespace Raft {
-    struct RaftMessageImpl {
+    struct RaftMessage {
 
         enum class Type {
             Unknown,
@@ -40,7 +40,7 @@ namespace Raft {
         bool isElectionMessage = false;
 
 
-        RaftMessageImpl() {}
+        RaftMessage() {}
     };
 }
 

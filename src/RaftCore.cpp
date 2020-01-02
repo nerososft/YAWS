@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/1/2.
 //
 #include "../include/RaftCore.h"
-#include "../include/RaftMessageImpl.h"
+#include "../include/RaftMessage.h"
 
 namespace Raft {
 
@@ -41,7 +41,7 @@ namespace Raft {
         sharedProperties->votesForUs = 1;
 
         const auto message = Message::CreateMessage();
-        message->raftMessage->type = RaftMessageImpl::Type::RequestVote;
+        message->raftMessage->type = RaftMessage::Type::RequestVote;
         message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
@@ -64,7 +64,7 @@ namespace Raft {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->votesForUs = 1;
         const auto message = Message::CreateMessage();
-        message->raftMessage->type = RaftMessageImpl::Type::HeartBeat;
+        message->raftMessage->type = RaftMessage::Type::HeartBeat;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
         for (auto instanceNumber: sharedProperties->configuration.instancesNumbers) {
