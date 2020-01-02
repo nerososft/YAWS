@@ -169,7 +169,7 @@ namespace Raft {
                 memset(request, 0, 1000);
                 read(fdc, request, 1000);
 
-                char *buf = "HTTP/1.1 200 OK\r\nServer: OpenIP GO HTTP Service BY NeroYang"
+                char *buf = "HTTP/1.1 200 OK\r\nServer: Raft"
                             "\r\nContent-Type: text/json;charset=utf-8\r\n\r\n"
                             "<h1>Works</h1>";
 
