@@ -11,7 +11,7 @@ namespace Raft {
     TimeKeeper &TimeKeeper::operator=(TimeKeeper &&) noexcept = default;
 
 
-    Message::Message() {
+    TimeKeeper::TimeKeeper() {
 
     }
 

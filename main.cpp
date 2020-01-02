@@ -1,3 +1,4 @@
+#include <iostream>
 #include "include/Server.h"
 
 int main() {
@@ -8,6 +9,8 @@ int main() {
     auto *server = new Raft::Server();
     server->Configure(configuration);
 
-    server->Mobilize();
+//    server->Mobilize();
+
+    server->Listen();
     return 0;
 }

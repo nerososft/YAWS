@@ -1,6 +1,7 @@
 //
 // Created by XingfengYang on 2020/1/2.
 //
+#include <iostream>
 #include "../include/RaftCore.h"
 #include "../include/RaftMessage.h"
 
@@ -8,7 +9,8 @@ namespace Raft {
 
     RaftCore::~RaftCore() noexcept = default;
 
-    RaftCore::RaftCore() {
+    RaftCore::RaftCore() :
+            sharedProperties(std::make_shared<ServerSharedProperties>()) {
     }
 
     void RaftCore::ResetElectionTimer() {
@@ -57,7 +59,7 @@ namespace Raft {
 
             SendMessage(message, instanceNumber, now);
         }
-        double timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
+        sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
     }
 
     void RaftCore::SendHeartBeat(double now) {
@@ -137,4 +139,5 @@ namespace Raft {
     bool RaftCore::IsLeader() {
         return sharedProperties->isLeader;
     }
+
 }

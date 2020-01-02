@@ -46,8 +46,6 @@ IServer.h
 TimeKeeper.h
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
-
 /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
 memory
 -
@@ -61,38 +59,8 @@ TimeKeeper.h
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
 /Users/xingfeng.yang/project/live-code/Raft/main.cpp
+iostream
+-
 include/Server.h
 /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
-
-/Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp
-../include/RaftCore.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
-../include/RaftMessage.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
-
-/Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp
-../include/Server.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Server.h
-../include/Message.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Message.h
-../include/RaftMessage.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
-../include/RaftCore.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
-thread
--
-future
--
-memory
--
-mutex
--
-map
--
-random
--
-time.h
--
-algorithm
--
 

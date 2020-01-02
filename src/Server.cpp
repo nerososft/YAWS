@@ -4,16 +4,21 @@
 #include "../include/Server.h"
 #include "../include/Message.h"
 #include "../include/RaftMessage.h"
-#include "../include/RaftCore.h"
 #include <thread>
 #include <future>
 #include <memory>
 #include <mutex>
-#include <map>
-#include <random>
-#include <time.h>
+#include <ctime>
 #include <algorithm>
+#include <cstdio>
+#include <sys/socket.h>
+#include <cstdlib>
+#include <netinet/in.h>
+#include <cstring>
+#include <unistd.h>
+#include <iostream>
 
+#define PORT 8889
 
 
 namespace Raft {
@@ -25,7 +30,8 @@ namespace Raft {
     Server &Server::operator=(Server &&) noexcept = default;
 
     Server::Server() : raftServer(new RaftCore()) {
-        raftServer->sharedProperties->randomGenerator.seed((int) time(NULL));
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//        raftServer->sharedProperties->randomGenerator.seed(seed);
     }
 
     void Server::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
@@ -102,7 +108,7 @@ namespace Raft {
                     raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
                     raftServer->RevertToFollower();
                 }
-                raftServer->SendMessage(message, senderInstanceNumber, now);
+                raftServer->SendMessage(response, senderInstanceNumber, now);
             }
                 break;
             case RaftMessage::Type::RequestVoteResults: {
@@ -133,6 +139,44 @@ namespace Raft {
             default: {
             }
                 break;
+        }
+    }
+
+    void Server::Listen() {
+        struct sockaddr_in addr;
+        memset(&addr, 0, sizeof(addr));
+        int fd;
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(8081);
+        addr.sin_addr.s_addr = INADDR_ANY;
+        if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+            std::cerr << "Unable to Open the Socket" << std::endl;
+        }
+        if (bind(fd, (struct sockaddr *) (&addr), sizeof(addr)) != 0) {
+            std::cerr << "Unable to bind the Socket" << std::endl;
+        }
+        if (listen(fd, 50) == -1) {
+            std::cerr << "Unable to listen the Socket" << std::endl;
+        }
+        while (true) {
+            sockaddr client_addr;
+            unsigned int nLength;
+            int fdc = accept(fd, &client_addr, &nLength);
+            if (fdc == -1) {
+                std::cerr << "Unable to Connect with the client" << std::endl;
+            } else {
+                char *request = new char[1000];
+                memset(request, 0, 1000);
+                read(fdc, request, 1000);
+
+                char *buf = "HTTP/1.1 200 OK\r\nServer: OpenIP GO HTTP Service BY NeroYang"
+                            "\r\nContent-Type: text/json;charset=utf-8\r\n\r\n"
+                            "<h1>Works</h1>";
+
+                write(fdc, buf, strlen(buf));
+                close(fdc);
+                delete[] request;
+            }
         }
     }
 }
