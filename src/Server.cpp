@@ -135,9 +135,5 @@ namespace Raft {
                 break;
         }
     }
-
-    bool Server::IsLeader() {
-        return raftServer->sharedProperties->isLeader;
-    }
 }
 

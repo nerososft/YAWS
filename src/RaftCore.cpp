@@ -133,4 +133,8 @@ namespace Raft {
             sharedProperties->workerLoopCompletion = nullptr;
         }
     }
+
+    bool RaftCore::IsLeader() {
+        return sharedProperties->isLeader;
+    }
 }

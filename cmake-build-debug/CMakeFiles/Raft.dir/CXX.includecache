@@ -60,6 +60,10 @@ TimeKeeper.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
+/Users/xingfeng.yang/project/live-code/Raft/main.cpp
+include/Server.h
+/Users/xingfeng.yang/project/live-code/Raft/include/Server.h
+
 /Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp
 ../include/RaftCore.h
 /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h

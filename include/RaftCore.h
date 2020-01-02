@@ -88,6 +88,8 @@ namespace Raft {
         void RevertToFollower();
 
         void Worker();
+
+        bool IsLeader();
     };
 }
 #endif //RAFT_RAFTCORE_H
