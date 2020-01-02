@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Raft.dir/main.cpp.o"
   "CMakeFiles/Raft.dir/src/Message.cpp.o"
+  "CMakeFiles/Raft.dir/src/RaftCore.cpp.o"
   "CMakeFiles/Raft.dir/src/Server.cpp.o"
   "Raft"
   "Raft.pdb"

@@ -26,6 +26,26 @@ memory
 functional
 -
 
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
+memory
+-
+thread
+-
+future
+-
+condition_variable
+-
+random
+-
+mutex
+-
+map
+-
+IServer.h
+/Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+TimeKeeper.h
+/Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+
 /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
@@ -35,8 +55,20 @@ IServer.h
 /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
 TimeKeeper.h
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+../include/RaftCore.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+
+/Users/xingfeng.yang/project/live-code/Raft/main.cpp
+include/Server.h
+/Users/xingfeng.yang/project/live-code/Raft/include/Server.h
+
+/Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp
+../include/RaftCore.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
+../include/RaftMessageImpl.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
 
 /Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp
 ../include/Server.h
@@ -45,6 +77,8 @@ TimeKeeper.h
 /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
 ../include/RaftMessageImpl.h
 /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
+../include/RaftCore.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
 thread
 -
 future

@@ -9,6 +9,7 @@
 
 #include "IServer.h"
 #include "TimeKeeper.h"
+#include "../include/RaftCore.h"
 
 namespace Raft {
     class Server : public IServer {
@@ -45,8 +46,7 @@ namespace Raft {
         virtual bool IsLeader() override;
 
     private:
-        struct RaftServerImpl;
-        std::shared_ptr<RaftServerImpl> raftServer;
+        std::shared_ptr<RaftCore> raftServer;
     };
 }
 #endif //RAFT_SERVER_H
