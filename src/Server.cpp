@@ -142,8 +142,10 @@ namespace Raft {
         }
     }
 
+#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n<h1>Raft Server Works</h1>"
+
     void Server::Listen() {
-        struct sockaddr_in addr;
+        struct sockaddr_in addr{};
         memset(&addr, 0, sizeof(addr));
         int fd;
         addr.sin_family = AF_INET;
@@ -169,9 +171,7 @@ namespace Raft {
                 memset(request, 0, 1000);
                 read(fdc, request, 1000);
 
-                char *buf = "HTTP/1.1 200 OK\r\nServer: Raft"
-                            "\r\nContent-Type: text/json;charset=utf-8\r\n\r\n"
-                            "<h1>Works</h1>";
+                char *buf = TEST_HTTP_RESPONSE;
 
                 write(fdc, buf, strlen(buf));
                 close(fdc);
