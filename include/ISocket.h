@@ -25,10 +25,11 @@ namespace Raft {
 
         virtual int Listen() = 0;
 
-        using EventHandler = std::function<void(char *buffer, unsigned int receivedInstanceNumber)>;
+        using SocketAcceptEventHandler = std::function<void(char *buffer)>;
 
-        virtual int Accept(EventHandler eventHandler) = 0;
+        virtual int Accept(SocketAcceptEventHandler socketAcceptEventHandler) = 0;
 
+        virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) = 0;
     private:
     };
 }

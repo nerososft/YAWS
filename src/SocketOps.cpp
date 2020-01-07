@@ -4,6 +4,7 @@
 
 #include <netinet/in.h>
 #include <iostream>
+#include <unistd.h>
 #include "../include/SocketOps.h"
 
 namespace Raft {
@@ -44,7 +45,25 @@ namespace Raft {
         }
     }
 
-    int SocketOps::Accept(EventHandler eventHandler) {
+    void SocketOps::SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) {
+        impl->socketAcceptEventHandler = socketAcceptEventHandler;
+    }
 
+    int SocketOps::Accept(SocketAcceptEventHandler socketAcceptEventHandler) {
+        sockaddr client_addr;
+        unsigned int nLength;
+        int fdc = accept(fd, &client_addr, &nLength);
+        if (fdc == -1) {
+            std::cerr << "Unable to Connect with the client" << std::endl;
+        } else {
+            char *request = new char[1000];
+            memset(request, 0, 1000);
+            read(fdc, request, 1000);
+
+            impl->socketAcceptEventHandler(request);
+
+            close(fdc);
+            delete[] request;
+        }
     }
 }

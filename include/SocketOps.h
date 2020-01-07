@@ -32,7 +32,9 @@ namespace Raft {
 
         virtual int Listen() override;
 
-        virtual int Accept(EventHandler eventHandler) override;
+        virtual int Accept(SocketAcceptEventHandler socketAcceptEventHandler) override;
+
+        virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) override;
 
     private:
         std::shared_ptr<SocketOps> impl;
@@ -42,6 +44,8 @@ namespace Raft {
         Configuration configuration;
 
         struct sockaddr_in addr{};
+
+        SocketAcceptEventHandler socketAcceptEventHandler;
 
     };
 }

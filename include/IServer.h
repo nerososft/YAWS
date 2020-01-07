@@ -32,6 +32,7 @@ namespace Raft {
                                                        unsigned int receivedInstanceNumber)>;
 
     public:
+
         virtual bool Configure(const Configuration &configuration) = 0;
 
         virtual void SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) = 0;
