@@ -10,15 +10,12 @@
 #include <mutex>
 #include <ctime>
 #include <algorithm>
-#include <cstdio>
 #include <sys/socket.h>
 #include <cstdlib>
 #include <netinet/in.h>
 #include <cstring>
 #include <unistd.h>
 #include <iostream>
-
-#define PORT 8889
 
 
 namespace Raft {

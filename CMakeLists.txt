@@ -3,6 +3,6 @@ project(Raft)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SRC_LIST ${SEC_LIST} src/Message.cpp src/RaftCore.cpp src/Server.cpp main.cpp)
+set(SRC_LIST ${SEC_LIST} src/Message.cpp src/SocketOps.cpp src/RaftCore.cpp src/Server.cpp main.cpp)
 
 add_executable(Raft ${SRC_LIST})

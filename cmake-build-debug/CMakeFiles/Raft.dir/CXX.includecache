@@ -20,6 +20,12 @@ mutex
 future
 -
 
+/Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+memory
+-
+functional
+-
+
 /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
 memory
 -
@@ -58,6 +64,12 @@ TimeKeeper.h
 ../include/RaftCore.h
 /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
 
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
+ISocket.h
+/Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+memory
+-
+
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
 /Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp
@@ -79,8 +91,6 @@ ctime
 -
 algorithm
 -
-cstdio
--
 sys/socket.h
 -
 cstdlib
@@ -93,4 +103,8 @@ unistd.h
 -
 iostream
 -
+
+/Users/xingfeng.yang/project/live-code/Raft/src/SocketOps.cpp
+../include/SocketOps.h
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
 

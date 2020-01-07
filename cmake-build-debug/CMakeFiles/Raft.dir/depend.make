@@ -27,3 +27,7 @@ CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/Server.h
 CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/TimeKeeper.h
 CMakeFiles/Raft.dir/src/Server.cpp.o: ../src/Server.cpp
 
+CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../include/ISocket.h
+CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../include/SocketOps.h
+CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../src/SocketOps.cpp
+

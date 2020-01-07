@@ -231,6 +231,33 @@ src/Server.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Server.cpp.s
 .PHONY : src/Server.cpp.s
 
+src/SocketOps.o: src/SocketOps.cpp.o
+
+.PHONY : src/SocketOps.o
+
+# target to build an object file
+src/SocketOps.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/SocketOps.cpp.o
+.PHONY : src/SocketOps.cpp.o
+
+src/SocketOps.i: src/SocketOps.cpp.i
+
+.PHONY : src/SocketOps.i
+
+# target to preprocess a source file
+src/SocketOps.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/SocketOps.cpp.i
+.PHONY : src/SocketOps.cpp.i
+
+src/SocketOps.s: src/SocketOps.cpp.s
+
+.PHONY : src/SocketOps.s
+
+# target to generate assembly for a file
+src/SocketOps.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/SocketOps.cpp.s
+.PHONY : src/SocketOps.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -252,6 +279,9 @@ help:
 	@echo "... src/Server.o"
 	@echo "... src/Server.i"
 	@echo "... src/Server.s"
+	@echo "... src/SocketOps.o"
+	@echo "... src/SocketOps.i"
+	@echo "... src/SocketOps.s"
 .PHONY : help
 
 
