@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <iostream>
 #include <unistd.h>
+#include <sys/event.h>
 #include "../include/SocketOps.h"
 
 namespace Raft {
@@ -30,6 +31,11 @@ namespace Raft {
         impl->addr.sin_addr.s_addr = INADDR_ANY;
         if ((impl->fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             std::cerr << "Unable to Open the Socket" << std::endl;
+        }
+
+        impl->kq = kqueue();
+        if(impl->kq == -1){
+            std::cerr << "Unable to init kqueue" << std::endl;
         }
     }
 
@@ -60,7 +66,7 @@ namespace Raft {
             memset(request, 0, 1000);
             read(fdc, request, 1000);
 
-            impl->socketAcceptEventHandler(request);
+            impl->socketAcceptEventHandler(request, fdc);
 
             close(fdc);
             delete[] request;

@@ -40,6 +40,7 @@ namespace Raft {
         std::shared_ptr<SocketOps> impl;
 
         int fd = 0;
+        int kq = 0;
 
         Configuration configuration;
 
