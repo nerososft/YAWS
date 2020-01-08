@@ -40,8 +40,6 @@ namespace Raft {
         virtual void ReceiveMessage(std::shared_ptr<Message> message,
                                     unsigned int senderInstanceNumber) = 0;
 
-        virtual void Listen() = 0;
-
     private:
     };
 }

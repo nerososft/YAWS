@@ -43,8 +43,6 @@ namespace Raft {
         virtual void ReceiveMessage(std::shared_ptr<Message> message,
                                     unsigned int senderInstanceNumber) override;
 
-        virtual void Listen() override;
-
     private:
         std::shared_ptr<RaftCore> raftServer;
     };

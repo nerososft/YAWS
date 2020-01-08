@@ -8,15 +8,7 @@
 #include <future>
 #include <memory>
 #include <mutex>
-#include <ctime>
 #include <algorithm>
-#include <sys/socket.h>
-#include <cstdlib>
-#include <netinet/in.h>
-#include <cstring>
-#include <unistd.h>
-#include <iostream>
-
 
 namespace Raft {
 
@@ -136,44 +128,6 @@ namespace Raft {
             default: {
             }
                 break;
-        }
-    }
-
-#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n<h1>Raft Server Works</h1>"
-
-    void Server::Listen() {
-        struct sockaddr_in addr{};
-        memset(&addr, 0, sizeof(addr));
-        int fd;
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(8081);
-        addr.sin_addr.s_addr = INADDR_ANY;
-        if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-            std::cerr << "Unable to Open the Socket" << std::endl;
-        }
-        if (bind(fd, (struct sockaddr *) (&addr), sizeof(addr)) != 0) {
-            std::cerr << "Unable to bind the Socket" << std::endl;
-        }
-        if (listen(fd, 50) == -1) {
-            std::cerr << "Unable to listen the Socket" << std::endl;
-        }
-        while (true) {
-            sockaddr client_addr;
-            unsigned int nLength;
-            int fdc = accept(fd, &client_addr, &nLength);
-            if (fdc == -1) {
-                std::cerr << "Unable to Connect with the client" << std::endl;
-            } else {
-                char *request = new char[1000];
-                memset(request, 0, 1000);
-                read(fdc, request, 1000);
-
-                char *buf = TEST_HTTP_RESPONSE;
-
-                write(fdc, buf, strlen(buf));
-                close(fdc);
-                delete[] request;
-            }
         }
     }
 }

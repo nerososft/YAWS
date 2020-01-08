@@ -6,7 +6,9 @@
 #define RAFT_SOCKETOPS_H
 
 #include "ISocket.h"
+#include "SocketImpl.h"
 #include <memory>
+#include <netinet/in.h>
 
 namespace Raft {
     class SocketOps : public ISocket {
@@ -36,18 +38,10 @@ namespace Raft {
 
         virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) override;
 
+
+
     private:
-        std::shared_ptr<SocketOps> impl;
-
-        int fd = 0;
-        int kq = 0;
-
-        Configuration configuration;
-
-        struct sockaddr_in addr{};
-
-        SocketAcceptEventHandler socketAcceptEventHandler;
-
+        std::shared_ptr<SocketImpl> impl;
     };
 }
 #endif //RAFT_SOCKETOPS_H
