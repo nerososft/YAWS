@@ -8,6 +8,7 @@
 #include "ISocket.h"
 #include <memory>
 #include <netinet/in.h>
+#include <sys/event.h>
 
 namespace Raft {
     class SocketImpl : public ISocket {
@@ -25,7 +26,7 @@ namespace Raft {
     public:
         SocketImpl();
 
-        virtual bool Configure(const Configuration &configuration);
+        virtual bool Configure(const Configuration &config);
 
         virtual int SetUp();
 
@@ -33,16 +34,19 @@ namespace Raft {
 
         virtual int Listen();
 
-        virtual int Accept(SocketAcceptEventHandler socketAcceptEventHandler);
+        virtual int Accept(SocketAcceptEventHandler acceptEventHandler);
 
-        virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler);
-
-        struct sockaddr_in addr;
+        virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler acceptEventHandler);
 
 
     public:
         int fd = 0;
         int kq = 0;
+
+        struct sockaddr_in addr{};
+
+        struct kevent evSet;
+        struct kevent evList[32];
 
         Configuration configuration;
 

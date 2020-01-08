@@ -77,7 +77,7 @@ namespace Raft {
 
         double GetTimeSinceLastLeaderMessage(double now);
 
-        void SendMessage(std::shared_ptr<Message> message, unsigned int instanceNumber, double now);
+        void SendMessage(const std::shared_ptr<Message>& message, unsigned int instanceNumber, double now);
 
         void StartElection(double now);
 

@@ -27,7 +27,7 @@ namespace Raft {
         return now - sharedProperties->timeOfLastLeaderMessage;
     }
 
-    void RaftCore::SendMessage(std::shared_ptr<Message> message, unsigned int instanceNumber, double now) {
+    void RaftCore::SendMessage(const std::shared_ptr<Message>& message, unsigned int instanceNumber, double now) {
         auto &instance = sharedProperties->instances[instanceNumber];
         instance.timeLastRequestSend = now;
         instance.lastRequest = message;

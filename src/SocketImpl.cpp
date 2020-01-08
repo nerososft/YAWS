@@ -6,6 +6,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/event.h>
+#include <fcntl.h>
 #include "../include/SocketImpl.h"
 
 namespace Raft {
@@ -20,8 +21,8 @@ namespace Raft {
 
     }
 
-    bool SocketImpl::Configure(const Configuration &configuration) {
-        this->configuration = configuration;
+    bool SocketImpl::Configure(const Configuration &config) {
+        this->configuration = config;
     }
 
     int SocketImpl::SetUp() {
@@ -37,6 +38,12 @@ namespace Raft {
         if (kq == -1) {
             std::cerr << "Unable to init kqueue" << std::endl;
         }
+
+        EV_SET(&evSet, fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+        if (kevent(kq, &evSet, 1, NULL, 0, NULL) == -1) {
+            std::cerr << "Unable to init kevent" << std::endl;
+        }
+
     }
 
     int SocketImpl::Bind() {
@@ -51,25 +58,44 @@ namespace Raft {
         }
     }
 
-    void SocketImpl::SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) {
-        socketAcceptEventHandler = socketAcceptEventHandler;
+    void SocketImpl::SetSocketAcceptEventHandler(SocketAcceptEventHandler acceptEventHandler) {
+        this->socketAcceptEventHandler = acceptEventHandler;
     }
 
-    int SocketImpl::Accept(SocketAcceptEventHandler socketAcceptEventHandler) {
-        sockaddr client_addr;
-        unsigned int nLength;
-        int fdc = accept(fd, &client_addr, &nLength);
-        if (fdc == -1) {
-            std::cerr << "Unable to Connect with the client" << std::endl;
-        } else {
-            char *request = new char[1000];
-            memset(request, 0, 1000);
-            read(fdc, request, 1000);
+    int SocketImpl::Accept(SocketAcceptEventHandler acceptEventHandler) {
 
-            socketAcceptEventHandler(request, fdc);
+        int nev = kevent(kq, NULL, 0, evList, 32, NULL);
 
-            close(fdc);
-            delete[] request;
+        for (int i = 0; i < nev; i++) {
+            int fd_ = (int) evList[i].ident;
+            if (evList[i].flags & EV_EOF) {
+                close(fd_);
+            } else if (fd_ == fd) {
+                struct sockaddr_storage addr;
+                socklen_t socklen = sizeof(addr);
+                int connfd = accept(fd, (struct sockaddr *) &addr, &socklen);
+                if (connfd == -1) {
+                    std::cerr << "Unable to Connect with the client" << std::endl;
+                } else {
+                    EV_SET(&evSet, connfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+                    kevent(kq, &evSet, 1, NULL, 0, NULL);
+                    printf("Got connection!\n");
+
+                    int flags = fcntl(connfd, F_GETFL, 0);
+                    assert(flags >= 0);
+                    fcntl(connfd, F_SETFL, flags | O_NONBLOCK);
+
+                    EV_SET(&evSet, connfd, EVFILT_WRITE, EV_ADD | EV_ONESHOT, 0, 0, NULL);
+                    kevent(kq, &evSet, 1, NULL, 0, NULL);
+                }
+            } else if (evList[i].filter == EVFILT_READ) {
+                char buf[1024];
+                size_t bytes_read = recv(evList[i].ident, buf, sizeof(buf), 0);
+                acceptEventHandler(buf, evList[i].ident);
+                printf("read %zu bytes\n", bytes_read);
+            } else if (evList[i].filter == EVFILT_WRITE) {
+
+            }
         }
     }
 }
