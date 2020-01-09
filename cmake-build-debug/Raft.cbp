@@ -89,6 +89,9 @@
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp">
 			<Option target="Raft"/>
 		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp">
+			<Option target="Raft"/>
+		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp">
 			<Option target="Raft"/>
 		</Unit>

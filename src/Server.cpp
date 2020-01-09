@@ -74,9 +74,9 @@ namespace Raft {
                                 unsigned int senderInstanceNumber) {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
-            case RaftMessage::Type::RequestVote: {
+            case Type::RequestVote: {
                 const auto response = Message::CreateMessage();
-                response->raftMessage->type = RaftMessage::Type::RequestVoteResults;
+                response->raftMessage->type = Type::RequestVoteResults;
                 response->raftMessage->requestVoteResultsDetails.term = std::max(
                         message->raftMessage->requestVoteDetails.term,
                         raftServer->sharedProperties->configuration.currentTerm
@@ -100,7 +100,7 @@ namespace Raft {
                 raftServer->SendMessage(response, senderInstanceNumber, now);
             }
                 break;
-            case RaftMessage::Type::RequestVoteResults: {
+            case Type::RequestVoteResults: {
                 auto &instance = raftServer->sharedProperties->instances[senderInstanceNumber];
                 if (message->raftMessage->requestVoteResultsDetails.voteGranted) {
                     if (instance.awaitingVote) {
@@ -114,7 +114,7 @@ namespace Raft {
             }
                 break;
 
-            case RaftMessage::Type::HeartBeat: {
+            case Type::HeartBeat: {
                 if (raftServer->sharedProperties->configuration.currentTerm <
                     message->raftMessage->requestVoteDetails.term) {
                     raftServer->sharedProperties->configuration.currentTerm = message->raftMessage->heartBeatDetails.term;

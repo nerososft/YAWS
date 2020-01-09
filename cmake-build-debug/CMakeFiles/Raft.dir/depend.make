@@ -17,6 +17,9 @@ CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/RaftMessage.h
 CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/TimeKeeper.h
 CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../src/RaftCore.cpp
 
+CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: ../include/RaftMessage.h
+CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: ../src/RaftMessage.cpp
+
 CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/IServer.h
 CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/Message.h
 CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/RaftCore.h

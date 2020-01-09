@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <functional>
+#include "RaftMessage.h"
 
 namespace Raft {
     class Message {
@@ -28,7 +29,7 @@ namespace Raft {
         Message();
 
     public:
-        std::unique_ptr<struct RaftMessage> raftMessage;
+        std::shared_ptr<RaftMessage> raftMessage;
     };
 }
 #endif //RAFT_MESSAGE_H

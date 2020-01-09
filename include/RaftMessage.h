@@ -5,42 +5,72 @@
 #ifndef RAFT_MESSAGEIMPL_H
 #define RAFT_MESSAGEIMPL_H
 
+#include <memory>
+
 namespace Raft {
-    struct RaftMessage {
 
-        enum class Type {
-            Unknown,
-            RequestVote,
-            RequestVoteResults,
-            HeartBeat,
-        };
+    static const char MAGIC_NUMBER = 0b1001101;
 
-        struct RequestVoteDetails {
-            unsigned int term = 0;
-            unsigned int candidateId = 0;
-        };
+    enum class Type {
+        Unknown = 0,
+        RequestVote = 1,
+        RequestVoteResults = 2,
+        HeartBeat = 3,
+        LogEntry = 4,
+    };
 
-        struct RequestVoteResultsDetails {
-            unsigned int term = 0;
-            bool voteGranted = false;
-        };
+    struct RequestVoteHeader {
+        unsigned int term = 0;
+        unsigned int candidateId = 0;
+    };
 
-        struct HeartBeatDetails {
-            unsigned int term = 0;
-        };
+    struct RequestVoteResultsHeader {
+        unsigned int term = 0;
+        bool voteGranted = false;
+    };
 
-        Type type = Type::Unknown;
+    struct HeartBeatHeader {
+        unsigned int term = 0;
+    };
 
+    struct LogEntryHeader {
+        unsigned int term = 0;
+    };
+
+    class RaftMessage {
+    public:
+        ~RaftMessage() noexcept;
+
+        RaftMessage(const RaftMessage &) = delete;
+
+        RaftMessage(RaftMessage &&) noexcept;
+
+        RaftMessage &operator=(const RaftMessage &) = delete;
+
+        RaftMessage &operator=(RaftMessage &&) noexcept;
+
+    public:
         union {
-            RequestVoteDetails requestVoteDetails;
-            RequestVoteResultsDetails requestVoteResultsDetails;
-            HeartBeatDetails heartBeatDetails;
+            RequestVoteHeader requestVoteDetails;
+            RequestVoteResultsHeader requestVoteResultsDetails;
+            HeartBeatHeader heartBeatDetails;
+            LogEntryHeader logEntryDetails;
         };
+        Type type = Type::Unknown;
+        size_t conntentLength = 0;
+        char *content;
 
+    public:
         bool isElectionMessage = false;
 
+    public:
+        const char *EncodeMessage(const RaftMessage &raftMessage);
 
-        RaftMessage() {}
+        RaftMessage DncodeMessage(char *const buf);
+
+
+    public:
+        RaftMessage();
     };
 }
 

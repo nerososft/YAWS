@@ -204,6 +204,33 @@ src/RaftCore.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftCore.cpp.s
 .PHONY : src/RaftCore.cpp.s
 
+src/RaftMessage.o: src/RaftMessage.cpp.o
+
+.PHONY : src/RaftMessage.o
+
+# target to build an object file
+src/RaftMessage.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessage.cpp.o
+.PHONY : src/RaftMessage.cpp.o
+
+src/RaftMessage.i: src/RaftMessage.cpp.i
+
+.PHONY : src/RaftMessage.i
+
+# target to preprocess a source file
+src/RaftMessage.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessage.cpp.i
+.PHONY : src/RaftMessage.cpp.i
+
+src/RaftMessage.s: src/RaftMessage.cpp.s
+
+.PHONY : src/RaftMessage.s
+
+# target to generate assembly for a file
+src/RaftMessage.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessage.cpp.s
+.PHONY : src/RaftMessage.cpp.s
+
 src/Server.o: src/Server.cpp.o
 
 .PHONY : src/Server.o
@@ -303,6 +330,9 @@ help:
 	@echo "... src/RaftCore.o"
 	@echo "... src/RaftCore.i"
 	@echo "... src/RaftCore.s"
+	@echo "... src/RaftMessage.o"
+	@echo "... src/RaftMessage.i"
+	@echo "... src/RaftMessage.s"
 	@echo "... src/Server.o"
 	@echo "... src/Server.i"
 	@echo "... src/Server.s"
