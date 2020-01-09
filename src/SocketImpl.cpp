@@ -32,16 +32,19 @@ namespace Raft {
         addr.sin_addr.s_addr = INADDR_ANY;
         if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             std::cerr << "Unable to Open the Socket" << std::endl;
+            exit(0);
         }
 
         kq = kqueue();
         if (kq == -1) {
             std::cerr << "Unable to init kqueue" << std::endl;
+            exit(0);
         }
 
-        EV_SET(&evSet, fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-        if (kevent(kq, &evSet, 1, NULL, 0, NULL) == -1) {
+        EV_SET(&eventSet, fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+        if (kevent(kq, &eventSet, 1, NULL, 0, NULL) == -1) {
             std::cerr << "Unable to init kevent" << std::endl;
+            exit(0);
         }
 
     }
@@ -49,12 +52,14 @@ namespace Raft {
     int SocketImpl::Bind() {
         if (bind(fd, (struct sockaddr *) (&addr), sizeof(addr)) != 0) {
             std::cerr << "Unable to bind the Socket" << std::endl;
+            exit(0);
         }
     }
 
     int SocketImpl::Listen() {
         if (listen(fd, 50) == -1) {
             std::cerr << "Unable to listen the Socket" << std::endl;
+            exit(0);
         }
     }
 
@@ -64,36 +69,35 @@ namespace Raft {
 
     int SocketImpl::Accept(SocketAcceptEventHandler acceptEventHandler) {
 
-        int nev = kevent(kq, NULL, 0, evList, 32, NULL);
+        int nev = kevent(kq, NULL, 0, eventList, 32, NULL);
 
         for (int i = 0; i < nev; i++) {
-            int fd_ = (int) evList[i].ident;
-            if (evList[i].flags & EV_EOF) {
+            int fd_ = (int) eventList[i].ident;
+            if (eventList[i].flags & EV_EOF) {
                 close(fd_);
             } else if (fd_ == fd) {
-                struct sockaddr_storage addr;
-                socklen_t socklen = sizeof(addr);
-                int connfd = accept(fd, (struct sockaddr *) &addr, &socklen);
+                struct sockaddr_storage sockaddrStorage{};
+                socklen_t socklen = sizeof(sockaddrStorage);
+                int connfd = accept(fd, (struct sockaddr *) &sockaddrStorage, &socklen);
                 if (connfd == -1) {
                     std::cerr << "Unable to Connect with the client" << std::endl;
                 } else {
-                    EV_SET(&evSet, connfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-                    kevent(kq, &evSet, 1, NULL, 0, NULL);
+                    EV_SET(&eventSet, connfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+                    kevent(kq, &eventSet, 1, NULL, 0, NULL);
                     printf("Got connection!\n");
 
                     int flags = fcntl(connfd, F_GETFL, 0);
                     assert(flags >= 0);
                     fcntl(connfd, F_SETFL, flags | O_NONBLOCK);
 
-                    EV_SET(&evSet, connfd, EVFILT_WRITE, EV_ADD | EV_ONESHOT, 0, 0, NULL);
-                    kevent(kq, &evSet, 1, NULL, 0, NULL);
+                    EV_SET(&eventSet, connfd, EVFILT_WRITE, EV_ADD | EV_ONESHOT, 0, 0, NULL);
+                    kevent(kq, &eventSet, 1, NULL, 0, NULL);
                 }
-            } else if (evList[i].filter == EVFILT_READ) {
+            } else if (eventList[i].filter == EVFILT_READ) {
                 char buf[1024];
-                size_t bytes_read = recv(evList[i].ident, buf, sizeof(buf), 0);
-                acceptEventHandler(buf, evList[i].ident);
-                printf("read %zu bytes\n", bytes_read);
-            } else if (evList[i].filter == EVFILT_WRITE) {
+                size_t bytes_read = recv(eventList[i].ident, buf, sizeof(buf), 0);
+                acceptEventHandler(buf, eventList[i].ident);
+            } else if (eventList[i].filter == EVFILT_WRITE) {
 
             }
         }

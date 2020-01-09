@@ -22,6 +22,24 @@ netinet/in.h
 sys/event.h
 -
 
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
+ISocket.h
+/Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+SocketImpl.h
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
+memory
+-
+netinet/in.h
+-
+
+/Users/xingfeng.yang/project/live-code/Raft/main.cpp
+include/SocketOps.h
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
+unistd.h
+-
+iostream
+-
+
 /Users/xingfeng.yang/project/live-code/Raft/src/SocketImpl.cpp
 netinet/in.h
 -
@@ -35,4 +53,8 @@ fcntl.h
 -
 ../include/SocketImpl.h
 /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
+
+/Users/xingfeng.yang/project/live-code/Raft/src/SocketOps.cpp
+../include/SocketOps.h
+/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
 

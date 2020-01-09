@@ -12,6 +12,7 @@ void handler(char *buffer, int fdc) {
     }
     char *buf = TEST_HTTP_RESPONSE;
     write(fdc, buf, strlen(buf));
+    close(fdc);
 }
 
 int main() {
@@ -32,6 +33,4 @@ int main() {
     while (true) {
         socketOps->Accept(handler);
     }
-
-    return 0;
 }

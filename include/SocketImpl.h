@@ -45,8 +45,8 @@ namespace Raft {
 
         struct sockaddr_in addr{};
 
-        struct kevent evSet;
-        struct kevent evList[32];
+        struct kevent eventSet{};
+        struct kevent eventList[32]{};
 
         Configuration configuration;
 
