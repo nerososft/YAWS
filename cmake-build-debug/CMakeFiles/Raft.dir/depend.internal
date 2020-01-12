@@ -5,6 +5,7 @@ CMakeFiles/Raft.dir/main.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
  /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
@@ -13,11 +14,13 @@ CMakeFiles/Raft.dir/main.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/main.cpp
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
  /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
@@ -26,6 +29,7 @@ CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp
 CMakeFiles/Raft.dir/src/Message.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
@@ -33,21 +37,25 @@ CMakeFiles/Raft.dir/src/Message.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp
 CMakeFiles/Raft.dir/src/RaftCore.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
  /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp
 CMakeFiles/Raft.dir/src/Server.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Server.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
@@ -59,5 +67,11 @@ CMakeFiles/Raft.dir/src/SocketOps.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
  /Users/xingfeng.yang/project/live-code/Raft/src/SocketOps.cpp
 CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/TimeKeeper.cpp
+CMakeFiles/Raft.dir/src/TimeKeeperImpl.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/TimeKeeperImpl.cpp

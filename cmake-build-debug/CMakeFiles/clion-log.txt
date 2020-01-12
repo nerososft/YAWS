@@ -1,4 +1,16 @@
 "/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/193.5662.56/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/xingfeng.yang/project/live-code/Raft
 -- Configuring done
--- Generating done
--- Build files have been written to: /Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug
+CMake Error at CMakeLists.txt:18 (add_executable):
+  Cannot find source file:
+
+    src/TimeKeeperImpl.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
+  .hpp .hxx .in .txx
+
+
+CMake Error at CMakeLists.txt:18 (add_executable):
+  No SOURCES given to target: Raft
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

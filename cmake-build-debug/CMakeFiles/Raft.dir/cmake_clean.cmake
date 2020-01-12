@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Raft.dir/src/SocketImpl.cpp.o"
   "CMakeFiles/Raft.dir/src/SocketOps.cpp.o"
   "CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o"
+  "CMakeFiles/Raft.dir/src/TimeKeeperImpl.cpp.o"
   "Raft"
   "Raft.pdb"
 )

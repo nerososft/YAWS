@@ -1,7 +1,6 @@
 //
 // Created by XingfengYang on 2020/1/2.
 //
-#include <time.h>
 #include "../include/TimeKeeper.h"
 
 namespace Raft {
@@ -11,10 +10,10 @@ namespace Raft {
 
     TimeKeeper &TimeKeeper::operator=(TimeKeeper &&) noexcept = default;
 
-    TimeKeeper::TimeKeeper() {
+    TimeKeeper::TimeKeeper() : impl(std::make_shared<TimeKeeperImpl>()) {
     }
 
     double TimeKeeper::GetCurrentTime() {
-        return time(NULL);
+        return impl->GetCurrentTime();
     }
 }

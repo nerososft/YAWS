@@ -47,7 +47,6 @@ namespace Raft {
         configuration.instancesNumbers = {2, 5, 6, 7, 11};
         configuration.selfInstanceNumber = 2;
         this->server->Configure(configuration);
-
         this->server->SetTimeKeeper(this->timeKeeper);
 
         // sleep to accept heart beat
