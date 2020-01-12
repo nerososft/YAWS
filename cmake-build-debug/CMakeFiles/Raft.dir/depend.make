@@ -17,6 +17,7 @@ CMakeFiles/Raft.dir/main.cpp.o: ../main.cpp
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Bootstrap.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/IServer.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/ISocket.h
+CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Message.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftCore.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftMessage.h
@@ -56,4 +57,7 @@ CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../include/SocketImpl.h
 CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../include/SocketOps.h
 CMakeFiles/Raft.dir/src/SocketOps.cpp.o: ../src/SocketOps.cpp
+
+CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o: ../include/TimeKeeper.h
+CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o: ../src/TimeKeeper.cpp
 

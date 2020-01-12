@@ -102,14 +102,6 @@ netinet/in.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
 
-/Users/xingfeng.yang/project/live-code/Raft/main.cpp
-include/Bootstrap.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
-include/RaftMessage.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
-include/Log.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Log.h
-
 /Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp
 ../include/Bootstrap.h
 /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
@@ -117,8 +109,8 @@ unistd.h
 -
 iostream
 -
-
-/Users/xingfeng.yang/project/live-code/Raft/src/SocketOps.cpp
-../include/SocketOps.h
-/Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
+memory
+-
+../include/Log.h
+/Users/xingfeng.yang/project/live-code/Raft/include/Log.h
 

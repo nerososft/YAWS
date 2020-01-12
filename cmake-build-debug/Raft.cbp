@@ -104,6 +104,9 @@
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/SocketOps.cpp">
 			<Option target="Raft"/>
 		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/TimeKeeper.cpp">
+			<Option target="Raft"/>
+		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -4,6 +4,8 @@
 #include "../include/Bootstrap.h"
 #include <unistd.h>
 #include <iostream>
+#include <memory>
+#include "../include/Log.h"
 
 namespace Raft {
 
@@ -13,8 +15,10 @@ namespace Raft {
 
     RaftBootstrap &RaftBootstrap::operator=(RaftBootstrap &&) noexcept = default;
 
-    RaftBootstrap::RaftBootstrap() : server(std::make_shared<Server>()), socketOps(std::make_shared<SocketOps>()) {}
-
+    RaftBootstrap::RaftBootstrap() :
+            server(std::make_shared<Server>()),
+            socketOps(std::make_shared<SocketOps>()),
+            timeKeeper(std::make_shared<TimeKeeper>()) {}
 
     void RaftBootstrap::LoadConfigFile() {
 
@@ -37,22 +41,39 @@ namespace Raft {
     }
 
     void RaftBootstrap::Run() {
-        // sleep to accept heart beat
+        PrintSplash();
+
         Raft::Server::Configuration configuration;
         configuration.instancesNumbers = {2, 5, 6, 7, 11};
         configuration.selfInstanceNumber = 2;
         this->server->Configure(configuration);
-        // server->Mobilize();
+
+        this->server->SetTimeKeeper(this->timeKeeper);
+
+        // sleep to accept heart beat
+        server->Mobilize();
 
         Raft::ISocket::Configuration socketConfig;
         socketConfig.port = 8899;
         this->socketOps->Configure(socketConfig);
+
         this->socketOps->SetUp();
         this->socketOps->Bind();
         this->socketOps->Listen();
         while (isRunning) {
             this->socketOps->Accept(handler);
         }
+    }
+
+    void RaftBootstrap::PrintSplash() {
+        PrintColor2(" __ __    ___  ____    ____  _____  ______ \n")
+        PrintColor3("|  |  |  /  _]|    \\  /    ||     ||      |\n")
+        PrintColor4("|  |  | /  [_ |  D  )|  o  ||   __||      |\n")
+        PrintColor5("|  ~  ||    _]|    / |     ||  |_  |_|  |_|\n")
+        PrintColor6("|___, ||   [_ |    \\ |  _  ||   _]   |  |  \n")
+        PrintColor7("|     ||     ||  .  \\|  |  ||  |     |  |  \n")
+        PrintColor1("|____/ |_____||__|\\_||__|__||__|     |__|  \n")
+        PrintColor2("                                          ")
     }
 
 }

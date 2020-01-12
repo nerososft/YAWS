@@ -339,6 +339,33 @@ src/SocketOps.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/SocketOps.cpp.s
 .PHONY : src/SocketOps.cpp.s
 
+src/TimeKeeper.o: src/TimeKeeper.cpp.o
+
+.PHONY : src/TimeKeeper.o
+
+# target to build an object file
+src/TimeKeeper.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o
+.PHONY : src/TimeKeeper.cpp.o
+
+src/TimeKeeper.i: src/TimeKeeper.cpp.i
+
+.PHONY : src/TimeKeeper.i
+
+# target to preprocess a source file
+src/TimeKeeper.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/TimeKeeper.cpp.i
+.PHONY : src/TimeKeeper.cpp.i
+
+src/TimeKeeper.s: src/TimeKeeper.cpp.s
+
+.PHONY : src/TimeKeeper.s
+
+# target to generate assembly for a file
+src/TimeKeeper.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/TimeKeeper.cpp.s
+.PHONY : src/TimeKeeper.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -372,6 +399,9 @@ help:
 	@echo "... src/SocketOps.o"
 	@echo "... src/SocketOps.i"
 	@echo "... src/SocketOps.s"
+	@echo "... src/TimeKeeper.o"
+	@echo "... src/TimeKeeper.i"
+	@echo "... src/TimeKeeper.s"
 .PHONY : help
 
 

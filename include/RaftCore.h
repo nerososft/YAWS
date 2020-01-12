@@ -53,7 +53,6 @@ namespace {
 }
 
 namespace Raft {
-
     class RaftCore {
 
     public:
