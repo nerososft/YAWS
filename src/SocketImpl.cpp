@@ -68,29 +68,28 @@ namespace Raft {
     }
 
     int SocketImpl::Accept(SocketAcceptEventHandler acceptEventHandler) {
-
         int nev = kevent(kq, NULL, 0, eventList, 32, NULL);
+        struct sockaddr_storage sockaddrStorage{};
+        socklen_t socklen = sizeof(sockaddrStorage);
 
         for (int i = 0; i < nev; i++) {
             int fd_ = (int) eventList[i].ident;
             if (eventList[i].flags & EV_EOF) {
                 close(fd_);
             } else if (fd_ == fd) {
-                struct sockaddr_storage sockaddrStorage{};
-                socklen_t socklen = sizeof(sockaddrStorage);
-                int connfd = accept(fd, (struct sockaddr *) &sockaddrStorage, &socklen);
-                if (connfd == -1) {
+                int connectedFd = accept(fd, (struct sockaddr *) &sockaddrStorage, &socklen);
+                if (connectedFd == -1) {
                     std::cerr << "Unable to Connect with the client" << std::endl;
                 } else {
-                    EV_SET(&eventSet, connfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
+                    EV_SET(&eventSet, connectedFd, EVFILT_READ, EV_ADD, 0, 0, NULL);
                     kevent(kq, &eventSet, 1, NULL, 0, NULL);
                     printf("Got connection!\n");
 
-                    int flags = fcntl(connfd, F_GETFL, 0);
+                    int flags = fcntl(connectedFd, F_GETFL, 0);
                     assert(flags >= 0);
-                    fcntl(connfd, F_SETFL, flags | O_NONBLOCK);
+                    fcntl(connectedFd, F_SETFL, flags | O_NONBLOCK);
 
-                    EV_SET(&eventSet, connfd, EVFILT_WRITE, EV_ADD | EV_ONESHOT, 0, 0, NULL);
+                    EV_SET(&eventSet, connectedFd, EVFILT_WRITE, EV_ADD | EV_ONESHOT, 0, 0, NULL);
                     kevent(kq, &eventSet, 1, NULL, 0, NULL);
                 }
             } else if (eventList[i].filter == EVFILT_READ) {

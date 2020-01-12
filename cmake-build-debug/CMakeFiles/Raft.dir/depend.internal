@@ -3,6 +3,8 @@
 
 CMakeFiles/Raft.dir/main.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
  /Users/xingfeng.yang/project/live-code/Raft/main.cpp

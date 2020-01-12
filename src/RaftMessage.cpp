@@ -25,37 +25,36 @@ namespace Raft {
 //    unsigned int contentSize = 0;
 //    char crc[4];
 //    char *buf;
-    const char *RaftMessage::EncodeMessage(const RaftMessage &raftMessage) {
-        char *requestBuffer = (char *) malloc(64 + raftMessage.conntentLength * sizeof(char));
+    const char *RaftMessage::EncodeMessage() {
+        char *requestBuffer = (char *) malloc(64 + this->conntentLength * sizeof(char));
 
         // header
         *requestBuffer = MAGIC_NUMBER;
         requestBuffer++;
-        switch (raftMessage.type) {
+        switch (this->type) {
             case Type::RequestVote: {
                 *requestBuffer = 1;
                 requestBuffer++;
-                unsigned int candidateId = raftMessage.requestVoteDetails.candidateId;
-                unsigned int twoByteCandidateId = ((candidateId << 16) >> 16) | 0xFFFFFFFF;
-                requestBuffer -= 2;
+                uint32_t candidateId = this->requestVoteDetails.candidateId;
+                uint32_t twoByteCandidateId = ((candidateId << 16) >> 16) | 0xFFFF0000;
+                requestBuffer -= 2 * sizeof(char);
                 *(uint32_t *) requestBuffer &= twoByteCandidateId;
-                requestBuffer += 4;
-                *(uint32_t *) requestBuffer = raftMessage.requestVoteDetails.term;
-                requestBuffer += 4;
-                *(uint32_t *) requestBuffer = raftMessage.conntentLength;
+                requestBuffer += sizeof(uint32_t);
+                *(uint32_t *) requestBuffer = this->requestVoteDetails.term;
+                requestBuffer += sizeof(uint32_t);
+                *(uint32_t *) requestBuffer = this->conntentLength;
             }
                 break;
             case Type::RequestVoteResults: {
-                *requestBuffer = 2;
+                *requestBuffer = 2 * sizeof(char);
                 requestBuffer++;
-                unsigned int voteGranted = raftMessage.requestVoteResultsDetails.voteGranted;
-                unsigned int twoByteCandidateId = ((voteGranted << 16) >> 16) | 0xFFFFFFFF;
-                requestBuffer -= 2;
-                *(uint32_t *) requestBuffer &= twoByteCandidateId;
-                requestBuffer += 4;
-                *(uint32_t *) requestBuffer = raftMessage.requestVoteResultsDetails.term;
-                requestBuffer += 4;
-                *(uint32_t *) requestBuffer = raftMessage.conntentLength;
+                uint32_t voteGranted = this->requestVoteResultsDetails.voteGranted;
+                requestBuffer -= 2 * sizeof(char);
+                *(uint32_t *) requestBuffer &= voteGranted;
+                requestBuffer += sizeof(uint32_t);
+                *(uint32_t *) requestBuffer = this->requestVoteResultsDetails.term;
+                requestBuffer += sizeof(uint32_t);
+                *(uint32_t *) requestBuffer = this->conntentLength;
             }
                 break;
             case Type::HeartBeat: {
@@ -72,6 +71,8 @@ namespace Raft {
         }
 
         // crc
+        // X32+X26+X23+X22+X16+X12+X11+X10+X8+X7+X5+X4+X2+X1+1
+
 
         // content
 

@@ -20,21 +20,21 @@ namespace Raft {
     };
 
     struct RequestVoteHeader {
-        unsigned int term = 0;
-        unsigned int candidateId = 0;
+        uint32_t term = 0;
+        uint32_t candidateId = 0;
     };
 
     struct RequestVoteResultsHeader {
-        unsigned int term = 0;
+        uint32_t term = 0;
         bool voteGranted = false;
     };
 
     struct HeartBeatHeader {
-        unsigned int term = 0;
+        uint32_t term = 0;
     };
 
     struct LogEntryHeader {
-        unsigned int term = 0;
+        uint32_t term = 0;
     };
 
     class RaftMessage {
@@ -64,7 +64,7 @@ namespace Raft {
         bool isElectionMessage = false;
 
     public:
-        const char *EncodeMessage(const RaftMessage &raftMessage);
+        const char *EncodeMessage();
 
         RaftMessage DncodeMessage(char *const buf);
 
