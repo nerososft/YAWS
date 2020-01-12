@@ -38,10 +38,6 @@ namespace Raft {
 
         virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) override;
 
-    public:
-        bool running = 1;
-
-
     private:
         std::shared_ptr<SocketImpl> impl;
     };

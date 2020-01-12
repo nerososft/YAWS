@@ -83,6 +83,9 @@
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/main.cpp">
 			<Option target="Raft"/>
 		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp">
+			<Option target="Raft"/>
+		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp">
 			<Option target="Raft"/>
 		</Unit>

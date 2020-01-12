@@ -150,6 +150,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/Bootstrap.o: src/Bootstrap.cpp.o
+
+.PHONY : src/Bootstrap.o
+
+# target to build an object file
+src/Bootstrap.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
+.PHONY : src/Bootstrap.cpp.o
+
+src/Bootstrap.i: src/Bootstrap.cpp.i
+
+.PHONY : src/Bootstrap.i
+
+# target to preprocess a source file
+src/Bootstrap.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Bootstrap.cpp.i
+.PHONY : src/Bootstrap.cpp.i
+
+src/Bootstrap.s: src/Bootstrap.cpp.s
+
+.PHONY : src/Bootstrap.s
+
+# target to generate assembly for a file
+src/Bootstrap.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Bootstrap.cpp.s
+.PHONY : src/Bootstrap.cpp.s
+
 src/Message.o: src/Message.cpp.o
 
 .PHONY : src/Message.o
@@ -324,6 +351,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/Bootstrap.o"
+	@echo "... src/Bootstrap.i"
+	@echo "... src/Bootstrap.s"
 	@echo "... src/Message.o"
 	@echo "... src/Message.i"
 	@echo "... src/Message.s"
