@@ -7,6 +7,7 @@
 #include <memory>
 #include "Server.h"
 #include "SocketOps.h"
+#include <fstream>
 
 namespace Raft {
     class RaftBootstrap {

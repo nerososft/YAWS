@@ -84,7 +84,7 @@ namespace Raft {
 
     RaftMessage RaftMessage::DecodeMessage(char *buf) {
         if (this->ReadMem(buf, 0) != MAGIC_NUMBER) {
-            throw "Decode: Magic Number check failed.";
+            throw std::logic_error("Decode: Magic Number check failed.");
         }
         RaftMessage raftMessage;
         switch (this->ReadMem(buf, 1)) {
