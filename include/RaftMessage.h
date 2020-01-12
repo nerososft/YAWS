@@ -9,7 +9,7 @@
 
 namespace Raft {
 
-    static const char MAGIC_NUMBER = 0b1001101;
+    static const char MAGIC_NUMBER = 0b01111110;
 
     enum class Type {
         Unknown = 0,
@@ -35,6 +35,7 @@ namespace Raft {
 
     struct LogEntryHeader {
         uint32_t term = 0;
+        uint32_t commissionId = 0;
     };
 
     class RaftMessage {
@@ -63,10 +64,17 @@ namespace Raft {
     public:
         bool isElectionMessage = false;
 
-    public:
-        const char *EncodeMessage();
+    private:
+        void WriteMem(char *mem, uint32_t offset, char value);
 
-        RaftMessage DncodeMessage(char *const buf);
+        char ReadMem(char *mem, uint32_t offset);
+
+        uint32_t ReadMemU32(char *mem, uint32_t offset);
+
+    public:
+        char *EncodeMessage();
+
+        RaftMessage DecodeMessage(char *buf);
 
 
     public:

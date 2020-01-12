@@ -5,9 +5,12 @@
 #include <iostream>
 #include "include/Log.h"
 
-#define TEST(text, func){ PrintColor3(": %s\n",text); func();}
+#define TEST(text, func){ PrintColor4(" test case: %s [TESTING]\n",text); func(); PrintColor3(" test case: %s [Ok]\n",text)}
 
-#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n<h1>Raft Server Works</h1>"
+#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
+"<h1>Raft Server Status:\n</h1>"\
+"<p style='color:green;'>HTTP Server works.\n</p>"\
+
 
 void handler(char *buffer, int fdc) {
     while (*buffer != '\0') {
@@ -22,12 +25,18 @@ void handler(char *buffer, int fdc) {
 void should_encode_decode_raft_message() {
     auto *raftMessage = new Raft::RaftMessage();
     raftMessage->type = Raft::Type::RequestVote;
-    raftMessage->requestVoteDetails.candidateId = 1;
-    raftMessage->requestVoteDetails.term = 1;
+    raftMessage->requestVoteDetails.candidateId = 2;
+    raftMessage->requestVoteDetails.term = 2;
     raftMessage->conntentLength = 1024;
 
-    const char *encodeMessage = raftMessage->EncodeMessage();
+    char *encodeMessage = raftMessage->EncodeMessage();
+    assert(*encodeMessage != '\0');
 
+    Raft::RaftMessage message = raftMessage->DecodeMessage(encodeMessage);
+    assert(message.conntentLength == 1024);
+    assert(message.type == Raft::Type::RequestVote);
+    assert(message.requestVoteDetails.candidateId == 2);
+    assert(message.requestVoteDetails.term == 2);
 }
 
 int main() {
@@ -46,7 +55,7 @@ int main() {
 //    socketOps->SetUp();
 //    socketOps->Bind();
 //    socketOps->Listen();
-//    while (true) {
+//    while (socketOps->running) {
 //        socketOps->Accept(handler);
 //    }
 
