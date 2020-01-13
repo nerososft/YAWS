@@ -2,18 +2,18 @@
 // Created by XingfengYang on 2020/1/2.
 //
 #include <iostream>
-#include "../include/RaftCore.h"
+#include "../include/RaftServerImpl.h"
 #include "../include/RaftMessage.h"
 
 namespace Raft {
 
-    RaftCore::~RaftCore() noexcept = default;
+    RaftServerImpl::~RaftServerImpl() noexcept = default;
 
-    RaftCore::RaftCore() :
+    RaftServerImpl::RaftServerImpl() :
             sharedProperties(std::make_shared<ServerSharedProperties>()) {
     }
 
-    void RaftCore::ResetElectionTimer() {
+    void RaftServerImpl::ResetElectionTimer() {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
         sharedProperties->currentElectionTimeout = std::uniform_real_distribution<>(
@@ -22,12 +22,12 @@ namespace Raft {
         )(sharedProperties->randomGenerator);
     }
 
-    double RaftCore::GetTimeSinceLastLeaderMessage(double now) {
+    double RaftServerImpl::GetTimeSinceLastLeaderMessage(double now) {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         return now - sharedProperties->timeOfLastLeaderMessage;
     }
 
-    void RaftCore::SendMessage(const std::shared_ptr<Message> &message, unsigned int instanceNumber, double now) {
+    void RaftServerImpl::SendMessage(const std::shared_ptr<Message> &message, unsigned int instanceNumber, double now) {
         auto &instance = sharedProperties->instances[instanceNumber];
         instance.timeLastRequestSend = now;
         instance.lastRequest = message;
@@ -35,7 +35,7 @@ namespace Raft {
         sendMessageDelegate(message, instanceNumber);
     }
 
-    void RaftCore::StartElection(double now) {
+    void RaftServerImpl::StartElection(double now) {
         ++sharedProperties->configuration.currentTerm;
 
         sharedProperties->votedThisTerm = true;
@@ -62,7 +62,7 @@ namespace Raft {
         sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
     }
 
-    void RaftCore::SendHeartBeat(double now) {
+    void RaftServerImpl::SendHeartBeat(double now) {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->votesForUs = 1;
         const auto message = Message::CreateMessage();
@@ -78,7 +78,7 @@ namespace Raft {
         this->sharedProperties->timeOfLastLeaderMessage = timeKeeper->GetCurrentTime();
     }
 
-    void RaftCore::DoRetransmission(double now) {
+    void RaftServerImpl::DoRetransmission(double now) {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         for (auto &instanceEntry: sharedProperties->instances) {
             if (instanceEntry.second.awaitingVote &&
@@ -90,7 +90,7 @@ namespace Raft {
         }
     }
 
-    void RaftCore::RevertToFollower() {
+    void RaftServerImpl::RevertToFollower() {
         for (auto &instanceEntry: sharedProperties->instances) {
             instanceEntry.second.awaitingVote = false;
         }
@@ -98,7 +98,7 @@ namespace Raft {
         ResetElectionTimer();
     }
 
-    void RaftCore::Worker() {
+    void RaftServerImpl::Worker() {
         ResetElectionTimer();
         int rpcTimeoutMilliseconds = (int) (sharedProperties->configuration.rpcTimeout * 1000.0);
         std::future<void> workerAskedToStop = stopWorker.get_future();
@@ -136,7 +136,7 @@ namespace Raft {
         }
     }
 
-    bool RaftCore::IsLeader() {
+    bool RaftServerImpl::IsLeader() {
         return sharedProperties->isLeader;
     }
 

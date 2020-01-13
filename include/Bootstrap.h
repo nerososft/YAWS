@@ -5,7 +5,7 @@
 #define RAFT_BOOTSTRAP_H
 
 #include <memory>
-#include "Server.h"
+#include "RaftServer.h"
 #include "SocketOps.h"
 #include <fstream>
 
@@ -31,13 +31,13 @@ namespace Raft {
     private:
         bool isRunning = true;
         std::shared_ptr<TimeKeeper> timeKeeper;
-        std::shared_ptr<Server> server;
+        std::shared_ptr<RaftServer> server;
         std::shared_ptr<SocketOps> socketOps;
 
     public:
         void Run();
 
-        void PrintSplash();
+        static void PrintSplash();
     };
 
 }

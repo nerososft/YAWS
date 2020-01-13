@@ -89,13 +89,13 @@
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp">
 			<Option target="Raft"/>
 		</Unit>
-		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftCore.cpp">
-			<Option target="Raft"/>
-		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp">
 			<Option target="Raft"/>
 		</Unit>
-		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Server.cpp">
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftServer.cpp">
+			<Option target="Raft"/>
+		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftServerImpl.cpp">
 			<Option target="Raft"/>
 		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/SocketImpl.cpp">

@@ -9,8 +9,8 @@ set(SRC_LIST ${SEC_LIST} src/Message.cpp
         src/TimeKeeperImpl.cpp
         src/SocketImpl.cpp
         src/SocketOps.cpp
-        src/RaftCore.cpp
-        src/Server.cpp
+        src/RaftServerImpl.cpp
+        src/RaftServer.cpp
         src/Bootstrap.cpp
         main.cpp
         )

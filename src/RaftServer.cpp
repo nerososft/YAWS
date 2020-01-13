@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/1/1.
 //
-#include "../include/Server.h"
+#include "../include/RaftServer.h"
 #include "../include/Message.h"
 #include "../include/RaftMessage.h"
 #include <thread>
@@ -12,22 +12,22 @@
 
 namespace Raft {
 
-    Server::~Server() noexcept = default;
+    RaftServer::~RaftServer() noexcept = default;
 
-    Server::Server(Raft::Server &&) noexcept = default;
+    RaftServer::RaftServer(Raft::RaftServer &&) noexcept = default;
 
-    Server &Server::operator=(Server &&) noexcept = default;
+    RaftServer &RaftServer::operator=(RaftServer &&) noexcept = default;
 
-    Server::Server() : raftServer(new RaftCore()) {
+    RaftServer::RaftServer() : raftServer(new RaftServerImpl()) {
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 //        raftServer->sharedProperties->randomGenerator.seed(seed);
     }
 
-    void Server::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
+    void RaftServer::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
         raftServer->timeKeeper = timeKeeper;
     }
 
-    void Server::Mobilize() {
+    void RaftServer::Mobilize() {
         if (raftServer->worker.joinable()) {
             return;
         }
@@ -36,10 +36,10 @@ namespace Raft {
         raftServer->sharedProperties->timeOfLastLeaderMessage = 0.0;
         raftServer->sharedProperties->votesForUs = 0;
         raftServer->stopWorker = std::promise<void>();
-        raftServer->worker = std::thread(&RaftCore::Worker, raftServer.get());
+        raftServer->worker = std::thread(&RaftServerImpl::Worker, raftServer.get());
     }
 
-    void Server::Demobilize() {
+    void RaftServer::Demobilize() {
         if (!raftServer->worker.joinable()) {
             return;
         }
@@ -51,7 +51,7 @@ namespace Raft {
         raftServer->worker.join();
     }
 
-    void Server::WaitForAtLeastOneWorkerLoop() {
+    void RaftServer::WaitForAtLeastOneWorkerLoop() {
         std::unique_lock<decltype(raftServer->sharedProperties->mutex)> lock(raftServer->sharedProperties->mutex);
         raftServer->sharedProperties->workerLoopCompletion = std::make_shared<std::promise<void>>();
         auto workerLoopCompletion = raftServer->sharedProperties->workerLoopCompletion->get_future();
@@ -61,16 +61,16 @@ namespace Raft {
     }
 
 
-    bool Server::Configure(const Configuration &configuration) {
+    bool RaftServer::Configure(const Configuration &configuration) {
         raftServer->sharedProperties->configuration = configuration;
         return true;
     }
 
-    void Server::SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) {
+    void RaftServer::SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) {
         raftServer->sendMessageDelegate = sendMessageDelegate;
     }
 
-    void Server::ReceiveMessage(std::shared_ptr<Message> message,
+    void RaftServer::ReceiveMessage(std::shared_ptr<Message> message,
                                 unsigned int senderInstanceNumber) {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {

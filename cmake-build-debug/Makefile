@@ -204,33 +204,6 @@ src/Message.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Message.cpp.s
 .PHONY : src/Message.cpp.s
 
-src/RaftCore.o: src/RaftCore.cpp.o
-
-.PHONY : src/RaftCore.o
-
-# target to build an object file
-src/RaftCore.cpp.o:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftCore.cpp.o
-.PHONY : src/RaftCore.cpp.o
-
-src/RaftCore.i: src/RaftCore.cpp.i
-
-.PHONY : src/RaftCore.i
-
-# target to preprocess a source file
-src/RaftCore.cpp.i:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftCore.cpp.i
-.PHONY : src/RaftCore.cpp.i
-
-src/RaftCore.s: src/RaftCore.cpp.s
-
-.PHONY : src/RaftCore.s
-
-# target to generate assembly for a file
-src/RaftCore.cpp.s:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftCore.cpp.s
-.PHONY : src/RaftCore.cpp.s
-
 src/RaftMessage.o: src/RaftMessage.cpp.o
 
 .PHONY : src/RaftMessage.o
@@ -258,32 +231,59 @@ src/RaftMessage.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessage.cpp.s
 .PHONY : src/RaftMessage.cpp.s
 
-src/Server.o: src/Server.cpp.o
+src/RaftServer.o: src/RaftServer.cpp.o
 
-.PHONY : src/Server.o
+.PHONY : src/RaftServer.o
 
 # target to build an object file
-src/Server.cpp.o:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Server.cpp.o
-.PHONY : src/Server.cpp.o
+src/RaftServer.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServer.cpp.o
+.PHONY : src/RaftServer.cpp.o
 
-src/Server.i: src/Server.cpp.i
+src/RaftServer.i: src/RaftServer.cpp.i
 
-.PHONY : src/Server.i
+.PHONY : src/RaftServer.i
 
 # target to preprocess a source file
-src/Server.cpp.i:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Server.cpp.i
-.PHONY : src/Server.cpp.i
+src/RaftServer.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServer.cpp.i
+.PHONY : src/RaftServer.cpp.i
 
-src/Server.s: src/Server.cpp.s
+src/RaftServer.s: src/RaftServer.cpp.s
 
-.PHONY : src/Server.s
+.PHONY : src/RaftServer.s
 
 # target to generate assembly for a file
-src/Server.cpp.s:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Server.cpp.s
-.PHONY : src/Server.cpp.s
+src/RaftServer.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServer.cpp.s
+.PHONY : src/RaftServer.cpp.s
+
+src/RaftServerImpl.o: src/RaftServerImpl.cpp.o
+
+.PHONY : src/RaftServerImpl.o
+
+# target to build an object file
+src/RaftServerImpl.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o
+.PHONY : src/RaftServerImpl.cpp.o
+
+src/RaftServerImpl.i: src/RaftServerImpl.cpp.i
+
+.PHONY : src/RaftServerImpl.i
+
+# target to preprocess a source file
+src/RaftServerImpl.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.i
+.PHONY : src/RaftServerImpl.cpp.i
+
+src/RaftServerImpl.s: src/RaftServerImpl.cpp.s
+
+.PHONY : src/RaftServerImpl.s
+
+# target to generate assembly for a file
+src/RaftServerImpl.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.s
+.PHONY : src/RaftServerImpl.cpp.s
 
 src/SocketImpl.o: src/SocketImpl.cpp.o
 
@@ -411,15 +411,15 @@ help:
 	@echo "... src/Message.o"
 	@echo "... src/Message.i"
 	@echo "... src/Message.s"
-	@echo "... src/RaftCore.o"
-	@echo "... src/RaftCore.i"
-	@echo "... src/RaftCore.s"
 	@echo "... src/RaftMessage.o"
 	@echo "... src/RaftMessage.i"
 	@echo "... src/RaftMessage.s"
-	@echo "... src/Server.o"
-	@echo "... src/Server.i"
-	@echo "... src/Server.s"
+	@echo "... src/RaftServer.o"
+	@echo "... src/RaftServer.i"
+	@echo "... src/RaftServer.s"
+	@echo "... src/RaftServerImpl.o"
+	@echo "... src/RaftServerImpl.i"
+	@echo "... src/RaftServerImpl.s"
 	@echo "... src/SocketImpl.o"
 	@echo "... src/SocketImpl.i"
 	@echo "... src/SocketImpl.s"

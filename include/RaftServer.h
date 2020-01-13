@@ -2,30 +2,30 @@
 // Created by XingfengYang on 2020/1/1.
 //
 
-#ifndef RAFT_SERVER_H
-#define RAFT_SERVER_H
+#ifndef RAFT_RAFTSERVER_H
+#define RAFT_RAFTSERVER_H
 
 #include <memory>
 
 #include "IServer.h"
 #include "TimeKeeper.h"
-#include "../include/RaftCore.h"
+#include "RaftServerImpl.h"
 
 namespace Raft {
-    class Server : public IServer {
+    class RaftServer : public IServer {
     public:
-        ~Server() noexcept;
+        ~RaftServer() noexcept;
 
-        Server(const Server &) = delete;
+        RaftServer(const RaftServer &) = delete;
 
-        Server(Server &&) noexcept;
+        RaftServer(RaftServer &&) noexcept;
 
-        Server &operator=(const Server &) = delete;
+        RaftServer &operator=(const RaftServer &) = delete;
 
-        Server &operator=(Server &&) noexcept;
+        RaftServer &operator=(RaftServer &&) noexcept;
 
     public:
-        Server();
+        RaftServer();
 
         void SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper);
 
@@ -42,9 +42,8 @@ namespace Raft {
 
         virtual void ReceiveMessage(std::shared_ptr<Message> message,
                                     unsigned int senderInstanceNumber) override;
-
     private:
-        std::shared_ptr<RaftCore> raftServer;
+        std::shared_ptr<RaftServerImpl> raftServer;
     };
 }
-#endif //RAFT_SERVER_H
+#endif //RAFT_RAFTSERVER_H

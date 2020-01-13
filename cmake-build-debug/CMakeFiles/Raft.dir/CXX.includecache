@@ -9,8 +9,8 @@
 /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
 memory
 -
-Server.h
-/Users/xingfeng.yang/project/live-code/Raft/include/Server.h
+RaftServer.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
 SocketOps.h
 /Users/xingfeng.yang/project/live-code/Raft/include/SocketOps.h
 fstream
@@ -52,7 +52,21 @@ functional
 RaftMessage.h
 /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
 
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+memory
+-
+
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
+memory
+-
+IServer.h
+/Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+TimeKeeper.h
+/Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
+RaftServerImpl.h
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
+
+/Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
 memory
 -
 thread
@@ -71,20 +85,6 @@ IServer.h
 /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
 TimeKeeper.h
 /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
-
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
-memory
--
-
-/Users/xingfeng.yang/project/live-code/Raft/include/Server.h
-memory
--
-IServer.h
-/Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
-TimeKeeper.h
-/Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
-../include/RaftCore.h
-/Users/xingfeng.yang/project/live-code/Raft/include/RaftCore.h
 
 /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
 ISocket.h

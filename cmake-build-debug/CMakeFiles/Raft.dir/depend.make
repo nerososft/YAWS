@@ -7,9 +7,9 @@ CMakeFiles/Raft.dir/main.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/ITimeKeeper.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/Message.h
-CMakeFiles/Raft.dir/main.cpp.o: ../include/RaftCore.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/RaftMessage.h
-CMakeFiles/Raft.dir/main.cpp.o: ../include/Server.h
+CMakeFiles/Raft.dir/main.cpp.o: ../include/RaftServer.h
+CMakeFiles/Raft.dir/main.cpp.o: ../include/RaftServerImpl.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/SocketImpl.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/SocketOps.h
 CMakeFiles/Raft.dir/main.cpp.o: ../include/TimeKeeper.h
@@ -22,9 +22,9 @@ CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/ITimeKeeper.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Message.h
-CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftCore.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftMessage.h
-CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/Server.h
+CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftServer.h
+CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/RaftServerImpl.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/SocketImpl.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/SocketOps.h
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../include/TimeKeeper.h
@@ -35,27 +35,27 @@ CMakeFiles/Raft.dir/src/Message.cpp.o: ../include/Message.h
 CMakeFiles/Raft.dir/src/Message.cpp.o: ../include/RaftMessage.h
 CMakeFiles/Raft.dir/src/Message.cpp.o: ../src/Message.cpp
 
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/IServer.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/ITimeKeeper.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/Message.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/RaftCore.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/RaftMessage.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/TimeKeeper.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../include/TimeKeeperImpl.h
-CMakeFiles/Raft.dir/src/RaftCore.cpp.o: ../src/RaftCore.cpp
-
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: ../include/RaftMessage.h
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: ../src/RaftMessage.cpp
 
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/IServer.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/ITimeKeeper.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/Message.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/RaftCore.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/RaftMessage.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/Server.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/TimeKeeper.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../include/TimeKeeperImpl.h
-CMakeFiles/Raft.dir/src/Server.cpp.o: ../src/Server.cpp
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/IServer.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/ITimeKeeper.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/Message.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftMessage.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftServer.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftServerImpl.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/TimeKeeper.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/TimeKeeperImpl.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../src/RaftServer.cpp
+
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/IServer.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/ITimeKeeper.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/Message.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/RaftMessage.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/RaftServerImpl.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/TimeKeeper.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/TimeKeeperImpl.h
+CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../src/RaftServerImpl.cpp
 
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../include/SocketImpl.h

@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/1/2.
 //
 
-#ifndef RAFT_RAFTCORE_H
-#define RAFT_RAFTCORE_H
+#ifndef RAFT_RAFTSERVERIMPL_H
+#define RAFT_RAFTSERVERIMPL_H
 
 #include <memory>
 #include <thread>
@@ -53,10 +53,10 @@ namespace {
 }
 
 namespace Raft {
-    class RaftCore {
+    class RaftServerImpl {
 
     public:
-        ~RaftCore() noexcept;
+        ~RaftServerImpl() noexcept;
 
     public:
         std::shared_ptr<ServerSharedProperties> sharedProperties;
@@ -70,7 +70,7 @@ namespace Raft {
         std::condition_variable workerAskedToStopOrWeakUp;
 
     public:
-        RaftCore();
+        RaftServerImpl();
 
         void ResetElectionTimer();
 
@@ -91,4 +91,4 @@ namespace Raft {
         bool IsLeader();
     };
 }
-#endif //RAFT_RAFTCORE_H
+#endif //RAFT_RAFTSERVERIMPL_H

@@ -20,7 +20,7 @@ namespace Raft {
     RaftBootstrap &RaftBootstrap::operator=(RaftBootstrap &&) noexcept = default;
 
     RaftBootstrap::RaftBootstrap() :
-            server(std::make_shared<Server>()),
+            server(std::make_shared<RaftServer>()),
             socketOps(std::make_shared<SocketOps>()),
             timeKeeper(std::make_shared<TimeKeeper>()) {}
 
@@ -78,7 +78,7 @@ namespace Raft {
         PrintSplash();
         LoadConfigFile();
 
-        Raft::Server::Configuration configuration;
+        Raft::RaftServer::Configuration configuration;
         configuration.instancesNumbers = {2, 5, 6, 7, 11};
         configuration.selfInstanceNumber = 2;
         this->server->Configure(configuration);
