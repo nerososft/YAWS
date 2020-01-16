@@ -35,6 +35,9 @@ namespace Raft {
 
     public:
         HttpMessageImpl();
+
+    private:
+        void SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const;
     };
 }
 

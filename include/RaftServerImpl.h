@@ -100,6 +100,8 @@ namespace Raft {
 
         void SetSocketOps(std::shared_ptr<SocketImpl> socket);
 
+    private:
+        void Handler(char *buffer, int fdc);
     };
 }
 #endif //RAFT_RAFTSERVERIMPL_H

@@ -53,6 +53,9 @@ namespace Raft {
         std::shared_ptr<TimeKeeper> timeKeeper;
 
         bool isRunning = false;
+
+    private:
+        void Handler(char *buffer, int fdc);
     };
 }
 

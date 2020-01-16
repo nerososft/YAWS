@@ -35,16 +35,18 @@ namespace Raft {
 "<h1>HTTP Server Status:\n</h1>"\
 "<p style='color:green;'>HTTP Server works.\n</p>"
 
-    void handlerHttp(char *buffer, int fdc) {
+    void HttpServerImpl::Handler(char *buffer, int fdc) {
 
         char *buf = TEST_HTTP_RESPONSE;
+
         write(fdc, buf, strlen(buf));
         close(fdc);
     }
 
     void HttpServerImpl::ServerWorker() {
         while (isRunning) {
-            this->socket->Accept(handlerHttp);
+            const auto bind = std::bind(&HttpServerImpl::Handler, this, std::placeholders::_1, std::placeholders::_2);
+            this->socket->Accept(bind);
         }
     }
 

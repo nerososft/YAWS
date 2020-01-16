@@ -148,7 +148,7 @@ namespace Raft {
 "<h1>ooops:\n</h1>"\
 "<p style='color:red;'>Not A Raft RaftMessage.\n</p>"
 
-    void handler(char *buffer, int fdc) {
+    void RaftServerImpl::Handler(char *buffer, int fdc) {
         try {
             auto *raftMessage = new RaftMessageImpl();
             raftMessage->DecodeMessage(buffer);
@@ -164,7 +164,8 @@ namespace Raft {
 
     void RaftServerImpl::ServerWorker() {
         while (isRunning) {
-            this->socket->Accept(handler);
+            const auto bind = std::bind(&RaftServerImpl::Handler, this, std::placeholders::_1, std::placeholders::_2);
+            this->socket->Accept(bind);
         }
     }
 

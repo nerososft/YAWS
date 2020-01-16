@@ -83,5 +83,4 @@ namespace Raft {
         NormalPrintColor1("|____/ |_____||__|\\_||__|__||__|     |__|  \n")
         NormalPrintColor1("\n")
     }
-
 }
