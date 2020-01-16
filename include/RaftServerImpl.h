@@ -96,7 +96,7 @@ namespace Raft {
 
         void ServerWorker();
 
-        void SetRunning(bool isRunning);
+        void SetRunning(bool running);
 
         void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
 

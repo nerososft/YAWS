@@ -171,8 +171,8 @@ namespace Raft {
     }
 
 
-    void RaftServerImpl::SetRunning(bool isRunning) {
-        this->isRunning = isRunning;
+    void RaftServerImpl::SetRunning(bool running) {
+        this->isRunning = running;
     }
 
     void RaftServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socketOps) {

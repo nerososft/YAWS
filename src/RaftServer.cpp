@@ -4,6 +4,7 @@
 #include "../include/RaftServer.h"
 #include "../include/RaftMessage.h"
 #include "../include/RaftMessageImpl.h"
+#include "../include/Log.h"
 #include <thread>
 #include <future>
 #include <memory>
@@ -38,6 +39,7 @@ namespace Raft {
         this->socketOps->SetUp();
         this->socketOps->Bind();
         this->socketOps->Listen();
+        LogInfo("[RaftServer] Raft Protocol listen at port: %d\n",raftServer->sharedProperties->configuration.socketConfiguration.port)
         raftServer->SetSocketOps(this->socketOps);
         raftServer->SetRunning(true);
         raftServer->serverWorker = std::thread(&RaftServerImpl::ServerWorker, raftServer.get());

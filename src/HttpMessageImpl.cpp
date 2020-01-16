@@ -6,6 +6,7 @@
 #include "../include/HttpMessageImpl.h"
 #include <memory>
 #include <iostream>
+#include <vector>
 
 namespace Raft {
     HttpMessageImpl::~HttpMessageImpl() noexcept = default;
@@ -22,49 +23,57 @@ namespace Raft {
     }
 
     HttpMessageImpl HttpMessageImpl::DecodeMessage(char *buf) {
-        char *baseLine = (char *) malloc(512 * sizeof(char));
-        char *header = (char *) malloc(512 * sizeof(char));
+        int length = strlen(buf);
+        char *newBuf = (char *) malloc((length + 5) * sizeof(char));
+        memcpy(newBuf, buf, length);
+        *(newBuf + length) = '\0';
+        *(newBuf + length + 1) = '\0';
+        *(newBuf + length + 2) = '\0';
+        *(newBuf + length + 3) = '\0';
+        *(newBuf + length + 4) = '\0';
         char *content = (char *) malloc(512 * sizeof(char));
-        int processPhase = 0;
+        bool contentFound = false;
 
-        while (*buf) {
-            if (*buf == '\r') {
-                if (*(buf + 1) == '\n') {
-                    if (*(buf + 2) == '\r') {
-                        if (*(buf + 3) == '\n') {
-                            // change type
+        std::vector<char *> lines;
+
+        int len = 0;
+        while (*newBuf != '\0') {
+            if (contentFound) {
+                *content = *newBuf;
+                content++;
+                newBuf++;
+                continue;
+            }
+            std::cout << *newBuf;
+            if (*newBuf == '\r') {
+                if (*(newBuf + 1) == '\n') {
+                    if (*(newBuf + 2) == '\r') {
+                        if (*(newBuf + 3) == '\n') {
                             std::cout << "change line" << std::endl;
-                            processPhase++;
-                        } else {
-                            // wtf? but nothing happened
-                            this->SetProtocolPayload(buf, baseLine, header, content, processPhase);
+                            contentFound = true;
+                            newBuf += 4;
+                            continue;
                         }
                     } else {
-                        // just change line
-                        this->SetProtocolPayload(buf, baseLine, header, content, processPhase);
+                        char *line = (char *) malloc(len * sizeof(char));
+                        std::cout << "HEADER:";
+                        for (int i = 0; i < len; i++) {
+                            std::cout << *(newBuf - (len - i));
+                            line[i] = *(newBuf - (len - i));
+                        }
+                        lines.push_back(line);
+                        len = 0;
+                        newBuf += 2;
+                        continue;
                     }
-                } else {
-                    // nothing happened
-                    this->SetProtocolPayload(buf, baseLine, header, content, processPhase);
                 }
-            } else {
-                this->SetProtocolPayload(buf, baseLine, header, content, processPhase);
             }
+            len++;
+            newBuf++;
         }
-        buf++;
     }
 
     void HttpMessageImpl::SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const {
-        if (processPhase == 0) {
-            *baseLine = *buf;
-            baseLine++;
-        } else if (processPhase == 1) {
-            *header = *buf;
-            header++;
-        } else {
-            *content = *buf;
-            content++;
-        }
     }
 
 
@@ -78,10 +87,14 @@ namespace Raft {
 
     uint32_t HttpMessageImpl::ReadMemU32(char *mem, uint32_t offset) {
         return (
-                ((uint32_t)this->ReadMem(mem, offset)) << 24 |
-                ((uint32_t)this->ReadMem(mem, offset + 1)) << 16 |
-                ((uint32_t)this->ReadMem(mem, offset + 2)) << 8 |
-                ((uint32_t)this->ReadMem(mem, offset + 3))
+                ((uint32_t)
+        this->ReadMem(mem, offset)) << 24 |
+                                       ((uint32_t)
+        this->ReadMem(mem, offset + 1)) << 16 |
+                                           ((uint32_t)
+        this->ReadMem(mem, offset + 2)) << 8 |
+                                           ((uint32_t)
+        this->ReadMem(mem, offset + 3))
         );
     }
 

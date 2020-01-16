@@ -55,6 +55,7 @@ CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/HttpServerImpl.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/IHttpServer.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/ITimeKeeper.h
+CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/SocketImpl.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/TimeKeeper.h
 CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../include/TimeKeeperImpl.h
@@ -81,6 +82,7 @@ CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o: ../src/RaftMessageImpl.cpp
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/IRaftServer.h
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/ISocket.h
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/ITimeKeeper.h
+CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftMessage.h
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftMessageImpl.h
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o: ../include/RaftServer.h
@@ -104,6 +106,7 @@ CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../include/TimeKeeperImpl.h
 CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o: ../src/RaftServerImpl.cpp
 
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../include/ISocket.h
+CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../include/Log.h
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../include/SocketImpl.h
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o: ../src/SocketImpl.cpp
 

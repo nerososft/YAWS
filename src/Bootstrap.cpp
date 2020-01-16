@@ -41,7 +41,8 @@ namespace Raft {
                 if (line[0] != '#' && line.length() != 0) {
                     std::vector<std::string> configs;
                     split(line, configs, '=');
-                    std::cout << configs[0] << ":" << configs[1] << std::endl;
+
+                    LogWarnning("[Config]: %s - %s\n", configs[0].c_str(), configs[1].c_str())
                     // TODO:  nodes to mem
                 }
             }

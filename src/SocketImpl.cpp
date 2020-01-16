@@ -8,6 +8,7 @@
 #include <sys/event.h>
 #include <fcntl.h>
 #include "../include/SocketImpl.h"
+#include "../include/Log.h"
 
 namespace Raft {
 

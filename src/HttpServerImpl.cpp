@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <utility>
+#include <iostream>
 
 namespace Raft {
 
@@ -39,7 +40,8 @@ namespace Raft {
 
     void HttpServerImpl::Handler(char *buffer, int fdc) {
         char *buf = TEST_HTTP_RESPONSE;
-
+        auto *httpMessage = new HttpMessageImpl();
+        httpMessage->DecodeMessage(buffer);
         write(fdc, buf, strlen(buf));
         close(fdc);
     }

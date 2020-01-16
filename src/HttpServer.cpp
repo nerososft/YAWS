@@ -4,6 +4,7 @@
 #include "../include/HttpServer.h"
 #include "../include/HttpServerImpl.h"
 #include "../include/TimeKeeper.h"
+#include "../include/Log.h"
 #include <memory>
 
 namespace Raft {
@@ -43,6 +44,7 @@ namespace Raft {
         this->socketOps->SetUp();
         this->socketOps->Bind();
         this->socketOps->Listen();
+        LogInfo("[HttpServer] Http Protocol listen at port: %d\n",httpServer->configuration.socketConfiguration.port)
         this->httpServer->SetSocketOps(this->socketOps);
 
         this->httpServer->stopWorker = std::promise<void>();

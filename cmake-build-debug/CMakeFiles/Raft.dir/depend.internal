@@ -56,6 +56,7 @@ CMakeFiles/Raft.dir/src/HttpServer.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/IHttpServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
@@ -82,6 +83,7 @@ CMakeFiles/Raft.dir/src/RaftServer.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/IRaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
@@ -105,6 +107,7 @@ CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/src/RaftServerImpl.cpp
 CMakeFiles/Raft.dir/src/SocketImpl.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/SocketImpl.cpp
 CMakeFiles/Raft.dir/src/SocketOps.cpp.o
