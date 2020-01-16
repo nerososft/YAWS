@@ -3,6 +3,7 @@
 //
 #include "../include/HttpServer.h"
 #include "../include/HttpServerImpl.h"
+#include "../include/TimeKeeper.h"
 #include <memory>
 
 namespace Raft {
@@ -13,21 +14,43 @@ namespace Raft {
 
     HttpServer &HttpServer::operator=(HttpServer &&) noexcept = default;
 
-    HttpServer::HttpServer() : impl(new HttpServerImpl()) {
+    HttpServer::HttpServer() :
+            httpServer(std::make_shared<HttpServerImpl>()),
+            socketOps(std::make_shared<SocketImpl>()) {
 
     }
 
     bool HttpServer::Configure(const Configuration &configuration) {
-        this->impl->Configure(configuration);
+        this->httpServer->Configure(configuration);
     }
 
     void HttpServer::SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) {
-        this->impl->SetSendMessageDelegate(sendMessageDelegate);
+        this->httpServer->SetSendMessageDelegate(sendMessageDelegate);
     }
 
     void HttpServer::ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                     unsigned int senderInstanceNumber) {
-        this->impl->ReceiveMessage(message, senderInstanceNumber);
+        this->httpServer->ReceiveMessage(message, senderInstanceNumber);
+    }
+
+    void HttpServer::Mobilize() {
+        this->httpServer->SetSocketOps(this->socketOps);
+        if (this->httpServer->worker.joinable()) {
+            return;
+        }
+        this->httpServer->SetRunning(isRunning);
+        this->socketOps->Configure(this->httpServer->configuration.socketConfiguration);
+        this->socketOps->SetUp();
+        this->socketOps->Bind();
+        this->socketOps->Listen();
+        this->httpServer->SetSocketOps(this->socketOps);
+
+        this->httpServer->stopWorker = std::promise<void>();
+        this->httpServer->worker = std::thread(&HttpServerImpl::ServerWorker, httpServer.get());
+    }
+
+    void HttpServer::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
+        this->httpServer->timeKeeper = timeKeeper;
     }
 }
 

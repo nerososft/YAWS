@@ -4,9 +4,12 @@
 
 #ifndef RAFT_HTTPSERVER_H
 #define RAFT_HTTPSERVER_H
+
 #include "IHttpServer.h"
 #include "HttpServerImpl.h"
 #include "HttpMessage.h"
+#include "SocketImpl.h"
+#include "TimeKeeper.h"
 #include <memory>
 
 
@@ -34,8 +37,17 @@ namespace Raft {
         virtual void ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                     unsigned int senderInstanceNumber) override;
 
+    public:
+        void Mobilize();
+
+        void SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper);
+
+        void SetRunning(){this->isRunning = true;}
+
     private:
-        std::shared_ptr<HttpServerImpl> impl;
+        bool isRunning = false;
+        std::shared_ptr<HttpServerImpl> httpServer;
+        std::shared_ptr<SocketImpl> socketOps;
     };
 }
 

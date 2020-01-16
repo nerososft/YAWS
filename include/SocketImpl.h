@@ -26,7 +26,7 @@ namespace Raft {
     public:
         SocketImpl();
 
-        virtual bool Configure(const Configuration &config);
+        virtual bool Configure(const SocketConfiguration &config);
 
         virtual int SetUp();
 
@@ -48,7 +48,7 @@ namespace Raft {
         struct kevent eventSet{};
         struct kevent eventList[32]{};
 
-        Configuration configuration;
+        SocketConfiguration configuration;
 
         SocketAcceptEventHandler socketAcceptEventHandler;
     };

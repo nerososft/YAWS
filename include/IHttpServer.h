@@ -11,12 +11,14 @@
 #include <mutex>
 #include <future>
 #include "HttpMessage.h"
+#include "ISocket.h"
 
 namespace Raft {
 
     class IHttpServer {
     public:
         struct Configuration {
+            ISocket::SocketConfiguration socketConfiguration;
         };
 
         using SendMessageDelegate = std::function<void(std::shared_ptr<HttpMessage> message,

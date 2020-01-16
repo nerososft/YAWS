@@ -18,7 +18,9 @@ namespace Raft {
 
     RaftServer &RaftServer::operator=(RaftServer &&) noexcept = default;
 
-    RaftServer::RaftServer() : raftServer(new RaftServerImpl()) {
+    RaftServer::RaftServer() :
+            raftServer(std::make_shared<RaftServerImpl>()),
+            socketOps(std::make_shared<SocketImpl>()) {
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 //        raftServer->sharedProperties->randomGenerator.seed(seed);
     }
@@ -28,6 +30,18 @@ namespace Raft {
     }
 
     void RaftServer::Mobilize() {
+        if (raftServer->serverWorker.joinable()) {
+            return;
+        }
+        raftServer->SetRunning(isRunning);
+        this->socketOps->Configure(raftServer->sharedProperties->configuration.socketConfiguration);
+        this->socketOps->SetUp();
+        this->socketOps->Bind();
+        this->socketOps->Listen();
+        raftServer->SetSocketOps(this->socketOps);
+        raftServer->SetRunning(true);
+        raftServer->serverWorker = std::thread(&RaftServerImpl::ServerWorker, raftServer.get());
+
         if (raftServer->worker.joinable()) {
             return;
         }
@@ -71,7 +85,7 @@ namespace Raft {
     }
 
     void RaftServer::ReceiveMessage(std::shared_ptr<RaftMessage> message,
-                                unsigned int senderInstanceNumber) {
+                                    unsigned int senderInstanceNumber) {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
             case Type::RequestVote: {

@@ -8,6 +8,9 @@
 #include <memory>
 #include "IHttpServer.h"
 #include "HttpMessage.h"
+#include "SocketImpl.h"
+#include "TimeKeeper.h"
+#include <pthread/pthread.h>
 
 namespace Raft {
     class HttpServerImpl {
@@ -32,6 +35,24 @@ namespace Raft {
 
         void ReceiveMessage(std::shared_ptr<HttpMessage> message,
                             unsigned int senderInstanceNumber);
+
+    public:
+        void SetSocketOps(std::shared_ptr<SocketImpl> socket);
+
+        void ServerWorker();
+
+        void SetRunning(bool running);
+
+    public:
+        Raft::IHttpServer::Configuration configuration;
+
+        std::shared_ptr<SocketImpl> socket;
+        std::thread worker;
+        std::promise<void> stopWorker;
+
+        std::shared_ptr<TimeKeeper> timeKeeper;
+
+        bool isRunning = false;
     };
 }
 

@@ -12,12 +12,12 @@ namespace Raft {
     class ISocket {
 
     public:
-        struct Configuration {
+        struct SocketConfiguration {
             unsigned int port = 8899;
         };
 
     public:
-        virtual bool Configure(const Configuration &configuration) = 0;
+        virtual bool Configure(const SocketConfiguration &configuration) = 0;
 
         virtual int SetUp() = 0;
 

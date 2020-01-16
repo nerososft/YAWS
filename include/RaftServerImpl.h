@@ -14,6 +14,7 @@
 #include <map>
 #include "IRaftServer.h"
 #include "TimeKeeper.h"
+#include "SocketImpl.h"
 
 namespace {
 
@@ -65,9 +66,14 @@ namespace Raft {
         IRaftServer::SendMessageDelegate sendMessageDelegate;
 
         std::thread worker;
+        std::thread serverWorker;
         std::promise<void> stopWorker;
 
+        std::shared_ptr<SocketImpl> socket;
+
         std::condition_variable workerAskedToStopOrWeakUp;
+
+        bool isRunning = false;
 
     public:
         RaftServerImpl();
@@ -76,7 +82,7 @@ namespace Raft {
 
         double GetTimeSinceLastLeaderMessage(double now);
 
-        void SendMessage(const std::shared_ptr<RaftMessage>& message, unsigned int instanceNumber, double now);
+        void SendMessage(const std::shared_ptr<RaftMessage> &message, unsigned int instanceNumber, double now);
 
         void StartElection(double now);
 
@@ -88,7 +94,12 @@ namespace Raft {
 
         void Worker();
 
-        bool IsLeader();
+        void ServerWorker();
+
+        void SetRunning(bool isRunning);
+
+        void SetSocketOps(std::shared_ptr<SocketImpl> socket);
+
     };
 }
 #endif //RAFT_RAFTSERVERIMPL_H

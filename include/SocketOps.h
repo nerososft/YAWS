@@ -26,7 +26,7 @@ namespace Raft {
     public:
         SocketOps();
 
-        virtual bool Configure(const Configuration &configuration) override;
+        virtual bool Configure(const SocketConfiguration &configuration) override;
 
         virtual int SetUp() override;
 

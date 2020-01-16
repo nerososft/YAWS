@@ -10,6 +10,8 @@
 #include "IRaftServer.h"
 #include "TimeKeeper.h"
 #include "RaftServerImpl.h"
+#include "SocketImpl.h"
+#include "SocketOps.h"
 
 namespace Raft {
     class RaftServer : public IRaftServer {
@@ -35,6 +37,8 @@ namespace Raft {
 
         void WaitForAtLeastOneWorkerLoop();
 
+        void SetRunning(){this->isRunning = true;}
+
     public:
         virtual bool Configure(const Configuration &configuration) override;
 
@@ -42,7 +46,10 @@ namespace Raft {
 
         virtual void ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                     unsigned int senderInstanceNumber) override;
+
     private:
+        bool isRunning = false;
+        std::shared_ptr<SocketImpl> socketOps;
         std::shared_ptr<RaftServerImpl> raftServer;
     };
 }

@@ -21,7 +21,7 @@ namespace Raft {
 
     }
 
-    bool SocketImpl::Configure(const Configuration &config) {
+    bool SocketImpl::Configure(const SocketConfiguration &config) {
         this->configuration = config;
     }
 

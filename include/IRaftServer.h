@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 #include "RaftMessage.h"
+#include "ISocket.h"
 #include <mutex>
 #include <future>
 
@@ -26,6 +27,7 @@ namespace Raft {
             double minimumElectionTimeout = 0.15;
             double maximumElectionTimeout = 0.3;
             double rpcTimeout = 0.015;
+            ISocket::SocketConfiguration socketConfiguration;
         };
 
         using SendMessageDelegate = std::function<void(std::shared_ptr<RaftMessage> message,

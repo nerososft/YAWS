@@ -7,6 +7,7 @@
 #include <memory>
 #include "RaftServer.h"
 #include "SocketOps.h"
+#include "HttpServer.h"
 #include <fstream>
 
 namespace Raft {
@@ -31,8 +32,8 @@ namespace Raft {
     private:
         bool isRunning = true;
         std::shared_ptr<TimeKeeper> timeKeeper;
-        std::shared_ptr<RaftServer> server;
-        std::shared_ptr<SocketOps> socketOps;
+        std::shared_ptr<RaftServer> raftServer;
+        std::shared_ptr<HttpServer> httpServer;
 
     public:
         void Run();

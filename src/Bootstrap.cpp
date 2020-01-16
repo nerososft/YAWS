@@ -2,7 +2,6 @@
 // Created by XingfengYang on 2020/1/12.
 //
 #include "../include/Bootstrap.h"
-#include <unistd.h>
 #include <iostream>
 #include <memory>
 #include <fstream>
@@ -20,8 +19,8 @@ namespace Raft {
     RaftBootstrap &RaftBootstrap::operator=(RaftBootstrap &&) noexcept = default;
 
     RaftBootstrap::RaftBootstrap() :
-            server(std::make_shared<RaftServer>()),
-            socketOps(std::make_shared<SocketOps>()),
+            raftServer(std::make_shared<RaftServer>()),
+            httpServer(std::make_shared<HttpServer>()),
             timeKeeper(std::make_shared<TimeKeeper>()) {}
 
 
@@ -52,28 +51,6 @@ namespace Raft {
         }
     }
 
-#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
-"<h1>Raft Server Status:\n</h1>"\
-"<p style='color:green;'>HTTP Server works.\n</p>"
-
-#define DAILED_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
-"<h1>ooops:\n</h1>"\
-"<p style='color:red;'>Not A Raft RaftMessage.\n</p>"
-
-    void handler(char *buffer, int fdc) {
-        try {
-            auto *raftMessage = new RaftMessageImpl();
-            raftMessage->DecodeMessage(buffer);
-            char *buf = TEST_HTTP_RESPONSE;
-            write(fdc, buf, strlen(buf));
-        } catch (std::logic_error error) {
-            PrintColor2("Caught %s\n", error.what())
-            char *buf = DAILED_HTTP_RESPONSE;
-            write(fdc, buf, strlen(buf));
-        }
-        close(fdc);
-    }
-
     void RaftBootstrap::Run() {
         PrintSplash();
         LoadConfigFile();
@@ -81,22 +58,19 @@ namespace Raft {
         Raft::RaftServer::Configuration configuration;
         configuration.instancesNumbers = {2, 5, 6, 7, 11};
         configuration.selfInstanceNumber = 2;
-        this->server->Configure(configuration);
-        this->server->SetTimeKeeper(this->timeKeeper);
+        configuration.socketConfiguration.port = 8898;
+        this->raftServer->Configure(configuration);
+        this->raftServer->SetTimeKeeper(this->timeKeeper);
+        this->raftServer->SetRunning();
+        this->raftServer->Mobilize();
 
-        // sleep to accept heart beat
-        server->Mobilize();
-
-        Raft::ISocket::Configuration socketConfig;
-        socketConfig.port = 8899;
-        this->socketOps->Configure(socketConfig);
-
-        this->socketOps->SetUp();
-        this->socketOps->Bind();
-        this->socketOps->Listen();
-        while (isRunning) {
-            this->socketOps->Accept(handler);
-        }
+        Raft::IHttpServer::Configuration httpServerConfiguration;
+        httpServerConfiguration.socketConfiguration.port = 8899;
+        this->httpServer->Configure(httpServerConfiguration);
+        this->httpServer->SetTimeKeeper(this->timeKeeper);
+        this->httpServer->SetRunning();
+        this->httpServer->Mobilize();
+        while (isRunning) {}
     }
 
     void RaftBootstrap::PrintSplash() {
