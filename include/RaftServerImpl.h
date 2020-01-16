@@ -12,7 +12,7 @@
 #include <random>
 #include <mutex>
 #include <map>
-#include "IServer.h"
+#include "IRaftServer.h"
 #include "TimeKeeper.h"
 
 namespace {
@@ -23,12 +23,12 @@ namespace {
 
         double timeLastRequestSend = 0.0;
 
-        std::shared_ptr<Raft::Message> lastRequest;
+        std::shared_ptr<Raft::RaftMessage> lastRequest;
     };
 
     struct ServerSharedProperties {
 
-        Raft::IServer::Configuration configuration;
+        Raft::IRaftServer::Configuration configuration;
 
         std::mt19937 randomGenerator;
 
@@ -62,7 +62,7 @@ namespace Raft {
         std::shared_ptr<ServerSharedProperties> sharedProperties;
         std::shared_ptr<TimeKeeper> timeKeeper;
 
-        IServer::SendMessageDelegate sendMessageDelegate;
+        IRaftServer::SendMessageDelegate sendMessageDelegate;
 
         std::thread worker;
         std::promise<void> stopWorker;
@@ -76,7 +76,7 @@ namespace Raft {
 
         double GetTimeSinceLastLeaderMessage(double now);
 
-        void SendMessage(const std::shared_ptr<Message>& message, unsigned int instanceNumber, double now);
+        void SendMessage(const std::shared_ptr<RaftMessage>& message, unsigned int instanceNumber, double now);
 
         void StartElection(double now);
 

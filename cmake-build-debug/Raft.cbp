@@ -86,10 +86,22 @@
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp">
 			<Option target="Raft"/>
 		</Unit>
-		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp">
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp">
+			<Option target="Raft"/>
+		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp">
+			<Option target="Raft"/>
+		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp">
+			<Option target="Raft"/>
+		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp">
 			<Option target="Raft"/>
 		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp">
+			<Option target="Raft"/>
+		</Unit>
+		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp">
 			<Option target="Raft"/>
 		</Unit>
 		<Unit filename="/Users/xingfeng.yang/project/live-code/Raft/src/RaftServer.cpp">

@@ -57,22 +57,9 @@ include CMakeFiles/Raft.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Raft.dir/flags.make
 
-CMakeFiles/Raft.dir/src/Message.cpp.o: CMakeFiles/Raft.dir/flags.make
-CMakeFiles/Raft.dir/src/Message.cpp.o: ../src/Message.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Raft.dir/src/Message.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/Message.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp
-
-CMakeFiles/Raft.dir/src/Message.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/Message.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp > CMakeFiles/Raft.dir/src/Message.cpp.i
-
-CMakeFiles/Raft.dir/src/Message.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/Message.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp -o CMakeFiles/Raft.dir/src/Message.cpp.s
-
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: CMakeFiles/Raft.dir/flags.make
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o: ../src/RaftMessage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Raft.dir/src/RaftMessage.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Raft.dir/src/RaftMessage.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/RaftMessage.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp
 
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.i: cmake_force
@@ -82,6 +69,19 @@ CMakeFiles/Raft.dir/src/RaftMessage.cpp.i: cmake_force
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/RaftMessage.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp -o CMakeFiles/Raft.dir/src/RaftMessage.cpp.s
+
+CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o: CMakeFiles/Raft.dir/flags.make
+CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o: ../src/RaftMessageImpl.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp
+
+CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp > CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.i
+
+CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp -o CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.s
 
 CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o: CMakeFiles/Raft.dir/flags.make
 CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o: ../src/TimeKeeper.cpp
@@ -161,9 +161,61 @@ CMakeFiles/Raft.dir/src/RaftServer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/RaftServer.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/RaftServer.cpp -o CMakeFiles/Raft.dir/src/RaftServer.cpp.s
 
+CMakeFiles/Raft.dir/src/HttpMessage.cpp.o: CMakeFiles/Raft.dir/flags.make
+CMakeFiles/Raft.dir/src/HttpMessage.cpp.o: ../src/HttpMessage.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/Raft.dir/src/HttpMessage.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/HttpMessage.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp
+
+CMakeFiles/Raft.dir/src/HttpMessage.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/HttpMessage.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp > CMakeFiles/Raft.dir/src/HttpMessage.cpp.i
+
+CMakeFiles/Raft.dir/src/HttpMessage.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/HttpMessage.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp -o CMakeFiles/Raft.dir/src/HttpMessage.cpp.s
+
+CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o: CMakeFiles/Raft.dir/flags.make
+CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o: ../src/HttpMessageImpl.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp
+
+CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp > CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.i
+
+CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp -o CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.s
+
+CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o: CMakeFiles/Raft.dir/flags.make
+CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o: ../src/HttpServerImpl.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp
+
+CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp > CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.i
+
+CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp -o CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.s
+
+CMakeFiles/Raft.dir/src/HttpServer.cpp.o: CMakeFiles/Raft.dir/flags.make
+CMakeFiles/Raft.dir/src/HttpServer.cpp.o: ../src/HttpServer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/Raft.dir/src/HttpServer.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/HttpServer.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp
+
+CMakeFiles/Raft.dir/src/HttpServer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Raft.dir/src/HttpServer.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp > CMakeFiles/Raft.dir/src/HttpServer.cpp.i
+
+CMakeFiles/Raft.dir/src/HttpServer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Raft.dir/src/HttpServer.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp -o CMakeFiles/Raft.dir/src/HttpServer.cpp.s
+
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: CMakeFiles/Raft.dir/flags.make
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o: ../src/Bootstrap.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/Raft.dir/src/Bootstrap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/Raft.dir/src/Bootstrap.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/src/Bootstrap.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp
 
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.i: cmake_force
@@ -176,7 +228,7 @@ CMakeFiles/Raft.dir/src/Bootstrap.cpp.s: cmake_force
 
 CMakeFiles/Raft.dir/main.cpp.o: CMakeFiles/Raft.dir/flags.make
 CMakeFiles/Raft.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Raft.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/Raft.dir/main.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Raft.dir/main.cpp.o -c /Users/xingfeng.yang/project/live-code/Raft/main.cpp
 
 CMakeFiles/Raft.dir/main.cpp.i: cmake_force
@@ -189,33 +241,41 @@ CMakeFiles/Raft.dir/main.cpp.s: cmake_force
 
 # Object files for target Raft
 Raft_OBJECTS = \
-"CMakeFiles/Raft.dir/src/Message.cpp.o" \
 "CMakeFiles/Raft.dir/src/RaftMessage.cpp.o" \
+"CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o" \
 "CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o" \
 "CMakeFiles/Raft.dir/src/TimeKeeperImpl.cpp.o" \
 "CMakeFiles/Raft.dir/src/SocketImpl.cpp.o" \
 "CMakeFiles/Raft.dir/src/SocketOps.cpp.o" \
 "CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o" \
 "CMakeFiles/Raft.dir/src/RaftServer.cpp.o" \
+"CMakeFiles/Raft.dir/src/HttpMessage.cpp.o" \
+"CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o" \
+"CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o" \
+"CMakeFiles/Raft.dir/src/HttpServer.cpp.o" \
 "CMakeFiles/Raft.dir/src/Bootstrap.cpp.o" \
 "CMakeFiles/Raft.dir/main.cpp.o"
 
 # External object files for target Raft
 Raft_EXTERNAL_OBJECTS =
 
-Raft: CMakeFiles/Raft.dir/src/Message.cpp.o
 Raft: CMakeFiles/Raft.dir/src/RaftMessage.cpp.o
+Raft: CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o
 Raft: CMakeFiles/Raft.dir/src/TimeKeeper.cpp.o
 Raft: CMakeFiles/Raft.dir/src/TimeKeeperImpl.cpp.o
 Raft: CMakeFiles/Raft.dir/src/SocketImpl.cpp.o
 Raft: CMakeFiles/Raft.dir/src/SocketOps.cpp.o
 Raft: CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o
 Raft: CMakeFiles/Raft.dir/src/RaftServer.cpp.o
+Raft: CMakeFiles/Raft.dir/src/HttpMessage.cpp.o
+Raft: CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o
+Raft: CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o
+Raft: CMakeFiles/Raft.dir/src/HttpServer.cpp.o
 Raft: CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
 Raft: CMakeFiles/Raft.dir/main.cpp.o
 Raft: CMakeFiles/Raft.dir/build.make
 Raft: CMakeFiles/Raft.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable Raft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable Raft"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Raft.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

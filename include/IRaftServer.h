@@ -2,19 +2,19 @@
 // Created by XingfengYang on 2020/1/1.
 //
 
-#ifndef RAFT_ISERVER_H
-#define RAFT_ISERVER_H
+#ifndef RAFT_IRAFTSERVER_H
+#define RAFT_IRAFTSERVER_H
 
 #include <functional>
 #include <vector>
 #include <memory>
-#include "Message.h"
+#include "RaftMessage.h"
 #include <mutex>
 #include <future>
 
 namespace Raft {
 
-    class IServer {
+    class IRaftServer {
     public:
         struct Configuration {
             std::vector<unsigned int> instancesNumbers;
@@ -28,7 +28,7 @@ namespace Raft {
             double rpcTimeout = 0.015;
         };
 
-        using SendMessageDelegate = std::function<void(std::shared_ptr<Message> message,
+        using SendMessageDelegate = std::function<void(std::shared_ptr<RaftMessage> message,
                                                        unsigned int receivedInstanceNumber)>;
 
     public:
@@ -37,11 +37,11 @@ namespace Raft {
 
         virtual void SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) = 0;
 
-        virtual void ReceiveMessage(std::shared_ptr<Message> message,
+        virtual void ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                     unsigned int senderInstanceNumber) = 0;
 
     private:
     };
 }
 
-#endif //RAFT_ISERVER_H
+#endif //RAFT_IRAFTSERVER_H

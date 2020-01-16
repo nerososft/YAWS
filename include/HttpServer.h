@@ -4,12 +4,14 @@
 
 #ifndef RAFT_HTTPSERVER_H
 #define RAFT_HTTPSERVER_H
-
+#include "IHttpServer.h"
+#include "HttpServerImpl.h"
+#include "HttpMessage.h"
 #include <memory>
-#include "IServer.h"
+
 
 namespace Raft {
-    class HttpServer : public IServer {
+    class HttpServer : public IHttpServer {
     public:
         ~HttpServer() noexcept;
 
@@ -29,8 +31,11 @@ namespace Raft {
 
         virtual void SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) override;
 
-        virtual void ReceiveMessage(std::shared_ptr<Message> message,
+        virtual void ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                     unsigned int senderInstanceNumber) override;
+
+    private:
+        std::shared_ptr<HttpServerImpl> impl;
     };
 }
 

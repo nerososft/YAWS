@@ -58,11 +58,11 @@ namespace Raft {
 
 #define DAILED_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
 "<h1>ooops:\n</h1>"\
-"<p style='color:red;'>Not A Raft Message.\n</p>"
+"<p style='color:red;'>Not A Raft RaftMessage.\n</p>"
 
     void handler(char *buffer, int fdc) {
         try {
-            auto *raftMessage = new RaftMessage();
+            auto *raftMessage = new RaftMessageImpl();
             raftMessage->DecodeMessage(buffer);
             char *buf = TEST_HTTP_RESPONSE;
             write(fdc, buf, strlen(buf));

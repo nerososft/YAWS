@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/1/1.
 //
 #include "../include/RaftServer.h"
-#include "../include/Message.h"
 #include "../include/RaftMessage.h"
+#include "../include/RaftMessageImpl.h"
 #include <thread>
 #include <future>
 #include <memory>
@@ -70,12 +70,12 @@ namespace Raft {
         raftServer->sendMessageDelegate = sendMessageDelegate;
     }
 
-    void RaftServer::ReceiveMessage(std::shared_ptr<Message> message,
+    void RaftServer::ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                 unsigned int senderInstanceNumber) {
         const double now = raftServer->timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
             case Type::RequestVote: {
-                const auto response = Message::CreateMessage();
+                const auto response = RaftMessage::CreateMessage();
                 response->raftMessage->type = Type::RequestVoteResults;
                 response->raftMessage->requestVoteResultsDetails.term = std::max(
                         message->raftMessage->requestVoteDetails.term,

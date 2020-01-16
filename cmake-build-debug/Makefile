@@ -177,32 +177,113 @@ src/Bootstrap.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Bootstrap.cpp.s
 .PHONY : src/Bootstrap.cpp.s
 
-src/Message.o: src/Message.cpp.o
+src/HttpMessage.o: src/HttpMessage.cpp.o
 
-.PHONY : src/Message.o
+.PHONY : src/HttpMessage.o
 
 # target to build an object file
-src/Message.cpp.o:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Message.cpp.o
-.PHONY : src/Message.cpp.o
+src/HttpMessage.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessage.cpp.o
+.PHONY : src/HttpMessage.cpp.o
 
-src/Message.i: src/Message.cpp.i
+src/HttpMessage.i: src/HttpMessage.cpp.i
 
-.PHONY : src/Message.i
+.PHONY : src/HttpMessage.i
 
 # target to preprocess a source file
-src/Message.cpp.i:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Message.cpp.i
-.PHONY : src/Message.cpp.i
+src/HttpMessage.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessage.cpp.i
+.PHONY : src/HttpMessage.cpp.i
 
-src/Message.s: src/Message.cpp.s
+src/HttpMessage.s: src/HttpMessage.cpp.s
 
-.PHONY : src/Message.s
+.PHONY : src/HttpMessage.s
 
 # target to generate assembly for a file
-src/Message.cpp.s:
-	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/Message.cpp.s
-.PHONY : src/Message.cpp.s
+src/HttpMessage.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessage.cpp.s
+.PHONY : src/HttpMessage.cpp.s
+
+src/HttpMessageImpl.o: src/HttpMessageImpl.cpp.o
+
+.PHONY : src/HttpMessageImpl.o
+
+# target to build an object file
+src/HttpMessageImpl.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o
+.PHONY : src/HttpMessageImpl.cpp.o
+
+src/HttpMessageImpl.i: src/HttpMessageImpl.cpp.i
+
+.PHONY : src/HttpMessageImpl.i
+
+# target to preprocess a source file
+src/HttpMessageImpl.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.i
+.PHONY : src/HttpMessageImpl.cpp.i
+
+src/HttpMessageImpl.s: src/HttpMessageImpl.cpp.s
+
+.PHONY : src/HttpMessageImpl.s
+
+# target to generate assembly for a file
+src/HttpMessageImpl.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.s
+.PHONY : src/HttpMessageImpl.cpp.s
+
+src/HttpServer.o: src/HttpServer.cpp.o
+
+.PHONY : src/HttpServer.o
+
+# target to build an object file
+src/HttpServer.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServer.cpp.o
+.PHONY : src/HttpServer.cpp.o
+
+src/HttpServer.i: src/HttpServer.cpp.i
+
+.PHONY : src/HttpServer.i
+
+# target to preprocess a source file
+src/HttpServer.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServer.cpp.i
+.PHONY : src/HttpServer.cpp.i
+
+src/HttpServer.s: src/HttpServer.cpp.s
+
+.PHONY : src/HttpServer.s
+
+# target to generate assembly for a file
+src/HttpServer.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServer.cpp.s
+.PHONY : src/HttpServer.cpp.s
+
+src/HttpServerImpl.o: src/HttpServerImpl.cpp.o
+
+.PHONY : src/HttpServerImpl.o
+
+# target to build an object file
+src/HttpServerImpl.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o
+.PHONY : src/HttpServerImpl.cpp.o
+
+src/HttpServerImpl.i: src/HttpServerImpl.cpp.i
+
+.PHONY : src/HttpServerImpl.i
+
+# target to preprocess a source file
+src/HttpServerImpl.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.i
+.PHONY : src/HttpServerImpl.cpp.i
+
+src/HttpServerImpl.s: src/HttpServerImpl.cpp.s
+
+.PHONY : src/HttpServerImpl.s
+
+# target to generate assembly for a file
+src/HttpServerImpl.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.s
+.PHONY : src/HttpServerImpl.cpp.s
 
 src/RaftMessage.o: src/RaftMessage.cpp.o
 
@@ -230,6 +311,33 @@ src/RaftMessage.s: src/RaftMessage.cpp.s
 src/RaftMessage.cpp.s:
 	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessage.cpp.s
 .PHONY : src/RaftMessage.cpp.s
+
+src/RaftMessageImpl.o: src/RaftMessageImpl.cpp.o
+
+.PHONY : src/RaftMessageImpl.o
+
+# target to build an object file
+src/RaftMessageImpl.cpp.o:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o
+.PHONY : src/RaftMessageImpl.cpp.o
+
+src/RaftMessageImpl.i: src/RaftMessageImpl.cpp.i
+
+.PHONY : src/RaftMessageImpl.i
+
+# target to preprocess a source file
+src/RaftMessageImpl.cpp.i:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.i
+.PHONY : src/RaftMessageImpl.cpp.i
+
+src/RaftMessageImpl.s: src/RaftMessageImpl.cpp.s
+
+.PHONY : src/RaftMessageImpl.s
+
+# target to generate assembly for a file
+src/RaftMessageImpl.cpp.s:
+	$(MAKE) -f CMakeFiles/Raft.dir/build.make CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.s
+.PHONY : src/RaftMessageImpl.cpp.s
 
 src/RaftServer.o: src/RaftServer.cpp.o
 
@@ -408,12 +516,24 @@ help:
 	@echo "... src/Bootstrap.o"
 	@echo "... src/Bootstrap.i"
 	@echo "... src/Bootstrap.s"
-	@echo "... src/Message.o"
-	@echo "... src/Message.i"
-	@echo "... src/Message.s"
+	@echo "... src/HttpMessage.o"
+	@echo "... src/HttpMessage.i"
+	@echo "... src/HttpMessage.s"
+	@echo "... src/HttpMessageImpl.o"
+	@echo "... src/HttpMessageImpl.i"
+	@echo "... src/HttpMessageImpl.s"
+	@echo "... src/HttpServer.o"
+	@echo "... src/HttpServer.i"
+	@echo "... src/HttpServer.s"
+	@echo "... src/HttpServerImpl.o"
+	@echo "... src/HttpServerImpl.i"
+	@echo "... src/HttpServerImpl.s"
 	@echo "... src/RaftMessage.o"
 	@echo "... src/RaftMessage.i"
 	@echo "... src/RaftMessage.s"
+	@echo "... src/RaftMessageImpl.o"
+	@echo "... src/RaftMessageImpl.i"
+	@echo "... src/RaftMessageImpl.s"
 	@echo "... src/RaftServer.o"
 	@echo "... src/RaftServer.i"
 	@echo "... src/RaftServer.s"

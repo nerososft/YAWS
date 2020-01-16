@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include "../include/RaftServerImpl.h"
-#include "../include/RaftMessage.h"
+#include "../include/RaftMessageImpl.h"
 
 namespace Raft {
 
@@ -27,7 +27,7 @@ namespace Raft {
         return now - sharedProperties->timeOfLastLeaderMessage;
     }
 
-    void RaftServerImpl::SendMessage(const std::shared_ptr<Message> &message, unsigned int instanceNumber, double now) {
+    void RaftServerImpl::SendMessage(const std::shared_ptr<RaftMessage> &message, unsigned int instanceNumber, double now) {
         auto &instance = sharedProperties->instances[instanceNumber];
         instance.timeLastRequestSend = now;
         instance.lastRequest = message;
@@ -42,7 +42,7 @@ namespace Raft {
         sharedProperties->votedFor = sharedProperties->configuration.selfInstanceNumber;
         sharedProperties->votesForUs = 1;
 
-        const auto message = Message::CreateMessage();
+        const auto message = RaftMessage::CreateMessage();
         message->raftMessage->type = Type::RequestVote;
         message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
@@ -65,7 +65,7 @@ namespace Raft {
     void RaftServerImpl::SendHeartBeat(double now) {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->votesForUs = 1;
-        const auto message = Message::CreateMessage();
+        const auto message = RaftMessage::CreateMessage();
         message->raftMessage->type = Type::HeartBeat;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 

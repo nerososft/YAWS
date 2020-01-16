@@ -6,8 +6,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/xingfeng.yang/project/live-code/Raft/main.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/main.cpp.o"
   "/Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/Bootstrap.cpp.o"
-  "/Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/Message.cpp.o"
+  "/Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/HttpMessage.cpp.o"
+  "/Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o"
+  "/Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/HttpServer.cpp.o"
+  "/Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o"
   "/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/RaftMessage.cpp.o"
+  "/Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o"
   "/Users/xingfeng.yang/project/live-code/Raft/src/RaftServer.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/RaftServer.cpp.o"
   "/Users/xingfeng.yang/project/live-code/Raft/src/RaftServerImpl.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o"
   "/Users/xingfeng.yang/project/live-code/Raft/src/SocketImpl.cpp" "/Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug/CMakeFiles/Raft.dir/src/SocketImpl.cpp.o"

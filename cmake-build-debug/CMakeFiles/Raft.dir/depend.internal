@@ -3,12 +3,12 @@
 
 CMakeFiles/Raft.dir/main.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
- /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IRaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
- /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
@@ -18,12 +18,12 @@ CMakeFiles/Raft.dir/main.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/main.cpp
 CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/Bootstrap.h
- /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IRaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ISocket.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/Log.h
- /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/SocketImpl.h
@@ -31,28 +31,48 @@ CMakeFiles/Raft.dir/src/Bootstrap.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/Bootstrap.cpp
-CMakeFiles/Raft.dir/src/Message.cpp.o
- /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
- /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
- /Users/xingfeng.yang/project/live-code/Raft/src/Message.cpp
+CMakeFiles/Raft.dir/src/HttpMessage.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessageImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessage.cpp
+CMakeFiles/Raft.dir/src/HttpMessageImpl.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessageImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/HttpMessageImpl.cpp
+CMakeFiles/Raft.dir/src/HttpServer.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessageImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpServerImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IHttpServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/HttpServer.cpp
+CMakeFiles/Raft.dir/src/HttpServerImpl.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpMessageImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/HttpServerImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IHttpServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/HttpServerImpl.cpp
 CMakeFiles/Raft.dir/src/RaftMessage.cpp.o
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessage.cpp
+CMakeFiles/Raft.dir/src/RaftMessageImpl.cpp.o
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
+ /Users/xingfeng.yang/project/live-code/Raft/src/RaftMessageImpl.cpp
 CMakeFiles/Raft.dir/src/RaftServer.cpp.o
- /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IRaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
- /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/src/RaftServer.cpp
 CMakeFiles/Raft.dir/src/RaftServerImpl.cpp.o
- /Users/xingfeng.yang/project/live-code/Raft/include/IServer.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/IRaftServer.h
  /Users/xingfeng.yang/project/live-code/Raft/include/ITimeKeeper.h
- /Users/xingfeng.yang/project/live-code/Raft/include/Message.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessage.h
+ /Users/xingfeng.yang/project/live-code/Raft/include/RaftMessageImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/RaftServerImpl.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeper.h
  /Users/xingfeng.yang/project/live-code/Raft/include/TimeKeeperImpl.h

@@ -7,12 +7,12 @@
 
 #include <memory>
 
-#include "IServer.h"
+#include "IRaftServer.h"
 #include "TimeKeeper.h"
 #include "RaftServerImpl.h"
 
 namespace Raft {
-    class RaftServer : public IServer {
+    class RaftServer : public IRaftServer {
     public:
         ~RaftServer() noexcept;
 
@@ -40,7 +40,7 @@ namespace Raft {
 
         virtual void SetSendMessageDelegate(SendMessageDelegate sendMessageDelegate) override;
 
-        virtual void ReceiveMessage(std::shared_ptr<Message> message,
+        virtual void ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                     unsigned int senderInstanceNumber) override;
     private:
         std::shared_ptr<RaftServerImpl> raftServer;

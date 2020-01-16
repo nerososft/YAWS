@@ -1,12 +1,12 @@
 #include "include/Bootstrap.h"
-#include "include/RaftMessage.h"
+#include "include/RaftMessageImpl.h"
 #include "include/Log.h"
 
 #define TEST(text, func){ PrintColor4(" [Test]: %s [TESTING]\n",text); func(); PrintColor3(" [Test]: %s [Ok]\n",text)}
 
 
 void should_encode_decode_raft_message() {
-    auto *raftMessage = new Raft::RaftMessage();
+    auto *raftMessage = new Raft::RaftMessageImpl();
     raftMessage->type = Raft::Type::RequestVote;
     raftMessage->requestVoteDetails.candidateId = 2;
     raftMessage->requestVoteDetails.term = 2;
@@ -15,7 +15,7 @@ void should_encode_decode_raft_message() {
     char *encodeMessage = raftMessage->EncodeMessage();
     assert(*encodeMessage != '\0');
 
-    Raft::RaftMessage message = raftMessage->DecodeMessage(encodeMessage);
+    Raft::RaftMessageImpl message = raftMessage->DecodeMessage(encodeMessage);
     assert(message.conntentLength == 1024);
     assert(message.type == Raft::Type::RequestVote);
     assert(message.requestVoteDetails.candidateId == 2);
