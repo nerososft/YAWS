@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/1/2.
 //
 #include <iostream>
+#include <utility>
 #include "../include/RaftServerImpl.h"
 #include "../include/RaftMessageImpl.h"
 
@@ -174,7 +175,7 @@ namespace Raft {
         this->isRunning = isRunning;
     }
 
-    void RaftServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socket) {
-        this->socket = socket;
+    void RaftServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socketOps) {
+        this->socket = std::move(socketOps);
     }
 }

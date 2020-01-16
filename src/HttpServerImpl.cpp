@@ -5,6 +5,8 @@
 #include "../include/HttpServerImpl.h"
 #include <unistd.h>
 
+#include <utility>
+
 namespace Raft {
 
 
@@ -36,7 +38,6 @@ namespace Raft {
 "<p style='color:green;'>HTTP Server works.\n</p>"
 
     void HttpServerImpl::Handler(char *buffer, int fdc) {
-
         char *buf = TEST_HTTP_RESPONSE;
 
         write(fdc, buf, strlen(buf));
@@ -50,8 +51,8 @@ namespace Raft {
         }
     }
 
-    void HttpServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socket) {
-        this->socket = socket;
+    void HttpServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socketOps) {
+        this->socket = std::move(socketOps);
     }
 
     void HttpServerImpl::SetRunning(bool running) {

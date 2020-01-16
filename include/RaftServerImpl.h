@@ -98,7 +98,7 @@ namespace Raft {
 
         void SetRunning(bool isRunning);
 
-        void SetSocketOps(std::shared_ptr<SocketImpl> socket);
+        void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
 
     private:
         void Handler(char *buffer, int fdc);

@@ -37,7 +37,7 @@ namespace Raft {
                             unsigned int senderInstanceNumber);
 
     public:
-        void SetSocketOps(std::shared_ptr<SocketImpl> socket);
+        void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
 
         void ServerWorker();
 
