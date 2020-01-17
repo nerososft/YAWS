@@ -23,53 +23,42 @@ namespace Raft {
     }
 
     HttpMessageImpl HttpMessageImpl::DecodeMessage(char *buf) {
-        int length = strlen(buf);
-        char *newBuf = (char *) malloc((length + 5) * sizeof(char));
-        memcpy(newBuf, buf, length);
-        *(newBuf + length) = '\0';
-        *(newBuf + length + 1) = '\0';
-        *(newBuf + length + 2) = '\0';
-        *(newBuf + length + 3) = '\0';
-        *(newBuf + length + 4) = '\0';
-        char *content = (char *) malloc(512 * sizeof(char));
-        bool contentFound = false;
-
-        std::vector<char *> lines;
-
         int len = 0;
-        while (*newBuf != '\0') {
-            if (contentFound) {
-                *content = *newBuf;
-                content++;
-                newBuf++;
-                continue;
-            }
-            std::cout << *newBuf;
-            if (*newBuf == '\r') {
-                if (*(newBuf + 1) == '\n') {
-                    if (*(newBuf + 2) == '\r') {
-                        if (*(newBuf + 3) == '\n') {
-                            std::cout << "change line" << std::endl;
-                            contentFound = true;
-                            newBuf += 4;
-                            continue;
+        while (*buf) {
+            if (*buf == '\r') {
+                if (*(buf + 1) == '\n') {
+                    if (*(buf + 2) == '\r') {
+                        if (*(buf + 3) == '\n') {
+                            break;
                         }
-                    } else {
-                        char *line = (char *) malloc(len * sizeof(char));
-                        std::cout << "HEADER:";
-                        for (int i = 0; i < len; i++) {
-                            std::cout << *(newBuf - (len - i));
-                            line[i] = *(newBuf - (len - i));
-                        }
-                        lines.push_back(line);
-                        len = 0;
-                        newBuf += 2;
-                        continue;
                     }
                 }
             }
             len++;
-            newBuf++;
+            buf++;
+        }
+        char* header = (char*)malloc(len*sizeof(char));
+        buf-=len;
+        memcpy(header,buf,len);
+        buf+=len;
+        char* body = buf+4;
+
+        std::vector<char *> lines;
+        int headerLen = 0;
+        while (*header) {
+            if (*header == '\r') {
+                if (*(header + 1) == '\n') {
+                    char *line = (char *) malloc(headerLen * sizeof(char));
+                    for (int i = 0; i < headerLen; i++) {
+                        std::cout << *(header - (headerLen - i));
+                        line[i] = *(header - (headerLen - i));
+                    }
+                    lines.push_back(line);
+                    headerLen = 0;
+                }
+            }
+            header++;
+            headerLen++;
         }
     }
 
