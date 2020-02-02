@@ -11,6 +11,8 @@
 #define CR '\r'
 #define LF '\n'
 #define CR_LF '\r\n'
+static const char SPACE = ' ';
+static const char *const SYMBOL_COLON = ":";
 
 namespace Raft {
     HttpMessageImpl::~HttpMessageImpl() noexcept = default;
@@ -40,24 +42,24 @@ namespace Raft {
         char *tail = head;
 
         // Find request type
-        while (*head++ != ' ');
+        while (*head++ != SPACE);
         httpRequestHeader["Type"] = std::string((char *) msg).substr(0, (head - 1) - tail);
 
         // Find path
         tail = head;
-        while (*head++ != ' ');
+        while (*head++ != SPACE);
         httpRequestHeader["Path"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
 
         // Find HTTP version
         tail = head;
-        while (*head++ != '\r');
+        while (*head++ != CR);
         httpRequestHeader["Version"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
 
         // Map all headers from a key to a value
         while (true) {
             tail = head + 1;
-            while (*head++ != '\r');
-            mid = strstr(tail, ":");
+            while (*head++ != CR);
+            mid = strstr(tail, SYMBOL_COLON);
 
             // Look for the failed strstr
             if (tail > mid)
