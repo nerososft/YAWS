@@ -15,6 +15,17 @@ namespace Raft {
 
     RaftServerImpl::RaftServerImpl() :
             sharedProperties(std::make_shared<ServerSharedProperties>()) {
+        this->sendMessageDelegate = std::bind(&RaftServerImpl::SendMessageImpl, this, std::placeholders::_1, std::placeholders::_2);
+    }
+
+    void RaftServerImpl::SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber) {
+//        std::string host = this->hostMap[receivedInstanceNumber];
+        char *encodedMessage = message->raftMessage->EncodeMessage();
+
+        struct sockaddr_in serv_addr;
+        socket->Connect(serv_addr);
+        socket->Send(encodedMessage);
+
     }
 
     void RaftServerImpl::ResetElectionTimer() {
@@ -103,11 +114,13 @@ namespace Raft {
     }
 
     void RaftServerImpl::Worker() {
+        LogInfo("[RaftServer] Start Election \n")
         ResetElectionTimer();
         int rpcTimeoutMilliseconds = (int) (sharedProperties->configuration.rpcTimeout * 1000.0);
         std::future<void> workerAskedToStop = stopWorker.get_future();
         std::unique_lock<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-        while (workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+        while (workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::ready ||
+               workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::timeout) {
             (void) workerAskedToStopOrWeakUp.wait_for(
                     lock,
                     std::chrono::milliseconds(rpcTimeoutMilliseconds)
@@ -134,6 +147,7 @@ namespace Raft {
                 sharedProperties->workerLoopCompletion = nullptr;
             }
         }
+        LogWarnning("[Election] !!!")
         if (sharedProperties->workerLoopCompletion != nullptr) {
             sharedProperties->workerLoopCompletion->set_value();
             sharedProperties->workerLoopCompletion = nullptr;
@@ -156,7 +170,7 @@ namespace Raft {
             char *buf = TEST_HTTP_RESPONSE;
             write(fdc, buf, strlen(buf));
         } catch (std::logic_error error) {
-            PrintColor2("Caught %s\n", error.what())
+            LogError("Caught %s\n", error.what())
             char *buf = DAILED_HTTP_RESPONSE;
             write(fdc, buf, strlen(buf));
         }

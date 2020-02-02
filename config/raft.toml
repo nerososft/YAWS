@@ -1,0 +1,8 @@
+# id is the indentify of this node
+[owner]
+id = "server1"
+port = 8899
+
+# nodes are servers
+[servers]
+nodes = ["localhost:8891", "localhost:8892", "localhost:8893", "localhost:8894"]

@@ -100,6 +100,8 @@ namespace Raft {
 
         void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
 
+        void SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber);
+
     private:
         void Handler(char *buffer, int fdc);
     };

@@ -34,7 +34,7 @@ namespace Raft {
     }
 
     void RaftBootstrap::LoadConfigFile() {
-        std::ifstream is("config/raft.conf", std::ifstream::binary);
+        std::ifstream is("config/raft.toml", std::ifstream::binary);
         if (is.is_open()) {
             std::string line;
             while (getline(is, line)) {
@@ -48,7 +48,7 @@ namespace Raft {
             }
             is.close();
         } else {
-            PrintColor2("Config file laod failed. %s \n", "config/raft.conf")
+            LogError("[Config] Config file laod failed. %s \n", "config/raft.toml")
         }
     }
 

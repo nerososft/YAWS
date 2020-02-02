@@ -102,4 +102,12 @@ namespace Raft {
             }
         }
     }
+
+    int SocketImpl::Connect(struct sockaddr_in sockaddrIn) {
+        std::cout << "ConnectToServer" << std::endl;
+    }
+
+    int SocketImpl::Send(char *buf) {
+        std::cout << "SendMessage" << std::endl;
+    }
 }

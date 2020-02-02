@@ -39,4 +39,12 @@ namespace Raft {
     int SocketOps::Accept(SocketAcceptEventHandler socketAcceptEventHandler) {
         impl->Accept(socketAcceptEventHandler);
     }
+
+    int SocketOps::Connect(struct sockaddr_in sockaddrIn) {
+        impl->Connect(sockaddrIn);
+    }
+
+    int SocketOps::Send(char *buf) {
+        impl->Send(buf);
+    }
 }
