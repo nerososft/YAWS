@@ -22,7 +22,7 @@ void should_encode_decode_raft_message() {
     assert(message.requestVoteDetails.term == 2);
 }
 
-void should_decode_http_message() {
+void should_decode_http_message_header() {
     auto *httpMessage = new Raft::HttpMessageImpl();
 
     char *msg = "GET / HTTP/1.1\r\n"
@@ -50,7 +50,7 @@ void should_decode_http_message() {
 
 int main() {
     TEST("should_encode_raft_message", should_encode_decode_raft_message)
-    TEST("should_decode_http_message", should_decode_http_message)
+    TEST("should_decode_http_message_header", should_decode_http_message_header)
 
     auto *bootstrap = new Raft::RaftBootstrap();
     bootstrap->Run();
