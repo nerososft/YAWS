@@ -32,19 +32,19 @@ namespace Raft {
         addr.sin_port = htons(configuration.port);
         addr.sin_addr.s_addr = INADDR_ANY;
         if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-            std::cerr << "Unable to Open the Socket" << std::endl;
+            LogError("[Socket] Unable to Open the Socket\n");
             exit(0);
         }
 
         kq = kqueue();
         if (kq == -1) {
-            std::cerr << "Unable to init kqueue" << std::endl;
+            LogError("[Socket] Unable to init kqueue\n");
             exit(0);
         }
 
         EV_SET(&eventSet, fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
         if (kevent(kq, &eventSet, 1, NULL, 0, NULL) == -1) {
-            std::cerr << "Unable to init kevent" << std::endl;
+            LogError("[Socket] Unable to init kevent\n");
             exit(0);
         }
 
@@ -52,14 +52,14 @@ namespace Raft {
 
     int SocketImpl::Bind() {
         if (bind(fd, (struct sockaddr *) (&addr), sizeof(addr)) != 0) {
-            std::cerr << "Unable to bind the Socket" << std::endl;
+            LogError("[Socket] Unable to bind the Socket\n");
             exit(0);
         }
     }
 
     int SocketImpl::Listen() {
         if (listen(fd, 50) == -1) {
-            std::cerr << "Unable to listen the Socket" << std::endl;
+            LogError("[Socket] Unable to listen the Socket\n");
             exit(0);
         }
     }
@@ -84,7 +84,7 @@ namespace Raft {
                 } else {
                     EV_SET(&eventSet, connectedFd, EVFILT_READ, EV_ADD, 0, 0, NULL);
                     kevent(kq, &eventSet, 1, NULL, 0, NULL);
-                    printf("Got connection!\n");
+                    LogInfo("Got connection!\n");
 
                     int flags = fcntl(connectedFd, F_GETFL, 0);
                     assert(flags >= 0);

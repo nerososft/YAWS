@@ -1,4 +1,4 @@
-"/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/193.5662.56/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/xingfeng.yang/project/live-code/Raft
+"/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/xingfeng.yang/project/live-code/Raft
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /Users/xingfeng.yang/project/live-code/Raft/cmake-build-debug

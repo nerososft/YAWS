@@ -6,6 +6,7 @@
 #define HTTP_MESSAGEIMPL_H
 
 #include <memory>
+#include <map>
 
 namespace Raft {
     class HttpMessageImpl {
@@ -20,6 +21,7 @@ namespace Raft {
 
         HttpMessageImpl &operator=(HttpMessageImpl &&) noexcept;
 
+        std::map<std::string, std::string> httpRequestHeader;
     private:
         void WriteMem(char *mem, uint32_t offset, char value);
 
@@ -38,6 +40,9 @@ namespace Raft {
 
     private:
         void SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const;
+
+        std::map<std::string, std::string> ParseHeader(const char *buf);
+
     };
 }
 

@@ -22,8 +22,35 @@ void should_encode_decode_raft_message() {
     assert(message.requestVoteDetails.term == 2);
 }
 
+void should_decode_http_message() {
+    auto *httpMessage = new Raft::HttpMessageImpl();
+
+    char *msg = "GET / HTTP/1.1\r\n"
+                "Host: 192.241.213.46:6880\r\n"
+                "Upgrade-Insecure-Requests: 1\r\n"
+                "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
+                "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8\r\n"
+                "Accept-Language: en-us\r\n"
+                "Accept-Encoding: gzip, deflate\r\n"
+                "Connection: keep-alive\r\n\r\n";
+
+    Raft::HttpMessageImpl message = httpMessage->DecodeMessage(msg);
+
+    assert(message.httpRequestHeader["Type"] == "GET");
+    assert(message.httpRequestHeader["Path"] == "/");
+    assert(message.httpRequestHeader["Version"] == "HTTP/1.1");
+    assert(message.httpRequestHeader["Host"] == "192.241.213.46:6880");
+    assert(message.httpRequestHeader["Upgrade-Insecure-Requests"] == "1");
+    assert(message.httpRequestHeader["Accept"] == "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+    assert(message.httpRequestHeader["User-Agent"] == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8");
+    assert(message.httpRequestHeader["Accept-Language"] == "en-us");
+    assert(message.httpRequestHeader["Accept-Encoding"] == "gzip, deflate");
+    assert(message.httpRequestHeader["Connection"] == "keep-alive");
+}
+
 int main() {
     TEST("should_encode_raft_message", should_encode_decode_raft_message)
+    TEST("should_decode_http_message", should_decode_http_message)
 
     auto *bootstrap = new Raft::RaftBootstrap();
     bootstrap->Run();

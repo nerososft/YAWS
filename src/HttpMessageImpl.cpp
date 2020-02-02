@@ -6,7 +6,11 @@
 #include "../include/HttpMessageImpl.h"
 #include <memory>
 #include <iostream>
-#include <vector>
+#include <map>
+
+#define CR '\r'
+#define LF '\n'
+#define CR_LF '\r\n'
 
 namespace Raft {
     HttpMessageImpl::~HttpMessageImpl() noexcept = default;
@@ -23,43 +27,46 @@ namespace Raft {
     }
 
     HttpMessageImpl HttpMessageImpl::DecodeMessage(char *buf) {
-        int len = 0;
-        while (*buf) {
-            if (*buf == '\r') {
-                if (*(buf + 1) == '\n') {
-                    if (*(buf + 2) == '\r') {
-                        if (*(buf + 3) == '\n') {
-                            break;
-                        }
-                    }
-                }
-            }
-            len++;
-            buf++;
-        }
-        char* header = (char*)malloc(len*sizeof(char));
-        buf-=len;
-        memcpy(header,buf,len);
-        buf+=len;
-        char* body = buf+4;
+        HttpMessageImpl httpMessage;
+        httpMessage.httpRequestHeader = this->ParseHeader(buf);
+        return httpMessage;
+    }
 
-        std::vector<char *> lines;
-        int headerLen = 0;
-        while (*header) {
-            if (*header == '\r') {
-                if (*(header + 1) == '\n') {
-                    char *line = (char *) malloc(headerLen * sizeof(char));
-                    for (int i = 0; i < headerLen; i++) {
-                        std::cout << *(header - (headerLen - i));
-                        line[i] = *(header - (headerLen - i));
-                    }
-                    lines.push_back(line);
-                    headerLen = 0;
-                }
-            }
-            header++;
-            headerLen++;
+    std::map<std::string, std::string> HttpMessageImpl::ParseHeader(const char *msg) {
+        std::map<std::string, std::string> httpRequestHeader;
+
+        char *head = (char *) msg;
+        char *mid;
+        char *tail = head;
+
+        // Find request type
+        while (*head++ != ' ');
+        httpRequestHeader["Type"] = std::string((char *) msg).substr(0, (head - 1) - tail);
+
+        // Find path
+        tail = head;
+        while (*head++ != ' ');
+        httpRequestHeader["Path"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
+
+        // Find HTTP version
+        tail = head;
+        while (*head++ != '\r');
+        httpRequestHeader["Version"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
+
+        // Map all headers from a key to a value
+        while (true) {
+            tail = head + 1;
+            while (*head++ != '\r');
+            mid = strstr(tail, ":");
+
+            // Look for the failed strstr
+            if (tail > mid)
+                break;
+
+            httpRequestHeader[std::string((char *) msg).substr(tail - (char *) msg, (mid) - tail)] = std::string((char *) msg).substr(mid + 2 - (char *) msg, (head - 3) - mid);
         }
+
+        return httpRequestHeader;
     }
 
     void HttpMessageImpl::SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const {
@@ -77,13 +84,13 @@ namespace Raft {
     uint32_t HttpMessageImpl::ReadMemU32(char *mem, uint32_t offset) {
         return (
                 ((uint32_t)
-        this->ReadMem(mem, offset)) << 24 |
-                                       ((uint32_t)
-        this->ReadMem(mem, offset + 1)) << 16 |
-                                           ((uint32_t)
-        this->ReadMem(mem, offset + 2)) << 8 |
-                                           ((uint32_t)
-        this->ReadMem(mem, offset + 3))
+                        this->ReadMem(mem, offset)) << 24 |
+                ((uint32_t)
+                        this->ReadMem(mem, offset + 1)) << 16 |
+                ((uint32_t)
+                        this->ReadMem(mem, offset + 2)) << 8 |
+                ((uint32_t)
+                        this->ReadMem(mem, offset + 3))
         );
     }
 
