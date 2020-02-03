@@ -38,7 +38,7 @@ namespace Raft {
 
         virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) override;
 
-        virtual int Connect(struct sockaddr_in sockaddrIn) override;
+        virtual int Connect(char *addr, int port) override;
 
         virtual int Send(char *buf) override;
 

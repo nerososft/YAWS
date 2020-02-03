@@ -22,8 +22,7 @@ namespace Raft {
 //        std::string host = this->hostMap[receivedInstanceNumber];
         char *encodedMessage = message->raftMessage->EncodeMessage();
 
-        struct sockaddr_in serv_addr;
-        socket->Connect(serv_addr);
+        socket->Connect("127.0.0.1", 8899);
         socket->Send(encodedMessage);
 
     }

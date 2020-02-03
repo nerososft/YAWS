@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/event.h>
 #include <fcntl.h>
+#include <arpa/inet.h>
 #include "../include/SocketImpl.h"
 #include "../include/Log.h"
 
@@ -103,11 +104,31 @@ namespace Raft {
         }
     }
 
-    int SocketImpl::Connect(struct sockaddr_in sockaddrIn) {
-        std::cout << "ConnectToServer" << std::endl;
+    int SocketImpl::Connect(char *addr, int port) {
+        LogWarnning("[Socket] Start Connect to Server.\n")
+        struct sockaddr_in sockaddrIn;
+        int sock = 0;
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+            LogError("[Socket] Socket creation error.\n")
+            return -1;
+        }
+
+        sockaddrIn.sin_family = AF_INET;
+        sockaddrIn.sin_port = htons(port);
+
+        if (inet_pton(AF_INET, addr, &sockaddrIn.sin_addr) <= 0) {
+            LogError("[Socket] Invalid address / Address not supported.\n")
+            return -1;
+        }
+
+        if (connect(this->fd, (struct sockaddr *) &sockaddrIn, sizeof(sockaddrIn)) < 0) {
+            LogError("[Socket] Connection Failed.\n")
+            return -1;
+        }
     }
 
+
     int SocketImpl::Send(char *buf) {
-        std::cout << "SendMessage" << std::endl;
+        LogWarnning("[Socket] SendMessage\n")
     }
 }
