@@ -84,6 +84,8 @@ namespace Raft {
 
         void SendMessage(const std::shared_ptr<RaftMessage> &message, unsigned int instanceNumber, double now);
 
+        void ReceiveMessage(std::shared_ptr<RaftMessage> message, unsigned int senderInstanceNumber);
+
         void StartElection(double now);
 
         void SendHeartBeat(double now);

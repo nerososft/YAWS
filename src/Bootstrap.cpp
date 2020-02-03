@@ -54,6 +54,7 @@ namespace Raft {
 
     void RaftBootstrap::Run() {
         PrintSplash();
+
         LoadConfigFile();
 
         Raft::RaftServer::Configuration configuration;

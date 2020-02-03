@@ -22,7 +22,7 @@ namespace Raft {
 //        std::string host = this->hostMap[receivedInstanceNumber];
         char *encodedMessage = message->raftMessage->EncodeMessage();
 
-        socket->Connect("127.0.0.1", 8899);
+        socket->Connect("127.0.0.1", 8898);
         socket->Send(encodedMessage);
 
     }
@@ -47,6 +47,70 @@ namespace Raft {
         instance.lastRequest = message;
 
         sendMessageDelegate(message, instanceNumber);
+    }
+
+    void RaftServerImpl::ReceiveMessage(std::shared_ptr<RaftMessage> message,
+                                        unsigned int senderInstanceNumber) {
+
+        LogInfo("[Raft] Receive Message\n")
+
+        const double now = timeKeeper->GetCurrentTime();
+        switch (message->raftMessage->type) {
+            case Type::RequestVote: {
+                const auto response = RaftMessage::CreateMessage();
+                response->raftMessage->type = Type::RequestVoteResults;
+                response->raftMessage->requestVoteResultsDetails.term = std::max(
+                        message->raftMessage->requestVoteDetails.term,
+                        sharedProperties->configuration.currentTerm
+                );
+
+                if (sharedProperties->configuration.currentTerm >
+                    message->raftMessage->requestVoteDetails.term) {
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = false;
+                } else if (sharedProperties->configuration.currentTerm ==
+                           message->raftMessage->requestVoteDetails.term &&
+                           sharedProperties->votedThisTerm &&
+                           sharedProperties->votedFor != senderInstanceNumber) {
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = false;
+                } else {
+                    response->raftMessage->requestVoteResultsDetails.voteGranted = true;
+                    sharedProperties->votedThisTerm = true;
+                    sharedProperties->votedFor = senderInstanceNumber;
+                    sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
+                    RevertToFollower();
+                }
+                SendMessage(response, senderInstanceNumber, now);
+            }
+                break;
+            case Type::RequestVoteResults: {
+                auto &instance = sharedProperties->instances[senderInstanceNumber];
+                if (message->raftMessage->requestVoteResultsDetails.voteGranted) {
+                    if (instance.awaitingVote) {
+                        ++sharedProperties->votesForUs;
+                        if (sharedProperties->votesForUs >=
+                            sharedProperties->configuration.instancesNumbers.size() / 2 + 1) {
+                            sharedProperties->isLeader = true;
+                        }
+                    }
+                }
+            }
+                break;
+
+            case Type::HeartBeat: {
+                if (sharedProperties->configuration.currentTerm <
+                    message->raftMessage->requestVoteDetails.term) {
+                    sharedProperties->configuration.currentTerm = message->raftMessage->heartBeatDetails.term;
+                    RevertToFollower();
+                } else if (sharedProperties->configuration.currentTerm ==
+                           message->raftMessage->requestVoteDetails.term) {
+                    ResetElectionTimer();
+                }
+            }
+                break;
+            default: {
+            }
+                break;
+        }
     }
 
     void RaftServerImpl::StartElection(double now) {
@@ -164,8 +228,14 @@ namespace Raft {
 
     void RaftServerImpl::Handler(char *buffer, int fdc) {
         try {
-            auto *raftMessage = new RaftMessageImpl();
-            raftMessage->DecodeMessage(buffer);
+            std::shared_ptr<RaftMessageImpl> raftMessageImpl = std::make_shared<RaftMessageImpl>();
+            raftMessageImpl->DecodeMessage(buffer);
+
+            std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
+            raftMessage->raftMessage = raftMessageImpl;
+
+            ReceiveMessage(raftMessage, 0);
+
             char *buf = TEST_HTTP_RESPONSE;
             write(fdc, buf, strlen(buf));
         } catch (std::logic_error error) {

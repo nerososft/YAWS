@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include "../include/SocketImpl.h"
 #include "../include/Log.h"
+#include "../include/RaftMessageImpl.h"
 
 namespace Raft {
 
@@ -105,7 +106,7 @@ namespace Raft {
     }
 
     int SocketImpl::Connect(char *addr, int port) {
-        LogWarnning("[Socket] Start Connect to Server.\n")
+        LogInfo("[Socket] Start Connect to Server [%s:%d].\n", addr, port)
         struct sockaddr_in sockaddrIn;
         int sock = 0;
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -121,14 +122,24 @@ namespace Raft {
             return -1;
         }
 
-        if (connect(this->fd, (struct sockaddr *) &sockaddrIn, sizeof(sockaddrIn)) < 0) {
+        if (connect(sock, (struct sockaddr *) &sockaddrIn, sizeof(sockaddrIn)) < 0) {
             LogError("[Socket] Connection Failed.\n")
             return -1;
         }
+        LogInfo("[Socket] Connected to Server [%s:%d].\n", addr, port)
+
+        auto *raftMessage = new Raft::RaftMessageImpl();
+        raftMessage->type = Raft::Type::RequestVote;
+        raftMessage->requestVoteDetails.candidateId = 2;
+        raftMessage->requestVoteDetails.term = 2;
+        raftMessage->conntentLength = 1024;
+        char *encodeMessage = raftMessage->EncodeMessage();
+
+        send(sock, encodeMessage, strlen(encodeMessage), 0);
     }
 
 
     int SocketImpl::Send(char *buf) {
-        LogWarnning("[Socket] SendMessage\n")
+        LogWarnning("[Socket] Start Send message\n")
     }
 }

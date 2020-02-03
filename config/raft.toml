@@ -1,8 +1,11 @@
 # id is the indentify of this node
 [owner]
-id = "server1"
-port = 8899
+    id = "server1"
+    [raft]
+        port = 8899
+    [http]
+        port = 8899
 
 # nodes are servers
 [servers]
-nodes = ["localhost:8891", "localhost:8892", "localhost:8893", "localhost:8894"]
+    nodes = ["localhost:8891", "localhost:8892", "localhost:8893", "localhost:8894"]
