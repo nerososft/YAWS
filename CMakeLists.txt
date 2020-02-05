@@ -7,6 +7,7 @@ set(SRC_LIST ${SEC_LIST} src/RaftMessage.cpp
         src/RaftMessageImpl.cpp
         src/TimeKeeper.cpp
         src/TimeKeeperImpl.cpp
+        src/ConnectionPool.cpp
         src/SocketImpl.cpp
         src/SocketOps.cpp
         src/RaftServerImpl.cpp

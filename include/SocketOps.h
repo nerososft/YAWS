@@ -40,7 +40,7 @@ namespace Raft {
 
         virtual int Connect(char *addr, int port) override;
 
-        virtual int Send(char *buf) override;
+        virtual int Send(unsigned int receivedInstanceNumber, char *buf) override;
 
     private:
         std::shared_ptr<SocketImpl> impl;

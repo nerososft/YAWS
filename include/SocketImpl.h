@@ -6,9 +6,11 @@
 #define RAFT_SOCKETIMPL_H
 
 #include "ISocket.h"
+#include "ConnectionPool.h"
 #include <memory>
 #include <netinet/in.h>
 #include <sys/event.h>
+#include <map>
 
 namespace Raft {
     class SocketImpl : public ISocket {
@@ -40,7 +42,7 @@ namespace Raft {
 
         virtual int Connect(char *addr, int port);
 
-        virtual int Send(char *buf);
+        virtual int Send(unsigned int receivedInstanceNumber, char *buf);
 
 
     public:
@@ -55,6 +57,9 @@ namespace Raft {
         SocketConfiguration configuration;
 
         SocketAcceptEventHandler socketAcceptEventHandler;
+
+    private:
+        std::shared_ptr<ConnectionPool> connectionPool;
     };
 }
 #endif //RAFT_SOCKETIMPL_H

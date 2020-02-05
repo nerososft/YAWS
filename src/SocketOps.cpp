@@ -44,7 +44,7 @@ namespace Raft {
         impl->Connect(addr, port);
     }
 
-    int SocketOps::Send(char *buf) {
-        impl->Send(buf);
+    int SocketOps::Send(unsigned int receivedInstanceNumber, char *buf) {
+        impl->Send(receivedInstanceNumber, buf);
     }
 }

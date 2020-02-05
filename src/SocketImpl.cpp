@@ -11,6 +11,7 @@
 #include "../include/SocketImpl.h"
 #include "../include/Log.h"
 #include "../include/RaftMessageImpl.h"
+#include "../include/ConnectionPool.h"
 
 namespace Raft {
 
@@ -20,7 +21,7 @@ namespace Raft {
 
     SocketImpl &SocketImpl::operator=(SocketImpl &&) noexcept = default;
 
-    SocketImpl::SocketImpl() : fd(-1), kq(-1), addr({}) {
+    SocketImpl::SocketImpl() : fd(-1), kq(-1), addr({}), connectionPool(std::make_shared<ConnectionPool>()) {
 
     }
 
@@ -127,19 +128,24 @@ namespace Raft {
             return -1;
         }
         LogInfo("[Socket] Connected to Server [%s:%d].\n", addr, port)
-
-        auto *raftMessage = new Raft::RaftMessageImpl();
-        raftMessage->type = Raft::Type::RequestVote;
-        raftMessage->requestVoteDetails.candidateId = 2;
-        raftMessage->requestVoteDetails.term = 2;
-        raftMessage->conntentLength = 1024;
-        char *encodeMessage = raftMessage->EncodeMessage();
-
-        send(sock, encodeMessage, strlen(encodeMessage), 0);
+        return sock;
     }
 
+    int SocketImpl::Send(unsigned int receivedInstanceNumber, char *buf) {
+        LogWarnning("send\n")
 
-    int SocketImpl::Send(char *buf) {
-        LogWarnning("[Socket] Start Send message\n")
+        // get connect from connect pool
+        const Connection *connection = this->connectionPool->GetConnection(receivedInstanceNumber);
+        if (connection == nullptr) {
+            LogWarnning("[Socket] Connection not found,node %d\n", receivedInstanceNumber)
+            // if not found connection in connection pool, create new connection and put to connection pool
+            char *host = "127.0.0.1";// load from config;
+            int port = 8898;// load from config;
+            int sock = this->Connect(host, port);
+            this->connectionPool->AddConnection(receivedInstanceNumber, host, port, sock);
+        } else {
+            LogInfo("[Socket] Start Send message to node %d [%s:%d]\n", receivedInstanceNumber, connection->endPoint.host, connection->endPoint.port)
+            send(connection->socketFd, buf, strlen(buf), 0);
+        }
     }
 }

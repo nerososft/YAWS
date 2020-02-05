@@ -3,14 +3,14 @@
 
 #include <vector>
 
-namespace Raft{
-    struct EndPoint{
-        char* host;
+namespace Raft {
+    struct EndPoint {
+        char *host;
         int port;
-    }
+    };
 
-    struct Config{
-        char id;
+    struct Config {
+        char *id;
         std::vector<EndPoint> endpoints;
     };
 }

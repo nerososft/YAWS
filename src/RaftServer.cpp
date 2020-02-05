@@ -3,13 +3,11 @@
 //
 #include "../include/RaftServer.h"
 #include "../include/RaftMessage.h"
-#include "../include/RaftMessageImpl.h"
 #include "../include/Log.h"
 #include <thread>
 #include <future>
 #include <memory>
 #include <mutex>
-#include <algorithm>
 
 namespace Raft {
 

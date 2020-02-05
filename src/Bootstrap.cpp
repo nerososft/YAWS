@@ -55,7 +55,7 @@ namespace Raft {
     void RaftBootstrap::Run() {
         PrintSplash();
 
-        LoadConfigFile();
+//        LoadConfigFile();
 
         Raft::RaftServer::Configuration configuration;
         configuration.instancesNumbers = {2, 5, 6, 7, 11};

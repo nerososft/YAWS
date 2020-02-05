@@ -34,7 +34,7 @@ namespace Raft {
 
         virtual int Connect(char *addr, int port) = 0;
 
-        virtual int Send(char *buf) = 0;
+        virtual int Send(unsigned int receivedInstanceNumber, char *buf) = 0;
 
     private:
     };
