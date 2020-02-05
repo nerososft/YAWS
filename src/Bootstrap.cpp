@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 #include <iterator>
+#include <map>
+#include <ostream>
 
 #include "../include/Log.h"
 #include "../include/Common.h"
@@ -37,15 +39,22 @@ namespace Raft {
                     if (strcmp(Common::trim(configs[0]).c_str(), "nodes") == 0) {
                         // transform host port pair to int number[nodeId]. use Hash
                         unsigned int nodeId = Common::GetHashCode(configs[1]);
-                        LogWarnning("[Config]: %s - %s, nodeId: %d\n", configs[0].c_str(), configs[1].c_str(), nodeId)
 
                         std::vector<std::string> host;
                         Common::split(configs[1], host, ':');
+                        LogWarnning("[Config]: %s-%s:%s, nodeId: %d\n", configs[0].c_str(), host[0].c_str(), host[1].c_str(), nodeId)
 
+                        EndPoint endPoint{};
+                        endPoint.host = host[0];
+                        char *pEnd;
+                        endPoint.port = (unsigned int) std::strtol(host[1].c_str(), &pEnd, 10);
+                        config.id = "self";
+                        config.endpoints.insert(std::pair<unsigned int, EndPoint>(nodeId, endPoint));
                         // add nodes to memory config
                     }
                 }
             }
+            std::cout << config << std::endl;
             is.close();
         } else {
             LogError("[Config] Config file laod failed. %s \n", "config/raft.conf")
@@ -53,26 +62,26 @@ namespace Raft {
     }
 
     void RaftBootstrap::Run() {
-        PrintSplash();
+//        PrintSplash();
 
         LoadConfigFile();
 
-        Raft::RaftServer::Configuration configuration;
-        configuration.instancesNumbers = {2, 5, 6, 7, 11};
-        configuration.selfInstanceNumber = 2;
-        configuration.socketConfiguration.port = 8898;
-        this->raftServer->Configure(configuration);
-        this->raftServer->SetTimeKeeper(this->timeKeeper);
-        this->raftServer->SetRunning();
-        this->raftServer->Mobilize();
-
-        Raft::IHttpServer::Configuration httpServerConfiguration;
-        httpServerConfiguration.socketConfiguration.port = 8899;
-        this->httpServer->Configure(httpServerConfiguration);
-        this->httpServer->SetTimeKeeper(this->timeKeeper);
-        this->httpServer->SetRunning();
-        this->httpServer->Mobilize();
-        while (isRunning) {}
+//        Raft::RaftServer::Configuration configuration;
+//        configuration.instancesNumbers = {2, 5, 6, 7, 11};
+//        configuration.selfInstanceNumber = 2;
+//        configuration.socketConfiguration.port = 8898;
+//        this->raftServer->Configure(configuration);
+//        this->raftServer->SetTimeKeeper(this->timeKeeper);
+//        this->raftServer->SetRunning();
+//        this->raftServer->Mobilize();
+//
+//        Raft::IHttpServer::Configuration httpServerConfiguration;
+//        httpServerConfiguration.socketConfiguration.port = 8899;
+//        this->httpServer->Configure(httpServerConfiguration);
+//        this->httpServer->SetTimeKeeper(this->timeKeeper);
+//        this->httpServer->SetRunning();
+//        this->httpServer->Mobilize();
+//        while (isRunning) {}
     }
 
     void RaftBootstrap::PrintSplash() {

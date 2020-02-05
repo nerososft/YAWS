@@ -35,6 +35,8 @@ namespace Raft {
         std::shared_ptr<RaftServer> raftServer;
         std::shared_ptr<HttpServer> httpServer;
 
+        Config config;
+
     public:
         void Run();
 

@@ -145,7 +145,7 @@ namespace Raft {
             this->connectionPool->AddConnection(receivedInstanceNumber, host, port, sock);
             send(sock, buf, strlen(buf), 0);
         } else {
-            LogInfo("[Socket] Start Send message to node %d [%s:%d]\n", receivedInstanceNumber, connection->endPoint.host, connection->endPoint.port)
+            LogInfo("[Socket] Start Send message to node %d [%s:%d]\n", receivedInstanceNumber, connection->endPoint.host.c_str(), connection->endPoint.port)
             send(connection->socketFd, buf, strlen(buf), 0);
         }
     }
