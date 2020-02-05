@@ -16,11 +16,13 @@ namespace Raft {
     };
 
     struct Config {
-        char *id;
+        std::string id;
+        int raftPort;
+        int httpPort;
         std::map<unsigned int, EndPoint> endpoints;
 
         friend std::ostream &operator<<(std::ostream &os, const Config &config) {
-            os << "{id: " << config.id << ", endpoints: [";
+            os << "{id: " << config.id << ", raftPort: " << config.raftPort << ", httpPort: " << config.httpPort << ", endpoints: [";
             for (auto it = config.endpoints.begin(); it != config.endpoints.end(); ++it) {
                 os << "{nodeId: " << it->first << ", endpoint: " << it->second << "}";
             }
