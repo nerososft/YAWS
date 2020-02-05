@@ -9,6 +9,7 @@
 #include <iterator>
 
 #include "../include/Log.h"
+#include "../include/Common.h"
 
 namespace Raft {
 
@@ -23,39 +24,38 @@ namespace Raft {
             httpServer(std::make_shared<HttpServer>()),
             timeKeeper(std::make_shared<TimeKeeper>()) {}
 
-
-    template<class Container>
-    void split(const std::string &str, Container &cont, char delim = ' ') {
-        std::stringstream ss(str);
-        std::string token;
-        while (std::getline(ss, token, delim)) {
-            cont.push_back(token);
-        }
-    }
-
     void RaftBootstrap::LoadConfigFile() {
-        std::ifstream is("config/raft.toml", std::ifstream::binary);
+        std::ifstream is("config/raft.conf", std::ifstream::binary);
         if (is.is_open()) {
             std::string line;
             while (getline(is, line)) {
                 if (line[0] != '#' && line.length() != 0) {
                     std::vector<std::string> configs;
-                    split(line, configs, '=');
+                    Common::split(line, configs, '=');
 
-                    LogWarnning("[Config]: %s - %s\n", configs[0].c_str(), configs[1].c_str())
-                    // TODO:  nodes to mem
+                    // add nodes to mem
+                    if (strcmp(Common::trim(configs[0]).c_str(), "nodes") == 0) {
+                        // transform host port pair to int number[nodeId]. use Hash
+                        unsigned int nodeId = Common::GetHashCode(configs[1]);
+                        LogWarnning("[Config]: %s - %s, nodeId: %d\n", configs[0].c_str(), configs[1].c_str(), nodeId)
+
+                        std::vector<std::string> host;
+                        Common::split(configs[1], host, ':');
+
+                        // add nodes to memory config
+                    }
                 }
             }
             is.close();
         } else {
-            LogError("[Config] Config file laod failed. %s \n", "config/raft.toml")
+            LogError("[Config] Config file laod failed. %s \n", "config/raft.conf")
         }
     }
 
     void RaftBootstrap::Run() {
         PrintSplash();
 
-//        LoadConfigFile();
+        LoadConfigFile();
 
         Raft::RaftServer::Configuration configuration;
         configuration.instancesNumbers = {2, 5, 6, 7, 11};

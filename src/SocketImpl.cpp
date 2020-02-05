@@ -107,7 +107,7 @@ namespace Raft {
     }
 
     int SocketImpl::Connect(char *addr, int port) {
-        LogInfo("[Socket] Start Connect to Server [%s:%d].\n", addr, port)
+        LogInfo("[Socket] Start establish connection to Server [%s:%d].\n", addr, port)
         struct sockaddr_in sockaddrIn;
         int sock = 0;
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -124,10 +124,10 @@ namespace Raft {
         }
 
         if (connect(sock, (struct sockaddr *) &sockaddrIn, sizeof(sockaddrIn)) < 0) {
-            LogError("[Socket] Connection Failed.\n")
+            LogError("[Socket] Connection establish Failed.\n")
             return -1;
         }
-        LogInfo("[Socket] Connected to Server [%s:%d].\n", addr, port)
+        LogInfo("[Socket] Connection established to Server [%s:%d].\n", addr, port)
         return sock;
     }
 
@@ -137,7 +137,7 @@ namespace Raft {
         // get connect from connect pool
         const Connection *connection = this->connectionPool->GetConnection(receivedInstanceNumber);
         if (connection == nullptr) {
-            LogWarnning("[Socket] Connection not found,node %d\n", receivedInstanceNumber)
+            LogWarnning("[Socket] Connection not found, node %d\n", receivedInstanceNumber)
             // if not found connection in connection pool, create new connection and put to connection pool
             char *host = "127.0.0.1";// load from config;
             int port = 8898;// load from config;
