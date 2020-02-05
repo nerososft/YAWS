@@ -51,6 +51,7 @@ namespace Raft {
 
         struct sockaddr_in addr{};
 
+        // TODO : kqueue just work on osx, should replace with epoll on linux
         struct kevent eventSet{};
         struct kevent eventList[32]{};
 
