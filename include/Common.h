@@ -6,6 +6,7 @@
 #define RAFT_COMMON_H
 
 #include <string>
+#include <sstream>
 
 namespace Raft {
     namespace Common {
