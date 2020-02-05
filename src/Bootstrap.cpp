@@ -77,22 +77,35 @@ namespace Raft {
 
         LoadConfigFile();
 
-        Raft::RaftServer::Configuration configuration;
-        configuration.instancesNumbers = {2, 5, 6, 7, 11};
-        configuration.selfInstanceNumber = 2;
-        configuration.socketConfiguration.port = this->config.raftPort;
-        this->raftServer->Configure(configuration);
-        this->raftServer->SetTimeKeeper(this->timeKeeper);
-        this->raftServer->SetRunning();
-        this->raftServer->Mobilize();
-
-        Raft::IHttpServer::Configuration httpServerConfiguration;
-        httpServerConfiguration.socketConfiguration.port = this->config.httpPort;
-        this->httpServer->Configure(httpServerConfiguration);
-        this->httpServer->SetTimeKeeper(this->timeKeeper);
-        this->httpServer->SetRunning();
-        this->httpServer->Mobilize();
+        BootstrapRaftServer();
+        BootstrapHttpServer();
         while (isRunning) {}
+    }
+
+    void RaftBootstrap::BootstrapHttpServer() const {
+        IHttpServer::Configuration httpServerConfiguration;
+        httpServerConfiguration.socketConfiguration.port = config.httpPort;
+        httpServer->Configure(httpServerConfiguration);
+        httpServer->SetTimeKeeper(timeKeeper);
+        httpServer->SetRunning();
+        httpServer->Mobilize();
+    }
+
+    void RaftBootstrap::BootstrapRaftServer() const {
+        Raft::RaftServer::Configuration configuration;
+
+        // nodeId set of endpoints
+        for (auto it = this->config.endpoints.begin(); it != config.endpoints.end(); ++it) {
+            configuration.instancesNumbers.push_back(it->first);
+        }
+
+        // should be hash from self ip and port
+        configuration.selfInstanceNumber = Common::GetHashCode("127.0.0.1:" + std::to_string(config.raftPort));
+        configuration.socketConfiguration.port = config.raftPort;
+        raftServer->Configure(configuration);
+        raftServer->SetTimeKeeper(timeKeeper);
+        raftServer->SetRunning();
+        raftServer->Mobilize();
     }
 
     void RaftBootstrap::PrintSplash() {

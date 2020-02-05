@@ -41,6 +41,10 @@ namespace Raft {
         void Run();
 
         static void PrintSplash();
+
+        void BootstrapRaftServer() const;
+
+        void BootstrapHttpServer() const;
     };
 
 }
