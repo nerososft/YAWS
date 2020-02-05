@@ -15,11 +15,11 @@ void should_encode_decode_raft_message() {
     char *encodeMessage = raftMessage->EncodeMessage();
     assert(*encodeMessage != '\0');
 
-    Raft::RaftMessageImpl message = raftMessage->DecodeMessage(encodeMessage);
-    assert(message.conntentLength == 1024);
-    assert(message.type == Raft::Type::RequestVote);
-    assert(message.requestVoteDetails.candidateId == 2);
-    assert(message.requestVoteDetails.term == 2);
+    std::shared_ptr<Raft::RaftMessageImpl> message = raftMessage->DecodeMessage(encodeMessage);
+    assert(message->conntentLength == 1024);
+    assert(message->type == Raft::Type::RequestVote);
+    assert(message->requestVoteDetails.candidateId == 2);
+    assert(message->requestVoteDetails.term == 2);
 }
 
 void should_decode_http_message_header() {

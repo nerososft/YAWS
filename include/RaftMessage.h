@@ -25,6 +25,8 @@ namespace Raft {
     public:
         static std::function<std::shared_ptr<RaftMessage>()> CreateMessage;
 
+        char* getMessageType() const;
+
     public:
         RaftMessage();
 

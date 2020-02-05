@@ -6,6 +6,7 @@
 #define RAFT_MESSAGEIMPL_H
 
 #include <memory>
+#include <map>
 
 namespace Raft {
 
@@ -71,10 +72,16 @@ namespace Raft {
 
         uint32_t ReadMemU32(char *mem, uint32_t offset);
 
+
+    private:
+        std::map<int, char*> raftMessageType;
+
     public:
         char *EncodeMessage();
 
-        RaftMessageImpl DecodeMessage(char *buf);
+        std::shared_ptr<RaftMessageImpl> DecodeMessage(char *buf);
+
+       char* getMessageType() const;
 
 
     public:

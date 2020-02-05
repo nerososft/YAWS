@@ -4,6 +4,8 @@
 //
 #include "../include/RaftMessage.h"
 #include "../include/RaftMessageImpl.h"
+#include <map>
+#include <string>
 
 namespace {
     std::shared_ptr<Raft::RaftMessage> CreateBaseMessage() {
@@ -24,5 +26,9 @@ namespace Raft {
 
     RaftMessage::RaftMessage() : raftMessage(new RaftMessageImpl()) {
 
+    }
+
+    char* RaftMessage::getMessageType() const {
+        return raftMessage->getMessageType();
     }
 }

@@ -6,6 +6,9 @@
 #include "../include/RaftMessageImpl.h"
 #include <memory>
 #include <iostream>
+#include <map>
+#include <string>
+
 
 namespace Raft {
     RaftMessageImpl::~RaftMessageImpl() noexcept = default;
@@ -14,7 +17,13 @@ namespace Raft {
 
     RaftMessageImpl &RaftMessageImpl::operator=(RaftMessageImpl &&) noexcept = default;
 
-    RaftMessageImpl::RaftMessageImpl() {}
+    RaftMessageImpl::RaftMessageImpl() {
+        raftMessageType.insert(std::pair<int, char *>(0, "Unknown"));
+        raftMessageType.insert(std::pair<int, char *>(1, "RequestVote"));
+        raftMessageType.insert(std::pair<int, char *>(2, "RequestVoteResults"));
+        raftMessageType.insert(std::pair<int, char *>(3, "HeartBeat"));
+        raftMessageType.insert(std::pair<int, char *>(4, "LogEntry"));
+    }
 
 
 //    char requestType = 0;
@@ -82,36 +91,36 @@ namespace Raft {
         return requestBuffer;
     }
 
-    RaftMessageImpl RaftMessageImpl::DecodeMessage(char *buf) {
+    std::shared_ptr<RaftMessageImpl> RaftMessageImpl::DecodeMessage(char *buf) {
         if (this->ReadMem(buf, 0) != MAGIC_NUMBER) {
             throw std::logic_error("Decode: Magic Number check failed.");
         }
-        RaftMessageImpl raftMessage;
+        std::shared_ptr<RaftMessageImpl> raftMessage = std::make_shared<RaftMessageImpl>();
         switch (this->ReadMem(buf, 1)) {
             case 1: {//Type::RequestVote
-                raftMessage.type = Type::RequestVote;
-                raftMessage.requestVoteDetails.candidateId = (((uint32_t) this->ReadMem(buf, 2)) << 8) | this->ReadMem(buf, 3);
-                raftMessage.requestVoteDetails.term = this->ReadMemU32(buf, 4);
+                raftMessage->type = Type::RequestVote;
+                raftMessage->requestVoteDetails.candidateId = (((uint32_t) this->ReadMem(buf, 2)) << 8) | this->ReadMem(buf, 3);
+                raftMessage->requestVoteDetails.term = this->ReadMemU32(buf, 4);
             }
                 break;
             case 2: {//Type::RequestVoteResults
-                raftMessage.type = Type::RequestVoteResults;
-                raftMessage.requestVoteResultsDetails.voteGranted = (((uint32_t) this->ReadMem(buf, 2)) << 8) | this->ReadMem(buf, 3);
-                raftMessage.requestVoteResultsDetails.term = this->ReadMemU32(buf, 4);
+                raftMessage->type = Type::RequestVoteResults;
+                raftMessage->requestVoteResultsDetails.voteGranted = (((uint32_t) this->ReadMem(buf, 2)) << 8) | this->ReadMem(buf, 3);
+                raftMessage->requestVoteResultsDetails.term = this->ReadMemU32(buf, 4);
             }
                 break;
             case 3: {//Type::HeartBeat
-                raftMessage.type = Type::HeartBeat;
+                raftMessage->type = Type::HeartBeat;
             }
                 break;
             case 4: {//Type::LogEntry
-                raftMessage.type = Type::LogEntry;
+                raftMessage->type = Type::LogEntry;
             }
                 break;
             default:
                 break;
         }
-        raftMessage.conntentLength = this->ReadMemU32(buf, 8);
+        raftMessage->conntentLength = this->ReadMemU32(buf, 8);
 
 
         return raftMessage;
@@ -133,5 +142,10 @@ namespace Raft {
                 ((uint32_t) this->ReadMem(mem, offset + 2)) << 8 |
                 ((uint32_t) this->ReadMem(mem, offset + 3))
         );
+    }
+
+
+    char *RaftMessageImpl::getMessageType() const {
+        return raftMessageType.find((int) (type))->second;
     }
 }

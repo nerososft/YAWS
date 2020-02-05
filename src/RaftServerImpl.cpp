@@ -9,6 +9,8 @@
 #include "../include/Log.h"
 #include <unistd.h>
 
+#include <map>
+
 namespace Raft {
 
     RaftServerImpl::~RaftServerImpl() noexcept = default;
@@ -52,7 +54,7 @@ namespace Raft {
     void RaftServerImpl::ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                         unsigned int senderInstanceNumber) {
 
-        LogInfo("[Raft] Receive Message\n")
+        LogInfo("[Raft] Receive Message, type %d[%s]\n", message->raftMessage->type, message->getMessageType())
 
         const double now = timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
@@ -64,8 +66,7 @@ namespace Raft {
                         sharedProperties->configuration.currentTerm
                 );
 
-                if (sharedProperties->configuration.currentTerm >
-                    message->raftMessage->requestVoteDetails.term) {
+                if (sharedProperties->configuration.currentTerm > message->raftMessage->requestVoteDetails.term) {
                     response->raftMessage->requestVoteResultsDetails.voteGranted = false;
                 } else if (sharedProperties->configuration.currentTerm ==
                            message->raftMessage->requestVoteDetails.term &&
@@ -222,17 +223,12 @@ namespace Raft {
 "<h1>Raft Server Status:\n</h1>"\
 "<p style='color:green;'>Raft Server works.\n</p>"
 
-#define DAILED_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
-"<h1>ooops:\n</h1>"\
-"<p style='color:red;'>Not A Raft RaftMessage.\n</p>"
-
     void RaftServerImpl::Handler(char *buffer, int fdc) {
         try {
             std::shared_ptr<RaftMessageImpl> raftMessageImpl = std::make_shared<RaftMessageImpl>();
-            raftMessageImpl->DecodeMessage(buffer);
 
             std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
-            raftMessage->raftMessage = raftMessageImpl;
+            raftMessage->raftMessage = raftMessageImpl->DecodeMessage(buffer);
 
             ReceiveMessage(raftMessage, 0);
 
@@ -240,7 +236,7 @@ namespace Raft {
             write(fdc, buf, strlen(buf));
         } catch (std::logic_error error) {
             LogError("Caught %s\n", error.what())
-            char *buf = DAILED_HTTP_RESPONSE;
+            char *buf = "Not A Raft RaftMessage.";
             write(fdc, buf, strlen(buf));
         }
         close(fdc);
