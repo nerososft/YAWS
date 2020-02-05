@@ -100,7 +100,9 @@ namespace Raft {
         }
 
         // should be hash from self ip and port
+        // TODO : hash (ip:port) is not a good idea, because it means every node's config should use either WAN ip or LAN ip
         configuration.selfInstanceNumber = Common::GetHashCode("127.0.0.1:" + std::to_string(config.raftPort));
+
         configuration.socketConfiguration.port = config.raftPort;
         raftServer->Configure(configuration);
         raftServer->SetTimeKeeper(timeKeeper);

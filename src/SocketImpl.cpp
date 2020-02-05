@@ -139,8 +139,9 @@ namespace Raft {
         if (connection == nullptr) {
             LogWarnning("[Socket] Connection not found, node %d\n", receivedInstanceNumber)
             // if not found connection in connection pool, create new connection and put to connection pool
-            char *host = "127.0.0.1";// load from config;
-            int port = 8898;// load from config;
+
+            char *host = "127.0.0.1";// TODO: load from config;
+            int port = 8898;// TODO: load from config;
             int sock = this->Connect(host, port);
             this->connectionPool->AddConnection(receivedInstanceNumber, host, port, sock);
             send(sock, buf, strlen(buf), 0);
