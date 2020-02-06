@@ -22,7 +22,9 @@ namespace Raft {
 
     void RaftServerImpl::SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber) {
         char *encodedMessage = message->raftMessage->EncodeMessage();
-        socket->Send(receivedInstanceNumber, encodedMessage);
+        // get EndPoint from config
+        EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
+        socket->Send(endPoint, encodedMessage);
     }
 
     void RaftServerImpl::ResetElectionTimer() {

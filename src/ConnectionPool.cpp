@@ -11,25 +11,22 @@ namespace Raft {
 
     ConnectionPool &ConnectionPool::operator=(ConnectionPool &&) noexcept = default;
 
-    ConnectionPool::ConnectionPool() {
+    ConnectionPool::ConnectionPool(){
+
     }
 
-    Connection *ConnectionPool::GetConnection(int nodeId) {
-        if (connections.count(nodeId)) {
-            return this->connections.find(nodeId)->second;
+    Connection *ConnectionPool::GetConnection(EndPoint endPoint) {
+        if (connections.count(endPoint)) {
+            return this->connections.find(endPoint)->second;
         }
         return nullptr;
     }
 
 
-    void ConnectionPool::AddConnection(int nodeId, char *host, int port, int socketFd) {
+    void ConnectionPool::AddConnection(EndPoint endPoint, int socketFd) {
         auto *pConnection = new Connection();
-        EndPoint endPoint{};
-        endPoint.host = host;
-        endPoint.port = port;
-        pConnection->endPoint = endPoint;
         pConnection->socketFd = socketFd;
-        this->connections.insert(std::pair<int, Connection *>(nodeId, pConnection));
+        this->connections.insert(std::pair<EndPoint, Connection *>(endPoint, pConnection));
     }
 
 }

@@ -28,21 +28,21 @@ namespace Raft {
     public:
         SocketImpl();
 
-        virtual bool Configure(const SocketConfiguration &config);
+        bool Configure(const SocketConfiguration &config) override;
 
-        virtual int SetUp();
+        int SetUp() override;
 
-        virtual int Bind();
+        int Bind() override;
 
-        virtual int Listen();
+        int Listen() override;
 
-        virtual int Accept(SocketAcceptEventHandler acceptEventHandler);
+        int Accept(SocketAcceptEventHandler acceptEventHandler) override;
 
-        virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler acceptEventHandler);
+        void SetSocketAcceptEventHandler(SocketAcceptEventHandler acceptEventHandler) override;
 
-        virtual int Connect(char *addr, int port);
+        int Connect(std::string host, int port) override;
 
-        virtual int Send(unsigned int receivedInstanceNumber, char *buf);
+        int Send(EndPoint endPoint, char *buf) override;
 
 
     public:

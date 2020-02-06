@@ -12,7 +12,6 @@
 
 namespace Raft {
     struct Connection {
-        EndPoint endPoint;
         sockaddr_in sockaddrIn;
         int socketFd;
     };
@@ -32,12 +31,12 @@ namespace Raft {
     public:
         ConnectionPool();
 
-        Connection *GetConnection(int nodeId);
+        Connection *GetConnection(EndPoint endPoint);
 
-        void AddConnection(int nodeId, char *host, int port, int socketFd);
+        void AddConnection(EndPoint endPoint, int socketFd);
 
     private:
-        std::map<int, Connection *> connections;
+        std::map<EndPoint, Connection *> connections;
     };
 }
 

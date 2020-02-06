@@ -12,6 +12,7 @@
 #include "../include/Log.h"
 #include "../include/RaftMessageImpl.h"
 #include "../include/ConnectionPool.h"
+#include "../include/Common.h"
 
 namespace Raft {
 
@@ -106,9 +107,9 @@ namespace Raft {
         }
     }
 
-    int SocketImpl::Connect(char *addr, int port) {
-        LogInfo("[Socket] Start establish connection to Server [%s:%d].\n", addr, port)
-        struct sockaddr_in sockaddrIn;
+    int SocketImpl::Connect(std::string host, int port) {
+        LogInfo("[Socket] Start establish connection to Server [%s:%d].\n", host.c_str(), port)
+        struct sockaddr_in sockaddrIn{};
         int sock = 0;
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
             LogError("[Socket] Socket creation error.\n")
@@ -118,7 +119,7 @@ namespace Raft {
         sockaddrIn.sin_family = AF_INET;
         sockaddrIn.sin_port = htons(port);
 
-        if (inet_pton(AF_INET, addr, &sockaddrIn.sin_addr) <= 0) {
+        if (inet_pton(AF_INET, host.c_str(), &sockaddrIn.sin_addr) <= 0) {
             LogError("[Socket] Invalid address / Address not supported.\n")
             return -1;
         }
@@ -127,26 +128,22 @@ namespace Raft {
             LogError("[Socket] Connection establish Failed.\n")
             return -1;
         }
-        LogInfo("[Socket] Connection established to Server [%s:%d].\n", addr, port)
+        LogInfo("[Socket] Connection established to Server [%s:%d].\n", host.c_str(), port)
         return sock;
     }
 
-    int SocketImpl::Send(unsigned int receivedInstanceNumber, char *buf) {
-        LogWarnning("send\n")
-
+    int SocketImpl::Send(EndPoint endPoint, char *buf) {
         // get connect from connect pool
-        const Connection *connection = this->connectionPool->GetConnection(receivedInstanceNumber);
+        const Connection *connection = this->connectionPool->GetConnection(endPoint);
         if (connection == nullptr) {
-            LogWarnning("[Socket] Connection not found, node %d\n", receivedInstanceNumber)
+            LogWarnning("[Socket] Connection not found, host %s ,port %d\n", endPoint.host.c_str(), endPoint.port)
             // if not found connection in connection pool, create new connection and put to connection pool
 
-            char *host = "127.0.0.1";// TODO: load from config;
-            int port = 8898;// TODO: load from config;
-            int sock = this->Connect(host, port);
-            this->connectionPool->AddConnection(receivedInstanceNumber, host, port, sock);
+            int sock = this->Connect(Common::trim(endPoint.host), endPoint.port);
+            this->connectionPool->AddConnection(endPoint, sock);
             send(sock, buf, strlen(buf), 0);
         } else {
-            LogInfo("[Socket] Start Send message to node %d [%s:%d]\n", receivedInstanceNumber, connection->endPoint.host.c_str(), connection->endPoint.port)
+            LogInfo("[Socket] Start Send message to node [%s:%d]\n", endPoint.host.c_str(), endPoint.port)
             send(connection->socketFd, buf, strlen(buf), 0);
         }
     }

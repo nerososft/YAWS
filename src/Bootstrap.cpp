@@ -103,6 +103,7 @@ namespace Raft {
         configuration.selfInstanceNumber = Common::GetHashCode("127.0.0.1:" + std::to_string(config.raftPort));
 
         configuration.socketConfiguration.port = config.raftPort;
+        configuration.endPoints = config.endpoints;
         raftServer->Configure(configuration);
         raftServer->SetTimeKeeper(timeKeeper);
         raftServer->SetRunning();

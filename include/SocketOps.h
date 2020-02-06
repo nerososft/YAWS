@@ -9,6 +9,7 @@
 #include "SocketImpl.h"
 #include <memory>
 #include <netinet/in.h>
+#include "Config.h"
 
 namespace Raft {
     class SocketOps : public ISocket {
@@ -38,9 +39,9 @@ namespace Raft {
 
         virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) override;
 
-        virtual int Connect(char *addr, int port) override;
+        virtual int Connect(std::string host, int port) override;
 
-        virtual int Send(unsigned int receivedInstanceNumber, char *buf) override;
+        virtual int Send(EndPoint endPoint, char *buf) override;
 
     private:
         std::shared_ptr<SocketImpl> impl;

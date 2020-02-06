@@ -13,6 +13,35 @@ namespace Raft {
             os << "{host: " << point.host << ", port: " << point.port << "}";
             return os;
         }
+
+        bool operator==(const EndPoint &rhs) const {
+            return host == rhs.host &&
+                   port == rhs.port;
+        }
+
+        bool operator!=(const EndPoint &rhs) const {
+            return !(rhs == *this);
+        }
+
+        bool operator<(const EndPoint &rhs) const {
+            if (host < rhs.host)
+                return true;
+            if (rhs.host < host)
+                return false;
+            return port < rhs.port;
+        }
+
+        bool operator>(const EndPoint &rhs) const {
+            return rhs < *this;
+        }
+
+        bool operator<=(const EndPoint &rhs) const {
+            return !(rhs < *this);
+        }
+
+        bool operator>=(const EndPoint &rhs) const {
+            return !(*this < rhs);
+        }
     };
 
     struct Config {

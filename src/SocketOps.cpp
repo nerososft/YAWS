@@ -40,11 +40,11 @@ namespace Raft {
         impl->Accept(socketAcceptEventHandler);
     }
 
-    int SocketOps::Connect(char *addr, int port) {
-        impl->Connect(addr, port);
+    int SocketOps::Connect(std::string host, int port) {
+        impl->Connect(host, port);
     }
 
-    int SocketOps::Send(unsigned int receivedInstanceNumber, char *buf) {
-        impl->Send(receivedInstanceNumber, buf);
+    int SocketOps::Send(EndPoint endPoint, char *buf) {
+        impl->Send(endPoint, buf);
     }
 }

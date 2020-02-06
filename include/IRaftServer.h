@@ -12,6 +12,7 @@
 #include "ISocket.h"
 #include <mutex>
 #include <future>
+#include "Config.h"
 
 namespace Raft {
 
@@ -20,14 +21,13 @@ namespace Raft {
         struct Configuration {
             std::vector<unsigned int> instancesNumbers;
             unsigned int selfInstanceNumber = 0;
-
             unsigned int currentTerm = 0;
-
-
             double minimumElectionTimeout = 0.15;
             double maximumElectionTimeout = 0.3;
             double rpcTimeout = 0.015;
             ISocket::SocketConfiguration socketConfiguration;
+
+            std::map<unsigned int, EndPoint> endPoints;
         };
 
         using SendMessageDelegate = std::function<void(std::shared_ptr<RaftMessage> message,

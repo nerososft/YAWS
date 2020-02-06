@@ -8,6 +8,7 @@
 #include <memory>
 #include <functional>
 #include <netinet/in.h>
+#include "Config.h"
 
 namespace Raft {
     class ISocket {
@@ -32,9 +33,9 @@ namespace Raft {
 
         virtual void SetSocketAcceptEventHandler(SocketAcceptEventHandler socketAcceptEventHandler) = 0;
 
-        virtual int Connect(char *addr, int port) = 0;
+        virtual int Connect(std::string host, int port) = 0;
 
-        virtual int Send(unsigned int receivedInstanceNumber, char *buf) = 0;
+        virtual int Send(EndPoint endPoint, char *buf) = 0;
 
     private:
     };
