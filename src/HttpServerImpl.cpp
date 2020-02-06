@@ -28,6 +28,8 @@ namespace Raft {
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("OPTIONS", OPTIONS));
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("TRACE", TRACE));
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("PATCH", PATCH));
+
+        InitRouter();
     }
 
     bool HttpServerImpl::Configure(const IHttpServer::Configuration &configuration) {
@@ -38,30 +40,28 @@ namespace Raft {
 
     }
 
-#define HTTP_RESPONSE_404 "HTTP/1.1 404 Not Found\r\nServer: Http \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
-"<h1>404 Not Found:\n</h1>"\
-"<p style='color:green;'>What you are looking for is missed.\n</p>"
-
+    #define HTTP_RESPONSE_404 "<h1>404 Not Found:</h1><p>What you are looking for is missed.</p>"
     void HttpServerImpl::ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                         unsigned int fdc) {
         std::string uri = message->httpMessage->httpRequestHeader["Path"];
         HttpMethod method = httpMethodMap[message->httpMessage->httpRequestHeader["Type"]];
         Route route{uri, method};
-
-        std::string result;
+        HandlerResponse responseBody;
         if (router.count(route)) {
-            std::function<std::string(HttpRequest)> &handler = this->router.find(route)->second;
+            std::function<HandlerResponse(HttpRequest)> &handler = this->router.find(route)->second;
             HttpRequest httpRequest;
             httpRequest.uri = uri;
             httpRequest.httpMethod = method;
             httpRequest.header = message->httpMessage->httpRequestHeader;
 //            httpRequest.body = message->httpMessage.body; //TODO : decode body from http request payload
-            result = handler(httpRequest);
+            responseBody = handler(httpRequest);
         } else { // 404 Not Found
-            result = HTTP_RESPONSE_404;
+            responseBody = {NOT_FOUND, HTTP_RESPONSE_404};
         }
 
-        write(fdc, result.c_str(), strlen(result.c_str()));
+        HttpMessageImpl httpMessage;
+        const std::string &response = httpMessage.EncodeMessage(responseBody.responseStatus, responseBody.body);
+        write(fdc, response.c_str(), strlen(response.c_str()));
         close(fdc);
     }
 
@@ -86,6 +86,25 @@ namespace Raft {
 
     void HttpServerImpl::SetRunning(bool running) {
         this->isRunning = running;
+    }
+
+    void HttpServerImpl::InitRouter() {
+        router.insert(std::pair<Route, std::function<HandlerResponse(HttpRequest)>>({"/dashboard", GET}, std::bind(&HttpServerImpl::Dashboard, this, std::placeholders::_1)));
+    }
+
+    HandlerResponse HttpServerImpl::Dashboard(HttpRequest request) {
+        // render response body by template engine
+        return {OK, "<h1>Dashboard:</h1>"
+                    "<ul>"
+                    "<li><a>nodes</a></li>"
+                    "<li><a>about</a></li>"
+                    "<li><a>config</a></li>"
+                    "</ul>"
+                    "<table>"
+                    "<tr><td>status</td><td>role</td><td>id</td><td>host</td><td>port</td><td>term</td><td>logEntryCommitId</td></tr>"
+                    "<tr><td>ok</td><td>follower</td><td>1</td><td>127.0.0.1</td><td>8898</td><td>2</td><td>4</td></tr>"
+                    "<tr><td>ok</td><td>follower</td><td>2</td><td>127.0.0.1</td><td>8897</td><td>2</td><td>4</td></tr>"
+                    "</table>"};
     }
 
 

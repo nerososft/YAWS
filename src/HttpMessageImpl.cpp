@@ -15,6 +15,70 @@ static const char SPACE = ' ';
 static const char *const SYMBOL_COLON = ":";
 
 namespace Raft {
+
+    static std::string responseReasonMap[] = {
+            [CONTINUE]="Continue",
+            [SWITCHING_PROTOCOLS]="Switching Protocols",
+            [PROCESSING]="",
+            [CHECKPOINT]="",
+            [OK]="OK",
+            [CREATED]="Created",
+            [ACCEPTED]="Accepted",
+            [NON_AUTHORITATIVE_INFORMATION]="",
+            [NO_CONTENT]="",
+            [RESET_CONTENT]="",
+            [PARTIAL_CONTENT]="",
+            [MULTI_STATUS]="",
+            [ALREADY_REPORTED]="",
+            [IM_USED]="",
+            [MULTIPLE_CHOICES]="",
+            [MOVED_PERMANENTLY]="",
+            [FOUND]="",
+            [SEE_OTHER]="",
+            [NOT_MODIFIED]="",
+            [TEMPORARY_REDIRECT]="",
+            [PERMANENT_REDIRECT]="",
+            [BAD_REQUEST]="",
+            [UNAUTHORIZED]="",
+            [PAYMENT_REQUIRED]="",
+            [FORBIDDEN]="",
+            [NOT_FOUND]="Not Found",
+            [METHOD_NOT_ALLOWED]="",
+            [NOT_ACCEPTABLE]="",
+            [PROXY_AUTHENTICATION_REQUIRED]="",
+            [REQUEST_TIMEOUT]="",
+            [CONFLICT]="Conflict",
+            [GONE]="",
+            [LENGTH_REQUIRED]="",
+            [PRECONDITION_FAILED]="",
+            [PAYLOAD_TOO_LARGE]="",
+            [URI_TOO_LONG]="",
+            [UNSUPPORTED_MEDIA_TYPE]="",
+            [REQUESTED_RANGE_NOT_SATISFIABLE]="",
+            [EXPECTATION_FAILED]="",
+            [I_AM_A_TEAPOT]="",
+            [UNPROCESSABLE_ENTITY]="",
+            [LOCKED]="",
+            [FAILED_DEPENDENCY]="",
+            [UPGRADE_REQUIRED]="",
+            [PRECONDITION_REQUIRED]="",
+            [TOO_MANY_REQUESTS]="",
+            [REQUEST_HEADER_FIELDS_TOO_LARGE]="",
+            [UNAVAILABLE_FOR_LEGAL_REASONS]="",
+            [INTERNAL_SERVER_ERROR]="",
+            [NOT_IMPLEMENTED]="",
+            [BAD_GATEWAY]="",
+            [SERVICE_UNAVAILABLE]="",
+            [GATEWAY_TIMEOUT]="",
+            [HTTP_VERSION_NOT_SUPPORTED]="",
+            [VARIANT_ALSO_NEGOTIATES]="",
+            [INSUFFICIENT_STORAGE]="",
+            [LOOP_DETECTED]="",
+            [BANDWIDTH_LIMIT_EXCEEDED]="",
+            [NOT_EXTENDED]="",
+            [NETWORK_AUTHENTICATION_REQUIRED]="",
+    };
+
     HttpMessageImpl::~HttpMessageImpl() noexcept = default;
 
     HttpMessageImpl::HttpMessageImpl(Raft::HttpMessageImpl &&) noexcept = default;
@@ -23,9 +87,25 @@ namespace Raft {
 
     HttpMessageImpl::HttpMessageImpl() {}
 
+    std::string HttpMessageImpl::EncodeMessage(HttpResponseStatus responseStatus, std::string responseBody) {
+        std::string response;
 
-    char *HttpMessageImpl::EncodeMessage() {
+        // statusLine
+        response.append("HTTP/1.1 ");
+        response.append(std::to_string((int) responseStatus));
+        response.append(" " + responseReasonMap[responseStatus] + " ");
 
+        response.append("\r\n");
+        // response header
+        for (auto it = httpRequestHeader.begin(); it != httpRequestHeader.end(); ++it) {
+            response.append(it->first);
+            response.append(":");
+            response.append(it->second);
+            response.append("\r\n");
+        }
+        response.append("\r\n");
+        response.append(responseBody);
+        return response;
     }
 
     std::shared_ptr<HttpMessageImpl> HttpMessageImpl::DecodeMessage(char *buf) {
@@ -73,7 +153,6 @@ namespace Raft {
 
     void HttpMessageImpl::SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const {
     }
-
 
     void HttpMessageImpl::WriteMem(char *mem, uint32_t offset, char value) {
         *(mem + offset) = value;

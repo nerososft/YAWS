@@ -8,6 +8,8 @@ Yet Another Raft Implement
 
 
 ## dashboard
+get RaftServer status form broswer
 ```
 http://localhost:8899/dashboard
 ```
+
