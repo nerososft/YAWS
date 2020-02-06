@@ -84,11 +84,11 @@ namespace Raft {
             } else if (fd_ == fd) {
                 int connectedFd = accept(fd, (struct sockaddr *) &sockaddrStorage, &socklen);
                 if (connectedFd == -1) {
-                    std::cerr << "Unable to Connect with the client" << std::endl;
+                    LogError("[Socket] Unable to Connect with the client")
                 } else {
                     EV_SET(&eventSet, connectedFd, EVFILT_READ, EV_ADD, 0, 0, NULL);
                     kevent(kq, &eventSet, 1, NULL, 0, NULL);
-                    LogInfo("Got connection!\n");
+                    LogInfo("[Socket] Got connection!\n");
 
                     int flags = fcntl(connectedFd, F_GETFL, 0);
                     assert(flags >= 0);

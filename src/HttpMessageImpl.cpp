@@ -28,9 +28,9 @@ namespace Raft {
 
     }
 
-    HttpMessageImpl HttpMessageImpl::DecodeMessage(char *buf) {
-        HttpMessageImpl httpMessage;
-        httpMessage.httpRequestHeader = this->ParseHeader(buf);
+    std::shared_ptr<HttpMessageImpl> HttpMessageImpl::DecodeMessage(char *buf) {
+        std::shared_ptr<HttpMessageImpl> httpMessage = std::make_shared<HttpMessageImpl>();
+        httpMessage->httpRequestHeader = this->ParseHeader(buf);
         return httpMessage;
     }
 
@@ -95,5 +95,4 @@ namespace Raft {
                         this->ReadMem(mem, offset + 3))
         );
     }
-
 }

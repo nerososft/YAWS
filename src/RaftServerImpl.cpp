@@ -217,22 +217,13 @@ namespace Raft {
         }
     }
 
-
-#define TEST_HTTP_RESPONSE "HTTP/1.1 200 OK\r\nServer: Raft \r\nContent-Type: text/html;charset=utf-8\r\n\r\n"\
-"<h1>Raft Server Status:\n</h1>"\
-"<p style='color:green;'>Raft Server works.\n</p>"
-
     void RaftServerImpl::Handler(char *buffer, int fdc) {
         try {
             std::shared_ptr<RaftMessageImpl> raftMessageImpl = std::make_shared<RaftMessageImpl>();
-
             std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
             raftMessage->raftMessage = raftMessageImpl->DecodeMessage(buffer);
 
             ReceiveMessage(raftMessage, 0);
-
-            char *buf = TEST_HTTP_RESPONSE;
-            write(fdc, buf, strlen(buf));
         } catch (std::logic_error error) {
             LogError("Caught %s\n", error.what())
             char *buf = "Not A Raft RaftMessage.";

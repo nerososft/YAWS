@@ -34,18 +34,18 @@ void should_decode_http_message_header() {
                 "Accept-Encoding: gzip, deflate\r\n"
                 "Connection: keep-alive\r\n\r\n";
 
-    Raft::HttpMessageImpl message = httpMessage->DecodeMessage(msg);
+    std::shared_ptr<Raft::HttpMessageImpl> message = httpMessage->DecodeMessage(msg);
 
-    assert(message.httpRequestHeader["Type"] == "GET");
-    assert(message.httpRequestHeader["Path"] == "/");
-    assert(message.httpRequestHeader["Version"] == "HTTP/1.1");
-    assert(message.httpRequestHeader["Host"] == "192.241.213.46:6880");
-    assert(message.httpRequestHeader["Upgrade-Insecure-Requests"] == "1");
-    assert(message.httpRequestHeader["Accept"] == "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-    assert(message.httpRequestHeader["User-Agent"] == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8");
-    assert(message.httpRequestHeader["Accept-Language"] == "en-us");
-    assert(message.httpRequestHeader["Accept-Encoding"] == "gzip, deflate");
-    assert(message.httpRequestHeader["Connection"] == "keep-alive");
+    assert(message->httpRequestHeader["Type"] == "GET");
+    assert(message->httpRequestHeader["Path"] == "/");
+    assert(message->httpRequestHeader["Version"] == "HTTP/1.1");
+    assert(message->httpRequestHeader["Host"] == "192.241.213.46:6880");
+    assert(message->httpRequestHeader["Upgrade-Insecure-Requests"] == "1");
+    assert(message->httpRequestHeader["Accept"] == "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+    assert(message->httpRequestHeader["User-Agent"] == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8");
+    assert(message->httpRequestHeader["Accept-Language"] == "en-us");
+    assert(message->httpRequestHeader["Accept-Encoding"] == "gzip, deflate");
+    assert(message->httpRequestHeader["Connection"] == "keep-alive");
 }
 
 int main() {

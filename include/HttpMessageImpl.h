@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <map>
+#include <string>
 
 namespace Raft {
     class HttpMessageImpl {
@@ -32,7 +33,7 @@ namespace Raft {
     public:
         char *EncodeMessage();
 
-        HttpMessageImpl DecodeMessage(char *buf);
+        std::shared_ptr<HttpMessageImpl> DecodeMessage(char *buf);
 
 
     public:
@@ -42,6 +43,9 @@ namespace Raft {
         void SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const;
 
         std::map<std::string, std::string> ParseHeader(const char *buf);
+
+    private:
+
 
     };
 }
