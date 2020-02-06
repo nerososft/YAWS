@@ -3,6 +3,7 @@
 //
 #include "../include/IHttpServer.h"
 #include "../include/HttpServerImpl.h"
+#include "../include/Log.h"
 #include <unistd.h>
 
 #include <utility>
@@ -40,11 +41,13 @@ namespace Raft {
 
     }
 
-    #define HTTP_RESPONSE_404 "<h1>404 Not Found:</h1><p>What you are looking for is missed.</p>"
+#define HTTP_RESPONSE_404 "<h1>404 Not Found:</h1><p>What you are looking for is missed.</p>"
+
     void HttpServerImpl::ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                         unsigned int fdc) {
         std::string uri = message->httpMessage->httpRequestHeader["Path"];
         HttpMethod method = httpMethodMap[message->httpMessage->httpRequestHeader["Type"]];
+        LogInfo("[HttpServer] Request %s %s\n", message->httpMessage->httpRequestHeader["Type"].c_str(), message->httpMessage->httpRequestHeader["Path"].c_str())
         Route route{uri, method};
         HandlerResponse responseBody;
         if (router.count(route)) {
@@ -61,6 +64,7 @@ namespace Raft {
 
         HttpMessageImpl httpMessage;
         const std::string &response = httpMessage.EncodeMessage(responseBody.responseStatus, responseBody.body);
+
         write(fdc, response.c_str(), strlen(response.c_str()));
         close(fdc);
     }
@@ -93,7 +97,7 @@ namespace Raft {
     }
 
     HandlerResponse HttpServerImpl::Dashboard(HttpRequest request) {
-        // render response body by template engine
+        // TODO : render response body by template engine
         return {OK, "<h1>Dashboard:</h1>"
                     "<ul>"
                     "<li><a>nodes</a></li>"
