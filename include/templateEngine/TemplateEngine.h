@@ -34,8 +34,8 @@ namespace Raft {
 
             Token Next();
 
-        private:
             const char *textPtr{};
+        private:
             long length{};
             long position{};
             Token currentToken;

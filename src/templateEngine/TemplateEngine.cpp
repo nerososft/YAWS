@@ -326,6 +326,8 @@ namespace Raft {
                         break;
                 }
             }
+
+            files.pop_back();
         }
 
         void TemplateEngine::Clear() {

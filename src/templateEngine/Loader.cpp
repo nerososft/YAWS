@@ -12,6 +12,7 @@ namespace Raft {
         if (!input.is_open()) {
             return {false, nullptr, "Could not open file " + fileName};
         }
+
         std::string content((std::istreambuf_iterator<char>(input)),
                             (std::istreambuf_iterator<char>()));
         return {true, content, ""};
