@@ -76,7 +76,7 @@ namespace Raft {
 
         LoadConfigFile();
 
-//        BootstrapRaftServer();
+        BootstrapRaftServer();
         BootstrapHttpServer();
         while (isRunning) {}
     }

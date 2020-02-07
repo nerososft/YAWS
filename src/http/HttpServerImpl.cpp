@@ -93,6 +93,7 @@ namespace Raft {
     }
 
     void HttpServerImpl::InitRouter() {
+        // TODO : may be can use micro to simplify,Like GET("/dashboard",HttpServerImpl::Dashboard)
         router.insert(std::pair<Route, std::function<HandlerResponse(HttpRequest)>>({"/dashboard", GET}, std::bind(&HttpServerImpl::Dashboard, this, std::placeholders::_1)));
     }
 

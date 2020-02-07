@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+</body>
+<p>Items:</p>
+{% block items %}
+<div>
+    <h4>Title: {{ title }}</h4>
+    <p>Text: {{ text }}</p>
+    {% block detailBlock %}
+    <div>
+        <p>Detail: {{ detail }}</p>
+    </div>
+    {% endBlock %}
+</div>
+{% endBlock %}
+</body>
+</html>

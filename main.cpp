@@ -1,6 +1,10 @@
+#include <iostream>
+#include <sstream>
 #include "include/Bootstrap.h"
 #include "include/raft/RaftMessageImpl.h"
 #include "include/log/Log.h"
+#include "include/templateEngine/Loader.h"
+#include "include/templateEngine/TemplateEngine.h"
 
 #define TEST(text, func){ PrintColor4(" [Test]: %s [TESTING]\n",text); func(); PrintColor3(" [Test]: %s [Ok]\n",text)}
 
@@ -48,9 +52,90 @@ void should_decode_http_message_header() {
     assert(message->httpRequestHeader["Connection"] == "keep-alive");
 }
 
+void should_render_html_template() {
+    Raft::FileLoader fileLoader;
+    Raft::Template::TemplateEngine templateEngine(fileLoader);
+    templateEngine.Load("www/test/test.html");
+    templateEngine.Set("text", "Hello, world");
+    templateEngine.SetBlock("items").Repeat(3);
+
+    const char *title[3] = {"title1", "title2", "title3"};
+    const char *detail[3] = {"detail1", "detail2", "detail3"};
+
+    for (int i = 0; i < 3; i++) {
+        templateEngine.SetBlock("items")[i].Set("title", title[i]);
+        templateEngine.SetBlock("items")[i].Set("text", "Lorem Ipsum");
+        Raft::Template::Block &block = templateEngine.SetBlock("items")[i].SetBlock("detailBlock");
+        block.Set("detail", detail[i]);
+
+        if (i == 0) {
+            block.Disable();
+        }
+    }
+
+    std::stringbuf buf;
+    std::ostream sout(&buf);
+    templateEngine.Render(sout);
+
+    assert(buf.str() == "<html xmlns=\"http://www.w3.org/1999/html\" xmlns=\"http://www.w3.org/1999/html\">\n"
+                        "</body>\n"
+                        "<p>Items:</p>\n"
+                        "\n"
+                        "<div>\n"
+                        "    <h4>Title: title1</h4>\n"
+                        "    <p>Text: Lorem Ipsum</p>\n"
+                        "    \n"
+                        "</div>\n"
+                        "\n"
+                        "<div>\n"
+                        "    <h4>Title: title2</h4>\n"
+                        "    <p>Text: Lorem Ipsum</p>\n"
+                        "    \n"
+                        "    <div>\n"
+                        "        <p>Detail: detail2</p>\n"
+                        "    </div>\n"
+                        "    \n"
+                        "</div>\n"
+                        "\n"
+                        "<div>\n"
+                        "    <h4>Title: title3</h4>\n"
+                        "    <p>Text: Lorem Ipsum</p>\n"
+                        "    \n"
+                        "    <div>\n"
+                        "        <p>Detail: detail3</p>\n"
+                        "    </div>\n"
+                        "    \n"
+                        "</div>\n"
+                        "\n"
+                        "</body>\n"
+                        "</html>\n");
+}
+
+void should_render_multi_html_template() {
+    Raft::MemoryLoader memoryLoader;
+    Raft::Template::TemplateEngine templateEngine(memoryLoader);
+
+    memoryLoader.Add("header", "<div>{{ title }}</div>\n{% include body %}");
+    memoryLoader.Add("body", "<p>Hi,I am {{ name }}</p>");
+
+
+    templateEngine.Load("header");
+    templateEngine.Set("title", "my title");
+    templateEngine.Set("name", "nero yang");
+
+    std::stringbuf buf;
+    std::ostream sout(&buf);
+    templateEngine.Render(sout);
+
+    assert(buf.str() == "<div>my title</div>\n"
+                        "<p>Hi,I am nero yang</p>");
+}
+
 int main() {
     TEST("should_encode_raft_message", should_encode_decode_raft_message)
     TEST("should_decode_http_message_header", should_decode_http_message_header)
+    TEST("should_render_html_template", should_render_html_template)
+    TEST("should_render_multi_html_template", should_render_multi_html_template)
 
     auto *bootstrap = new Raft::RaftBootstrap();
     bootstrap->Run();

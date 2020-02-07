@@ -14,6 +14,8 @@ set(SRC_LIST ${SEC_LIST} src/raft/RaftMessage.cpp
         src/raft/RaftServer.cpp
         src/http/HttpMessage.cpp
         src/http/HttpMessageImpl.cpp
+        src/templateEngine/Loader.cpp
+        src/templateEngine/TemplateEngine.cpp
         src/http/HttpServerImpl.cpp
         src/http/HttpServer.cpp
         src/Bootstrap.cpp
