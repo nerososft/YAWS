@@ -5,7 +5,7 @@ Yet Another Raft Implement
 
 ![C/C++ CI](https://github.com/nerososft/YaRaft/workflows/C/C++%20CI/badge.svg)
 
-
+Not just Raft.
 
 ## dashboard
 get RaftServer status form broswer
