@@ -5,9 +5,9 @@
 #define RAFT_BOOTSTRAP_H
 
 #include <memory>
-#include "RaftServer.h"
-#include "SocketOps.h"
-#include "HttpServer.h"
+#include "raft/RaftServer.h"
+#include "connect/SocketOps.h"
+#include "http/HttpServer.h"
 #include <fstream>
 
 namespace Raft {

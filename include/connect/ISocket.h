@@ -8,7 +8,7 @@
 #include <memory>
 #include <functional>
 #include <netinet/in.h>
-#include "Config.h"
+#include "../config/Config.h"
 
 namespace Raft {
     class ISocket {

@@ -2,8 +2,8 @@
 //
 // Created by XingfengYang on 2020/1/1.
 //
-#include "../include/RaftMessage.h"
-#include "../include/RaftMessageImpl.h"
+#include "../../include/raft/RaftMessage.h"
+#include "../../include/raft/RaftMessageImpl.h"
 #include <map>
 #include <string>
 

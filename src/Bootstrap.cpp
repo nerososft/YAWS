@@ -9,8 +9,8 @@
 #include <map>
 #include <ostream>
 
-#include "../include/Log.h"
-#include "../include/Common.h"
+#include "../include/log/Log.h"
+#include "../include/common/Common.h"
 
 namespace Raft {
 

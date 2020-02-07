@@ -9,10 +9,10 @@
 #include <vector>
 #include <memory>
 #include "RaftMessage.h"
-#include "ISocket.h"
+#include "../connect/ISocket.h"
 #include <mutex>
 #include <future>
-#include "Config.h"
+#include "../config/Config.h"
 
 namespace Raft {
 

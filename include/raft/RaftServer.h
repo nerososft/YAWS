@@ -8,10 +8,10 @@
 #include <memory>
 
 #include "IRaftServer.h"
-#include "TimeKeeper.h"
+#include "../timer/TimeKeeper.h"
 #include "RaftServerImpl.h"
-#include "SocketImpl.h"
-#include "SocketOps.h"
+#include "../connect/SocketImpl.h"
+#include "../connect/SocketOps.h"
 
 namespace Raft {
     class RaftServer : public IRaftServer {

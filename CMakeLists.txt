@@ -3,19 +3,19 @@ project(Raft)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SRC_LIST ${SEC_LIST} src/RaftMessage.cpp
-        src/RaftMessageImpl.cpp
-        src/TimeKeeper.cpp
-        src/TimeKeeperImpl.cpp
-        src/ConnectionPool.cpp
-        src/SocketImpl.cpp
-        src/SocketOps.cpp
-        src/RaftServerImpl.cpp
-        src/RaftServer.cpp
-        src/HttpMessage.cpp
-        src/HttpMessageImpl.cpp
-        src/HttpServerImpl.cpp
-        src/HttpServer.cpp
+set(SRC_LIST ${SEC_LIST} src/raft/RaftMessage.cpp
+        src/raft/RaftMessageImpl.cpp
+        src/timer/TimeKeeper.cpp
+        src/timer/TimeKeeperImpl.cpp
+        src/connect/ConnectionPool.cpp
+        src/connect/SocketImpl.cpp
+        src/connect/SocketOps.cpp
+        src/raft/RaftServerImpl.cpp
+        src/raft/RaftServer.cpp
+        src/http/HttpMessage.cpp
+        src/http/HttpMessageImpl.cpp
+        src/http/HttpServerImpl.cpp
+        src/http/HttpServer.cpp
         src/Bootstrap.cpp
         main.cpp
         )

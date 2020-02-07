@@ -2,14 +2,14 @@
 // Created by XingfengYang on 2020/2/6.
 //
 
-#ifndef RAFT_HTMLTEMPLATEENGINE_H
-#define RAFT_HTMLTEMPLATEENGINE_H
+#ifndef RAFT_TEMPLATEENGINE_H
+#define RAFT_TEMPLATEENGINE_H
 
 #include <map>
 #include <string>
 
 namespace Raft {
-    class HtmlTemplateEngine {
+    class TemplateEngine {
 
     private:
         std::string templateName;
@@ -25,4 +25,4 @@ namespace Raft {
     };
 }
 
-#endif //RAFT_HTMLTEMPLATEENGINE_H
+#endif //RAFT_TEMPLATEENGINE_H

@@ -6,7 +6,7 @@
 #ifndef RAFT_CONNECTIONPOOL_H
 #define RAFT_CONNECTIONPOOL_H
 
-#include "Config.h"
+#include "../config/Config.h"
 #include <map>
 #include <netinet/in.h>
 

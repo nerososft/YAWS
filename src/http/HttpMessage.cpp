@@ -2,7 +2,7 @@
 //
 // Created by XingfengYang on 2020/1/1.
 //
-#include "../include/HttpMessage.h"
+#include "../../include/http/HttpMessage.h"
 
 namespace {
     std::shared_ptr<Raft::HttpMessage> CreateBaseMessage() {

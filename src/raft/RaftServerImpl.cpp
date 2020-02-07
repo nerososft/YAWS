@@ -3,10 +3,10 @@
 //
 #include <iostream>
 #include <utility>
-#include "../include/RaftServerImpl.h"
-#include "../include/RaftMessageImpl.h"
+#include "../../include/raft/RaftServerImpl.h"
+#include "../../include/raft/RaftMessageImpl.h"
 
-#include "../include/Log.h"
+#include "../../include/log/Log.h"
 #include <unistd.h>
 
 #include <map>

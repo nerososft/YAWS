@@ -8,8 +8,8 @@
 #include "IHttpServer.h"
 #include "HttpServerImpl.h"
 #include "HttpMessage.h"
-#include "SocketImpl.h"
-#include "TimeKeeper.h"
+#include "../connect/SocketImpl.h"
+#include "../timer/TimeKeeper.h"
 #include <memory>
 
 

@@ -13,8 +13,8 @@
 #include <mutex>
 #include <map>
 #include "IRaftServer.h"
-#include "TimeKeeper.h"
-#include "SocketImpl.h"
+#include "../timer/TimeKeeper.h"
+#include "../connect/SocketImpl.h"
 
 namespace {
 

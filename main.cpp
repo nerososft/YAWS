@@ -1,6 +1,6 @@
 #include "include/Bootstrap.h"
-#include "include/RaftMessageImpl.h"
-#include "include/Log.h"
+#include "include/raft/RaftMessageImpl.h"
+#include "include/log/Log.h"
 
 #define TEST(text, func){ PrintColor4(" [Test]: %s [TESTING]\n",text); func(); PrintColor3(" [Test]: %s [Ok]\n",text)}
 

@@ -9,7 +9,7 @@
 #include "SocketImpl.h"
 #include <memory>
 #include <netinet/in.h>
-#include "Config.h"
+#include "../config/Config.h"
 
 namespace Raft {
     class SocketOps : public ISocket {

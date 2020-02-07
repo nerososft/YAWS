@@ -3,7 +3,7 @@
 // Created by XingfengYang on 2020/1/1.
 //
 
-#include "../include/RaftMessageImpl.h"
+#include "../../include/raft/RaftMessageImpl.h"
 #include <memory>
 #include <iostream>
 #include <map>

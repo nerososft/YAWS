@@ -1,9 +1,9 @@
 //
 // Created by XingfengYang on 2020/1/1.
 //
-#include "../include/RaftServer.h"
-#include "../include/RaftMessage.h"
-#include "../include/Log.h"
+#include "../../include/raft/RaftServer.h"
+#include "../../include/raft/RaftMessage.h"
+#include "../../include/log/Log.h"
 #include <thread>
 #include <future>
 #include <memory>

@@ -8,11 +8,11 @@
 #include <sys/event.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
-#include "../include/SocketImpl.h"
-#include "../include/Log.h"
-#include "../include/RaftMessageImpl.h"
-#include "../include/ConnectionPool.h"
-#include "../include/Common.h"
+#include "../../include/connect/SocketImpl.h"
+#include "../../include/log/Log.h"
+#include "../../include/raft/RaftMessageImpl.h"
+#include "../../include/connect/ConnectionPool.h"
+#include "../../include/common/Common.h"
 
 namespace Raft {
 
