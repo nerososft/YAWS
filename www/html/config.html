@@ -7,86 +7,12 @@
 <body>
 {% include www/html/header.html %}
 <div class="body">
-    <p style="color:#fff;margin-left: 64px;font-weight: bold;"><a>YaRaft</a> > <a>Config</a></p>
+    <p style="color:#fff;margin-left: 64px;font-weight: bold;"><a href="dashboard">YaRaft</a> > <a>Config</a></p>
     <div class="container">
 
     </div>
 </div>
 {% include www/html/footer.html %}
 </body>
-<style>
-    html, body {
-        padding: 0;
-        margin: 0;
-    }
-
-    .header {
-        background: crimson;
-    }
-
-    .footer {
-        background-color: #333;
-        margin: 0;
-        padding: 14px 16px;
-        color: #fff;
-    }
-
-    p {
-        margin: 0;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #333;
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
-
-    li {
-        float: left;
-    }
-
-    li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    a:hover {
-        color: #1abc9c;
-    }
-
-    li a:hover:not(.active) {
-        background-color: #111;
-    }
-
-    .logo {
-        color: white;
-        width: 50px;
-        text-align: center;
-        padding: 14px 16px;
-        font-weight: bolder;
-    }
-
-    .active {
-        background-color: #4CAF50;
-    }
-
-    .body {
-        padding: 40px 20px;
-        margin-top: 30px;
-        margin-bottom: 0;
-        background-color: #444;
-    }
-
-    .container {
-        padding: 20px 64px;
-    }
-</style>
+{% include www/html/style.html %}
 </html>

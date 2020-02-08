@@ -7,7 +7,7 @@
 <body>
 {% include www/html/header.html %}
 <div class="body">
-    <p style="color:#fff;margin-left: 64px;font-weight: bold;"><a>YaRaft</a> > <a>Dashboard</a></p>
+    <p style="color:#fff;margin-left: 64px;font-weight: bold;"><a href="dashboard">YaRaft</a> > <a>Dashboard</a></p>
     <div class="container">
         <table>
             <tr class="table-header">
@@ -21,7 +21,7 @@
             </tr>
             {% block configs %}
             <tr>
-                <th><span class="{{ statusClass }}"></span>{{ status }}</th>
+                <th><span class="status {{ statusClass }}"></span>{{ status }}</th>
                 <th>{{ role }}</th>
                 <th>{{ id }}</th>
                 <th>{{ host }}</th>
@@ -35,119 +35,5 @@
 </div>
 {% include www/html/footer.html %}
 </body>
-<style>
-    html, body {
-        padding: 0;
-        margin: 0;
-    }
-
-    .header {
-        background: crimson;
-    }
-
-    .footer {
-        background-color: #333;
-        margin: 0;
-        padding: 14px 16px;
-        color: #fff;
-    }
-
-    p {
-        margin: 0;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #333;
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
-
-    li {
-        float: left;
-    }
-
-    li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    a:hover {
-        color: #6200EE;
-    }
-
-    li a:hover:not(.active) {
-        background-color: #111;
-    }
-
-    .logo {
-        color: white;
-        width: 50px;
-        text-align: center;
-        padding: 14px 16px;
-        font-weight: bolder;
-    }
-
-    .active {
-        background-color: #03DAC6;
-    }
-
-    .body {
-        padding: 40px 20px;
-        margin-top: 30px;
-        margin-bottom: 0;
-        background-color: #3700B3;
-    }
-
-    .container {
-        padding: 20px 64px;
-    }
-
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    .table-header {
-        color: #fff;
-        background-color: #444;
-    }
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-        font-weight: normal;
-    }
-
-    tr {
-        color: #ccc;
-    }
-
-    tr:nth-child(even) {
-        background-color: #555;
-        color: #aaa;
-    }
-
-    .statusRed{
-        background-color: #B00020;
-    }
-
-
-    .statusGreen{
-
-    }
-
-    .statusYellow{
-
-    }
-</style>
+{% include www/html/style.html %}
 </html>
