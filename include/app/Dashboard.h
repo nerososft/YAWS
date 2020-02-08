@@ -30,9 +30,13 @@ namespace App {
     public:
         Http::HandlerResponse Home(Http::HttpRequest request);
 
+        Http::HandlerResponse Config(Http::HttpRequest request);
+
+        Http::HandlerResponse LogEntry(Http::HttpRequest request);
+
         Http::HandlerResponse About(Http::HttpRequest request);
 
-        Http::HandlerResponse Config(Http::HttpRequest request);
+
     };
 }
 #endif //RAFT_DASHBOARD_H

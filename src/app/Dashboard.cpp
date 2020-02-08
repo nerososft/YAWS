@@ -19,6 +19,7 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
         templateEngine.Set("dashboardClass", "active");
         templateEngine.Set("configClass", "");
         templateEngine.Set("aboutClass", "");
+        templateEngine.Set("logEntryClass", "");
 
 
         std::vector<NodeModel> nodeModels;
@@ -70,6 +71,7 @@ Http::HandlerResponse App::Dashboard::About(Http::HttpRequest request) {
         templateEngine.Set("dashboardClass", "");
         templateEngine.Set("configClass", "");
         templateEngine.Set("aboutClass", "active");
+        templateEngine.Set("logEntryClass", "");
 
         std::stringbuf buf;
         std::ostream sout(&buf);
@@ -92,6 +94,30 @@ Http::HandlerResponse App::Dashboard::Config(Http::HttpRequest request) {
         templateEngine.Set("dashboardClass", "");
         templateEngine.Set("configClass", "active");
         templateEngine.Set("aboutClass", "");
+        templateEngine.Set("logEntryClass", "");
+
+        std::stringbuf buf;
+        std::ostream sout(&buf);
+        templateEngine.Render(sout);
+        return {Http::OK, buf.str()};
+    } catch (std::logic_error error) {
+        return {Http::OK, error.what()};
+    }
+}
+
+Http::HandlerResponse App::Dashboard::LogEntry(Http::HttpRequest request) {
+    Loader::FileLoader fileLoader;
+    Template::TemplateEngine templateEngine(fileLoader);
+
+    try {
+        templateEngine.Load("www/html/logEntry.html");
+        templateEngine.Set("title", "LOG ENTRY");
+        templateEngine.Set("clientId", "5");
+
+        templateEngine.Set("dashboardClass", "");
+        templateEngine.Set("configClass", "");
+        templateEngine.Set("aboutClass", "");
+        templateEngine.Set("logEntryClass", "active");
 
         std::stringbuf buf;
         std::ostream sout(&buf);
@@ -106,4 +132,7 @@ void App::Dashboard::Init() {
     this->AddRoute({"/dashboard", Http::GET}, std::bind(&Dashboard::Home, this, std::placeholders::_1));
     this->AddRoute({"/about", Http::GET}, std::bind(&Dashboard::About, this, std::placeholders::_1));
     this->AddRoute({"/config", Http::GET}, std::bind(&Dashboard::Config, this, std::placeholders::_1));
+    this->AddRoute({"/log-entry", Http::GET}, std::bind(&Dashboard::LogEntry, this, std::placeholders::_1));
 }
+
+
