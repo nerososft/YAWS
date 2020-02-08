@@ -4,11 +4,14 @@
 #include "../../include/http/IHttpServer.h"
 #include "../../include/http/HttpServerImpl.h"
 #include "../../include/log/Log.h"
+#include "../../include/templateEngine/Loader.h"
+#include "../../include/templateEngine/TemplateEngine.h"
 #include <unistd.h>
 
 #include <utility>
 #include <iostream>
 #include <memory>
+#include <sstream>
 
 namespace Raft {
 
@@ -98,18 +101,14 @@ namespace Raft {
     }
 
     HandlerResponse HttpServerImpl::Dashboard(HttpRequest request) {
-        // TODO : render response body by template engine
-        return {OK, "<h1>Dashboard:</h1>"
-                    "<ul>"
-                    "<li><a>nodes</a></li>"
-                    "<li><a>about</a></li>"
-                    "<li><a>config</a></li>"
-                    "</ul>"
-                    "<table>"
-                    "<tr><td>status</td><td>role</td><td>id</td><td>host</td><td>port</td><td>term</td><td>logEntryCommitId</td></tr>"
-                    "<tr><td>ok</td><td>follower</td><td>1</td><td>127.0.0.1</td><td>8898</td><td>2</td><td>4</td></tr>"
-                    "<tr><td>ok</td><td>follower</td><td>2</td><td>127.0.0.1</td><td>8897</td><td>2</td><td>4</td></tr>"
-                    "</table>"};
+        Raft::FileLoader fileLoader;
+        Raft::Template::TemplateEngine templateEngine(fileLoader);
+        templateEngine.Load("www/html/dashboard.html");
+
+        std::stringbuf buf;
+        std::ostream sout(&buf);
+        templateEngine.Render(sout);
+        return {OK, buf.str()};
     }
 
 

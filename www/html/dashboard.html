@@ -5,14 +5,7 @@
 </head>
 
 <body>
-<header class="header">
-    <ul>
-        <li class="logo">YaRaft</li>
-        <li class="active"><a href="/dashboard">DASHBOARD</a></li>
-        <li><a href="news.asp">CONFIG</a></li>
-        <li><a href="contact.asp">ABOUT</a></li>
-    </ul>
-</header>
+{% include www/html/header.html %}
 <div class="body">
     <p style="color:#fff;margin-left: 64px;font-weight: bold;"><a>YaRaft</a> > <a>Dashboard</a></p>
     <div class="container">
@@ -83,9 +76,7 @@
         </table>
     </div>
 </div>
-<footer class="footer">
-    <p>@YaRaft</p>
-</footer>
+{% include www/html/footer.html %}
 </body>
 <style>
     html, body {
