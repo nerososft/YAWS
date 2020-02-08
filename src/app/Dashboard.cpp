@@ -14,6 +14,7 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
     try {
         templateEngine.Load("www/html/dashboard.html");
         templateEngine.Set("title", "DASHBOARD");
+        templateEngine.Set("clientId", "5");
 
         templateEngine.Set("dashboardClass", "active");
         templateEngine.Set("configClass", "");
@@ -28,9 +29,13 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
         nodeModels.push_back({"statusGreen", "OK", "Follower", "6", "127.0.0.1", "8893", "5", "3453"});
         nodeModels.push_back({"statusRed", "LostConnection", "Follower", "1", "127.0.0.1", "8894", "5", "3453"});
         nodeModels.push_back({"statusGreen", "OK", "Follower", "7", "127.0.0.1", "8895", "5", "3453"});
-        nodeModels.push_back({"statusGreen", "OK", "Leader [ self ]", "5", "127.0.0.1", "8898", "5", "3453"});
+        nodeModels.push_back({"statusGreen statusSelf", "OK", "Leader [ self ]", "5", "127.0.0.1", "8898", "5", "3453"});
         nodeModels.push_back({"statusGreen", "OK", "Follower", "56", "127.0.0.1", "8897", "5", "3453"});
         nodeModels.push_back({"statusGreen", "OK", "Follower", "88", "127.0.0.1", "8896", "5", "3453"});
+        nodeModels.push_back({"statusYellow", "Connecting...", "Follower", "1", "127.0.0.1", "8889", "5", "3453"});
+        nodeModels.push_back({"statusGreen", "OK", "Follower", "82", "127.0.0.1", "8888", "5", "3453"});
+        nodeModels.push_back({"statusGreen", "OK", "Follower", "87", "127.0.0.1", "8887", "5", "3453"});
+        nodeModels.push_back({"statusGreen", "OK", "Follower", "86", "127.0.0.1", "8886", "5", "3453"});
 
         templateEngine.SetBlock("configs").Repeat(nodeModels.size());
         for (int i = 0; i < nodeModels.size(); i++) {
@@ -60,6 +65,7 @@ Http::HandlerResponse App::Dashboard::About(Http::HttpRequest request) {
     try {
         templateEngine.Load("www/html/about.html");
         templateEngine.Set("title", "ABOUT");
+        templateEngine.Set("clientId", "5");
 
         templateEngine.Set("dashboardClass", "");
         templateEngine.Set("configClass", "");
@@ -81,6 +87,7 @@ Http::HandlerResponse App::Dashboard::Config(Http::HttpRequest request) {
     try {
         templateEngine.Load("www/html/config.html");
         templateEngine.Set("title", "CONFIG");
+        templateEngine.Set("clientId", "5");
 
         templateEngine.Set("dashboardClass", "");
         templateEngine.Set("configClass", "active");

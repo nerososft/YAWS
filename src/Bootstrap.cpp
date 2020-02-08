@@ -125,10 +125,10 @@ namespace Bootstrap {
     }
 
     void RaftBootstrap::PrintSplash() {
-        NormalPrintColor2(" __ __    ___  ____    ____  _____  ______ \n")
+        NormalPrintColor2(" __ __    ___  ____    ____  _____  ______  \n")
         NormalPrintColor3("|  |  |  /  _]|    \\  /    ||     ||      |\n")
-        NormalPrintColor4("|  |  | /  [_ |  D  )|  o  ||   __||      |\n")
-        NormalPrintColor5("|  ~  ||    _]|    / |     ||  |_  |_|  |_|\n")
+        NormalPrintColor4("|  |  | /  [_ |  D  )|  o  ||   __||      | \n")
+        NormalPrintColor5("|  ~  ||    _]|    / |     ||  |_  |_|  |_| \n")
         NormalPrintColor6("|___, ||   [_ |    \\ |  _  ||   _]   |  |  \n")
         NormalPrintColor7("|     ||     ||  .  \\|  |  ||  |     |  |  \n")
         NormalPrintColor1("|____/ |_____||__|\\_||__|__||__|     |__|  \n")
