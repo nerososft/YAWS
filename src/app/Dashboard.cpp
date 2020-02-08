@@ -16,16 +16,19 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
         templateEngine.Set("dashboardClass", "active");
         templateEngine.Set("configClass", "");
         templateEngine.Set("aboutClass", "");
-        templateEngine.SetBlock("configs").Repeat(5);
 
-        for (int i = 0; i < 5; i++) {
-            templateEngine.SetBlock("configs")[i].Set("status", "OK");
+        char *status[7] = {"OK", "Connecting...", "LostConnection", "OK", "Connecting...", "OK", "OK"};
+        char *statusClass[7] = {"statusGreen", "statusYellow", "statusRed", "statusGreen", "statusYellow", "statusGreen", "statusGreen"};
+        templateEngine.SetBlock("configs").Repeat(7);
+        for (int i = 0; i < 7; i++) {
+            templateEngine.SetBlock("configs")[i].Set("statusClass", statusClass[i]);
+            templateEngine.SetBlock("configs")[i].Set("status", status[i]);
             templateEngine.SetBlock("configs")[i].Set("role", "Follower");
-            templateEngine.SetBlock("configs")[i].Set("id", "Follower");
-            templateEngine.SetBlock("configs")[i].Set("host", "Follower");
-            templateEngine.SetBlock("configs")[i].Set("port", "Follower");
-            templateEngine.SetBlock("configs")[i].Set("term", "Follower");
-            templateEngine.SetBlock("configs")[i].Set("commissionId", "Follower");
+            templateEngine.SetBlock("configs")[i].Set("id", "3");
+            templateEngine.SetBlock("configs")[i].Set("host", "127.0.0.1");
+            templateEngine.SetBlock("configs")[i].Set("port", "8898");
+            templateEngine.SetBlock("configs")[i].Set("term", "5");
+            templateEngine.SetBlock("configs")[i].Set("commissionId", "2343");
         }
 
         std::stringbuf buf;
