@@ -194,7 +194,7 @@ void should_render_multi_html_file_template() {
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
     TEST("should_encode_raft_message", should_encode_decode_raft_message)
     TEST("should_decode_http_message_header", should_decode_http_message_header)
     TEST("should_render_html_template", should_render_html_template)
@@ -202,5 +202,5 @@ int main() {
     TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
 
     auto *bootstrap = new Bootstrap::RaftBootstrap();
-    bootstrap->Run();
+    bootstrap->Run(argc, argv);
 }

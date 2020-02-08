@@ -13,7 +13,6 @@
 namespace App {
     class Dashboard : public WebApplication {
     public:
-
         struct NodeModel {
             std::string statusClass;
             std::string status;

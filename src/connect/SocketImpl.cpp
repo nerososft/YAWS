@@ -88,7 +88,6 @@ namespace Connect {
                 } else {
                     EV_SET(&eventSet, connectedFd, EVFILT_READ, EV_ADD, 0, 0, NULL);
                     kevent(kq, &eventSet, 1, NULL, 0, NULL);
-                    LogInfo("[Socket] Got connection!\n");
 
                     int flags = fcntl(connectedFd, F_GETFL, 0);
                     assert(flags >= 0);
@@ -112,7 +111,7 @@ namespace Connect {
         struct sockaddr_in sockaddrIn{};
         int sock = 0;
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-            LogError("[Socket] Socket creation error.\n")
+            LogError("[Socket] Socket creation error, host: %s, port:%d\n", host.c_str(), port)
             return -1;
         }
 
@@ -120,12 +119,12 @@ namespace Connect {
         sockaddrIn.sin_port = htons(port);
 
         if (inet_pton(AF_INET, host.c_str(), &sockaddrIn.sin_addr) <= 0) {
-            LogError("[Socket] Invalid address / Address not supported.\n")
+            LogError("[Socket] Invalid address / Address not supported, host: %s, port:%d\n", host.c_str(), port)
             return -1;
         }
 
         if (connect(sock, (struct sockaddr *) &sockaddrIn, sizeof(sockaddrIn)) < 0) {
-            LogError("[Socket] Connection establish Failed.\n")
+            LogError("[Socket] Connection establish Failed, host: %s, port:%d\n", host.c_str(), port)
             return -1;
         }
         LogInfo("[Socket] Connection established to Server [%s:%d].\n", host.c_str(), port)
@@ -139,12 +138,13 @@ namespace Connect {
             LogWarnning("[Socket] Connection not found, host %s ,port %d\n", endPoint.host.c_str(), endPoint.port)
             // if not found connection in connection pool, create new connection and put to connection pool
 
-            int sock = this->Connect(Common::trim(endPoint.host), endPoint.port);
+            int sock = this->Connect(endPoint.host, endPoint.port);
             this->connectionPool->AddConnection(endPoint, sock);
             send(sock, buf, strlen(buf), 0);
         } else {
             LogInfo("[Socket] Start Send message to node [%s:%d]\n", endPoint.host.c_str(), endPoint.port)
             send(connection->socketFd, buf, strlen(buf), 0);
         }
+
     }
 }

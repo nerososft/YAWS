@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/2/5.
 //
 #include "../../include/connect/ConnectionPool.h"
+#include "../../include/log/Log.h"
 
 
 namespace Connect {
@@ -11,22 +12,26 @@ namespace Connect {
 
     ConnectionPool &ConnectionPool::operator=(ConnectionPool &&) noexcept = default;
 
-    ConnectionPool::ConnectionPool(){
+    ConnectionPool::ConnectionPool() {
 
     }
 
     Connection *ConnectionPool::GetConnection(EndPoint endPoint) {
+        LogInfo("[ConnectionPool] Get connection, host:%s, port:%d\n", endPoint.host.c_str(), endPoint.port)
         if (connections.count(endPoint)) {
-            return this->connections.find(endPoint)->second;
+            return connections.find(endPoint)->second;
         }
         return nullptr;
     }
 
 
     void ConnectionPool::AddConnection(EndPoint endPoint, int socketFd) {
-        auto *pConnection = new Connection();
-        pConnection->socketFd = socketFd;
-        this->connections.insert(std::pair<EndPoint, Connection *>(endPoint, pConnection));
+        Connection *connection = new Connection();
+        connection->socketFd = socketFd;
+        this->connections.insert(
+                std::pair<EndPoint, Connection *>({endPoint.host, endPoint.port}, connection)
+        );
+        LogInfo("[ConnectionPool] Add connection, host:%s, port:%d\n", endPoint.host.c_str(), endPoint.port)
     }
 
 }

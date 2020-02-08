@@ -31,12 +31,12 @@ namespace Connect {
     public:
         ConnectionPool();
 
-        Connection *GetConnection(EndPoint endPoint);
+        Connection* GetConnection(EndPoint endPoint);
 
         void AddConnection(EndPoint endPoint, int socketFd);
 
     private:
-        std::map<EndPoint, Connection *> connections;
+        std::map<EndPoint, Connection*> connections;
     };
 }
 

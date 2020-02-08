@@ -9,10 +9,6 @@ namespace Connect {
         std::string host;
         int port;
 
-        friend std::ostream &operator<<(std::ostream &os, const EndPoint &point) {
-            os << "{host: " << point.host << ", port: " << point.port << "}";
-            return os;
-        }
 
         bool operator==(const EndPoint &rhs) const {
             return host == rhs.host &&
@@ -41,6 +37,11 @@ namespace Connect {
 
         bool operator>=(const EndPoint &rhs) const {
             return !(*this < rhs);
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, const EndPoint &point) {
+            os << "{host: " << point.host << ", port: " << point.port << "}";
+            return os;
         }
     };
 

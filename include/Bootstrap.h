@@ -37,8 +37,11 @@ namespace Bootstrap {
 
         Connect::Config config;
 
+    private:
+        std::vector<std::string> args;
+
     public:
-        void Run();
+        void Run(int argc, char *argv[]);
 
         static void PrintSplash();
 

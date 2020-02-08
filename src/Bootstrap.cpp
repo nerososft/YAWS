@@ -27,7 +27,14 @@ namespace Bootstrap {
             timeKeeper(std::make_shared<Timer::TimeKeeper>()) {}
 
     void RaftBootstrap::LoadConfigFile() {
-        std::ifstream is("config/raft.conf", std::ifstream::binary);
+
+        const char *configFile = "config/raft.conf";
+
+        if (args.size() >= 2) {
+            configFile = args.at(1).c_str();
+        }
+
+        std::ifstream is(configFile, std::ifstream::binary);
         if (is.is_open()) {
             std::string line;
             while (getline(is, line)) {
@@ -58,26 +65,28 @@ namespace Bootstrap {
 
                         // add nodes to memory config
                         Connect::EndPoint endPoint{};
-                        endPoint.host = host[0];
+                        endPoint.host = Common::trim(host[0]);
                         char *pEnd;
                         endPoint.port = (unsigned int) std::strtol(host[1].c_str(), &pEnd, 10);
                         config.endpoints.insert(std::pair<unsigned int, Connect::EndPoint>(nodeId, endPoint));
                     }
                 }
             }
-            std::cout << config << std::endl;
             is.close();
         } else {
-            LogError("[Config] Config file laod failed. %s \n", "config/raft.conf")
+            LogError("[Config] Config file laod failed. %s \n", configFile)
         }
     }
 
-    void RaftBootstrap::Run() {
+    void RaftBootstrap::Run(int argc, char *argv[]) {
+        for (int i = 0; i < argc; ++i) {
+            args.emplace_back(argv[i]);
+        }
         PrintSplash();
 
         LoadConfigFile();
 
-//        BootstrapRaftServer();
+        BootstrapRaftServer();
         BootstrapHttpServer();
         while (isRunning) {}
     }

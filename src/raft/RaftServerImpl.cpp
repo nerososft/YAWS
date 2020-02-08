@@ -24,6 +24,7 @@ namespace Raft {
         char *encodedMessage = message->raftMessage->EncodeMessage();
         // get EndPoint from config
         Connect::EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
+        std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         socket->Send(endPoint, encodedMessage);
     }
 
@@ -210,7 +211,6 @@ namespace Raft {
                 sharedProperties->workerLoopCompletion = nullptr;
             }
         }
-        LogWarnning("[Election] !!!")
         if (sharedProperties->workerLoopCompletion != nullptr) {
             sharedProperties->workerLoopCompletion->set_value();
             sharedProperties->workerLoopCompletion = nullptr;
