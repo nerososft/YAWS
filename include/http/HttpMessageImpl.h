@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 
-namespace Raft {
+namespace Http {
     enum HttpResponseStatus {
         CONTINUE = 100,
         SWITCHING_PROTOCOLS = 101,
@@ -94,7 +94,7 @@ namespace Raft {
         uint32_t ReadMemU32(char *mem, uint32_t offset);
 
     public:
-        std::string EncodeMessage(HttpResponseStatus responseStatus,std::string responseBody);
+        std::string EncodeMessage(HttpResponseStatus responseStatus, std::string responseBody);
 
         std::shared_ptr<HttpMessageImpl> DecodeMessage(char *buf);
 

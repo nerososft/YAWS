@@ -4,10 +4,10 @@
 #include "../../include/connect/ConnectionPool.h"
 
 
-namespace Raft {
+namespace Connect {
     ConnectionPool::~ConnectionPool() noexcept = default;
 
-    ConnectionPool::ConnectionPool(Raft::ConnectionPool &&) noexcept = default;
+    ConnectionPool::ConnectionPool(Connect::ConnectionPool &&) noexcept = default;
 
     ConnectionPool &ConnectionPool::operator=(ConnectionPool &&) noexcept = default;
 

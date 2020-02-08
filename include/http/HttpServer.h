@@ -13,7 +13,7 @@
 #include <memory>
 
 
-namespace Raft {
+namespace Http {
     class HttpServer : public IHttpServer {
     public:
         ~HttpServer() noexcept;
@@ -40,14 +40,16 @@ namespace Raft {
     public:
         void Mobilize();
 
-        void SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper);
+        void SetTimeKeeper(std::shared_ptr<Timer::TimeKeeper> timeKeeper);
 
-        void SetRunning(){this->isRunning = true;}
+        void SetRunning() { this->isRunning = true; }
+
+        void AddRoute(Http::Route route, std::function<Http::HandlerResponse(Http::HttpRequest)> handler);
 
     private:
         bool isRunning = false;
         std::shared_ptr<HttpServerImpl> httpServer;
-        std::shared_ptr<SocketImpl> socketOps;
+        std::shared_ptr<Connect::SocketImpl> socketOps;
     };
 }
 

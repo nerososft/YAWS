@@ -61,7 +61,7 @@ namespace Raft {
 
     public:
         std::shared_ptr<ServerSharedProperties> sharedProperties;
-        std::shared_ptr<TimeKeeper> timeKeeper;
+        std::shared_ptr<Timer::TimeKeeper> timeKeeper;
 
         IRaftServer::SendMessageDelegate sendMessageDelegate;
 
@@ -69,7 +69,7 @@ namespace Raft {
         std::thread serverWorker;
         std::promise<void> stopWorker;
 
-        std::shared_ptr<SocketImpl> socket;
+        std::shared_ptr<Connect::SocketImpl> socket;
 
         std::condition_variable workerAskedToStopOrWeakUp;
 
@@ -100,7 +100,7 @@ namespace Raft {
 
         void SetRunning(bool running);
 
-        void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
+        void SetSocketOps(std::shared_ptr<Connect::SocketImpl> socketOps);
 
         void SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber);
 

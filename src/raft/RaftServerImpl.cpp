@@ -23,7 +23,7 @@ namespace Raft {
     void RaftServerImpl::SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber) {
         char *encodedMessage = message->raftMessage->EncodeMessage();
         // get EndPoint from config
-        EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
+        Connect::EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
         socket->Send(endPoint, encodedMessage);
     }
 
@@ -244,7 +244,7 @@ namespace Raft {
         this->isRunning = running;
     }
 
-    void RaftServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socketOps) {
+    void RaftServerImpl::SetSocketOps(std::shared_ptr<Connect::SocketImpl> socketOps) {
         this->socket = std::move(socketOps);
     }
 }

@@ -11,7 +11,7 @@
 #include <netinet/in.h>
 #include "../config/Config.h"
 
-namespace Raft {
+namespace Connect {
     class SocketOps : public ISocket {
     public:
         ~SocketOps() noexcept;

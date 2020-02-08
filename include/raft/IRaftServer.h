@@ -25,9 +25,9 @@ namespace Raft {
             double minimumElectionTimeout = 0.15;
             double maximumElectionTimeout = 0.3;
             double rpcTimeout = 0.015;
-            ISocket::SocketConfiguration socketConfiguration;
+            Connect::ISocket::SocketConfiguration socketConfiguration;
 
-            std::map<unsigned int, EndPoint> endPoints;
+            std::map<unsigned int, Connect::EndPoint> endPoints;
         };
 
         using SendMessageDelegate = std::function<void(std::shared_ptr<RaftMessage> message,

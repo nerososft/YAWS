@@ -19,12 +19,12 @@ namespace Raft {
 
     RaftServer::RaftServer() :
             raftServer(std::make_shared<RaftServerImpl>()),
-            socketOps(std::make_shared<SocketImpl>()) {
+            socketOps(std::make_shared<Connect::SocketImpl>()) {
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 //        raftServer->sharedProperties->randomGenerator.seed(seed);
     }
 
-    void RaftServer::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
+    void RaftServer::SetTimeKeeper(std::shared_ptr<Timer::TimeKeeper> timeKeeper) {
         raftServer->timeKeeper = timeKeeper;
     }
 

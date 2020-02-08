@@ -14,11 +14,11 @@
 #include "../../include/connect/ConnectionPool.h"
 #include "../../include/common/Common.h"
 
-namespace Raft {
+namespace Connect {
 
     SocketImpl::~SocketImpl() noexcept = default;
 
-    SocketImpl::SocketImpl(Raft::SocketImpl &&) noexcept = default;
+    SocketImpl::SocketImpl(Connect::SocketImpl &&) noexcept = default;
 
     SocketImpl &SocketImpl::operator=(SocketImpl &&) noexcept = default;
 

@@ -12,7 +12,7 @@
 #include <sys/event.h>
 #include <map>
 
-namespace Raft {
+namespace Connect {
     class SocketImpl : public ISocket {
     public:
         ~SocketImpl() noexcept;

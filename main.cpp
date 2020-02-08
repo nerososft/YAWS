@@ -26,7 +26,7 @@ void should_encode_decode_raft_message() {
 }
 
 void should_decode_http_message_header() {
-    auto *httpMessage = new Raft::HttpMessageImpl();
+    auto *httpMessage = new Http::HttpMessageImpl();
 
     char *msg = "GET / HTTP/1.1\r\n"
                 "Host: 192.241.213.46:6880\r\n"
@@ -37,7 +37,7 @@ void should_decode_http_message_header() {
                 "Accept-Encoding: gzip, deflate\r\n"
                 "Connection: keep-alive\r\n\r\n";
 
-    std::shared_ptr<Raft::HttpMessageImpl> message = httpMessage->DecodeMessage(msg);
+    std::shared_ptr<Http::HttpMessageImpl> message = httpMessage->DecodeMessage(msg);
 
     assert(message->httpRequestHeader["Type"] == "GET");
     assert(message->httpRequestHeader["Path"] == "/");
@@ -52,8 +52,8 @@ void should_decode_http_message_header() {
 }
 
 void should_render_html_template() {
-    Raft::FileLoader fileLoader;
-    Raft::Template::TemplateEngine templateEngine(fileLoader);
+    Loader::FileLoader fileLoader;
+    Template::TemplateEngine templateEngine(fileLoader);
     templateEngine.Load("www/test/test.html");
     templateEngine.Set("text", "Hello, world");
     templateEngine.SetBlock("items").Repeat(3);
@@ -64,7 +64,7 @@ void should_render_html_template() {
     for (int i = 0; i < 3; i++) {
         templateEngine.SetBlock("items")[i].Set("title", title[i]);
         templateEngine.SetBlock("items")[i].Set("text", "Lorem Ipsum");
-        Raft::Template::Block &block = templateEngine.SetBlock("items")[i].SetBlock("detailBlock");
+        Template::Block &block = templateEngine.SetBlock("items")[i].SetBlock("detailBlock");
         block.Set("detail", detail[i]);
 
         if (i == 0) {
@@ -111,8 +111,8 @@ void should_render_html_template() {
 }
 
 void should_render_multi_html_template() {
-    Raft::MemoryLoader memoryLoader;
-    Raft::Template::TemplateEngine templateEngine(memoryLoader);
+    Loader::MemoryLoader memoryLoader;
+    Template::TemplateEngine templateEngine(memoryLoader);
 
     memoryLoader.Add("header", "<div>{{ title }}</div>\n{% include body %}\n<p>Hello, World</p>");
     memoryLoader.Add("body", "<p>Hi,I am {{ name }}</p>");
@@ -132,8 +132,8 @@ void should_render_multi_html_template() {
 }
 
 void should_render_multi_html_file_template() {
-    Raft::FileLoader fileLoader;
-    Raft::Template::TemplateEngine templateEngine(fileLoader);
+    Loader::FileLoader fileLoader;
+    Template::TemplateEngine templateEngine(fileLoader);
     templateEngine.Load("www/test/test1.html");
     templateEngine.Set("text", "Hello, world");
     templateEngine.Set("name", "nero yang");
@@ -145,7 +145,7 @@ void should_render_multi_html_file_template() {
     for (int i = 0; i < 3; i++) {
         templateEngine.SetBlock("items")[i].Set("title", title[i]);
         templateEngine.SetBlock("items")[i].Set("text", "Lorem Ipsum");
-        Raft::Template::Block &block = templateEngine.SetBlock("items")[i].SetBlock("detailBlock");
+        Template::Block &block = templateEngine.SetBlock("items")[i].SetBlock("detailBlock");
         block.Set("detail", detail[i]);
 
         if (i == 0) {
@@ -201,6 +201,6 @@ int main() {
     TEST("should_render_multi_html_template", should_render_multi_html_template)
     TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
 
-    auto *bootstrap = new Raft::RaftBootstrap();
+    auto *bootstrap = new Bootstrap::RaftBootstrap();
     bootstrap->Run();
 }

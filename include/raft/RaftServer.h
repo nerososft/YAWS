@@ -29,7 +29,7 @@ namespace Raft {
     public:
         RaftServer();
 
-        void SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper);
+        void SetTimeKeeper(std::shared_ptr<Timer::TimeKeeper> timeKeeper);
 
         void Mobilize();
 
@@ -49,7 +49,7 @@ namespace Raft {
 
     private:
         bool isRunning = false;
-        std::shared_ptr<SocketImpl> socketOps;
+        std::shared_ptr<Connect::SocketImpl> socketOps;
         std::shared_ptr<RaftServerImpl> raftServer;
     };
 }

@@ -10,7 +10,7 @@
 #include "http/HttpServer.h"
 #include <fstream>
 
-namespace Raft {
+namespace Bootstrap {
     class RaftBootstrap {
     public:
         ~RaftBootstrap() noexcept;
@@ -31,11 +31,11 @@ namespace Raft {
 
     private:
         bool isRunning = true;
-        std::shared_ptr<TimeKeeper> timeKeeper;
-        std::shared_ptr<RaftServer> raftServer;
-        std::shared_ptr<HttpServer> httpServer;
+        std::shared_ptr<Timer::TimeKeeper> timeKeeper;
+        std::shared_ptr<Raft::RaftServer> raftServer;
+        std::shared_ptr<Http::HttpServer> httpServer;
 
-        Config config;
+        Connect::Config config;
 
     public:
         void Run();
@@ -45,6 +45,10 @@ namespace Raft {
         void BootstrapRaftServer() const;
 
         void BootstrapHttpServer() const;
+
+        void ConfigHttpServer() const;
+
+        void AttachApps() const;
     };
 
 }

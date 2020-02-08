@@ -7,17 +7,17 @@
 #include "../../include/log/Log.h"
 #include <memory>
 
-namespace Raft {
+namespace Http {
 
     HttpServer::~HttpServer() noexcept = default;
 
-    HttpServer::HttpServer(Raft::HttpServer &&) noexcept = default;
+    HttpServer::HttpServer(Http::HttpServer &&) noexcept = default;
 
     HttpServer &HttpServer::operator=(HttpServer &&) noexcept = default;
 
     HttpServer::HttpServer() :
             httpServer(std::make_shared<HttpServerImpl>()),
-            socketOps(std::make_shared<SocketImpl>()) {
+            socketOps(std::make_shared<Connect::SocketImpl>()) {
 
     }
 
@@ -44,15 +44,19 @@ namespace Raft {
         this->socketOps->SetUp();
         this->socketOps->Bind();
         this->socketOps->Listen();
-        LogInfo("[HttpServer] Http Protocol listen at port: %d\n",httpServer->configuration.socketConfiguration.port)
+        LogInfo("[HttpServer] Http Protocol listen at port: %d\n", httpServer->configuration.socketConfiguration.port)
         this->httpServer->SetSocketOps(this->socketOps);
 
         this->httpServer->stopWorker = std::promise<void>();
         this->httpServer->worker = std::thread(&HttpServerImpl::ServerWorker, httpServer.get());
     }
 
-    void HttpServer::SetTimeKeeper(std::shared_ptr<TimeKeeper> timeKeeper) {
+    void HttpServer::SetTimeKeeper(std::shared_ptr<Timer::TimeKeeper> timeKeeper) {
         this->httpServer->timeKeeper = timeKeeper;
+    }
+
+    void HttpServer::AddRoute(Http::Route route, std::function<Http::HandlerResponse(Http::HttpRequest)> handler) {
+        this->httpServer->router.insert(std::pair<Route, std::function<Http::HandlerResponse(Http::HttpRequest)>>(route, handler));
     }
 }
 

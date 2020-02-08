@@ -18,6 +18,8 @@ set(SRC_LIST ${SEC_LIST} src/raft/RaftMessage.cpp
         src/templateEngine/TemplateEngine.cpp
         src/http/HttpServerImpl.cpp
         src/http/HttpServer.cpp
+        src/app/WebApplication.cpp
+        src/app/Dashboard.cpp
         src/Bootstrap.cpp
         main.cpp
         )

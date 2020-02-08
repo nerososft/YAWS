@@ -4,7 +4,7 @@
 #include <map>
 #include <ostream>
 
-namespace Raft {
+namespace Connect {
     struct EndPoint {
         std::string host;
         int port;

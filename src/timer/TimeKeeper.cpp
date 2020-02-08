@@ -3,10 +3,10 @@
 //
 #include "../../include/timer/TimeKeeper.h"
 
-namespace Raft {
+namespace Timer {
     TimeKeeper::~TimeKeeper() noexcept = default;
 
-    TimeKeeper::TimeKeeper(Raft::TimeKeeper &&) noexcept = default;
+    TimeKeeper::TimeKeeper(Timer::TimeKeeper &&) noexcept = default;
 
     TimeKeeper &TimeKeeper::operator=(TimeKeeper &&) noexcept = default;
 

@@ -12,7 +12,7 @@
 #include "../timer/TimeKeeper.h"
 #include <pthread/pthread.h>
 
-namespace Raft {
+namespace Http {
     enum HttpMethod {
         GET,
         HEAD,
@@ -62,7 +62,6 @@ namespace Raft {
         HttpServerImpl &operator=(const HttpServerImpl &) = delete;
 
         HttpServerImpl &operator=(HttpServerImpl &&) noexcept;
-
     public:
         HttpServerImpl();
 
@@ -75,34 +74,30 @@ namespace Raft {
                             unsigned int senderInstanceNumber);
 
     public:
-        void SetSocketOps(std::shared_ptr<SocketImpl> socketOps);
+        void SetSocketOps(std::shared_ptr<Connect::SocketImpl> socketOps);
 
         void ServerWorker();
 
         void SetRunning(bool running);
 
     public:
-        Raft::IHttpServer::Configuration configuration;
+        Http::IHttpServer::Configuration configuration;
 
-        std::shared_ptr<SocketImpl> socket;
+        std::shared_ptr<Connect::SocketImpl> socket;
         std::thread worker;
         std::promise<void> stopWorker;
 
-        std::shared_ptr<TimeKeeper> timeKeeper;
+        std::shared_ptr<Timer::TimeKeeper> timeKeeper;
 
         bool isRunning = false;
 
-    private:
-        std::map<std::string, HttpMethod> httpMethodMap;
         std::map<Route, std::function<HandlerResponse(HttpRequest)>> router;
 
     private:
-        void Handler(char *buffer, int fdc);
-
-        void InitRouter();
+        std::map<std::string, HttpMethod> httpMethodMap;
 
     private:
-        HandlerResponse Dashboard(HttpRequest request);
+        void Handler(char *buffer, int fdc);
     };
 }
 

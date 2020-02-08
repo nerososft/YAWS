@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace Raft {
+namespace Loader {
     struct Result {
         bool vaild;
         std::string data;

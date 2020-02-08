@@ -11,19 +11,20 @@
 
 #include "../include/log/Log.h"
 #include "../include/common/Common.h"
+#include "../include/app/Dashboard.h"
 
-namespace Raft {
+namespace Bootstrap {
 
     RaftBootstrap::~RaftBootstrap() noexcept = default;
 
-    RaftBootstrap::RaftBootstrap(Raft::RaftBootstrap &&) noexcept = default;
+    RaftBootstrap::RaftBootstrap(Bootstrap::RaftBootstrap &&) noexcept = default;
 
     RaftBootstrap &RaftBootstrap::operator=(RaftBootstrap &&) noexcept = default;
 
     RaftBootstrap::RaftBootstrap() :
-            raftServer(std::make_shared<RaftServer>()),
-            httpServer(std::make_shared<HttpServer>()),
-            timeKeeper(std::make_shared<TimeKeeper>()) {}
+            raftServer(std::make_shared<Raft::RaftServer>()),
+            httpServer(std::make_shared<Http::HttpServer>()),
+            timeKeeper(std::make_shared<Timer::TimeKeeper>()) {}
 
     void RaftBootstrap::LoadConfigFile() {
         std::ifstream is("config/raft.conf", std::ifstream::binary);
@@ -56,11 +57,11 @@ namespace Raft {
                         LogWarnning("[Config]: %s-%s:%s, nodeId: %d\n", configs[0].c_str(), host[0].c_str(), host[1].c_str(), nodeId)
 
                         // add nodes to memory config
-                        EndPoint endPoint{};
+                        Connect::EndPoint endPoint{};
                         endPoint.host = host[0];
                         char *pEnd;
                         endPoint.port = (unsigned int) std::strtol(host[1].c_str(), &pEnd, 10);
-                        config.endpoints.insert(std::pair<unsigned int, EndPoint>(nodeId, endPoint));
+                        config.endpoints.insert(std::pair<unsigned int, Connect::EndPoint>(nodeId, endPoint));
                     }
                 }
             }
@@ -82,12 +83,25 @@ namespace Raft {
     }
 
     void RaftBootstrap::BootstrapHttpServer() const {
-        IHttpServer::Configuration httpServerConfiguration;
+        ConfigHttpServer();
+
+        AttachApps();
+
+        httpServer->Mobilize();
+    }
+
+    void RaftBootstrap::AttachApps() const {
+        App::Dashboard dashboard;
+        dashboard.SetServer(httpServer);
+        dashboard.Init();
+    }
+
+    void RaftBootstrap::ConfigHttpServer() const {
+        Http::IHttpServer::Configuration httpServerConfiguration;
         httpServerConfiguration.socketConfiguration.port = config.httpPort;
         httpServer->Configure(httpServerConfiguration);
         httpServer->SetTimeKeeper(timeKeeper);
         httpServer->SetRunning();
-        httpServer->Mobilize();
     }
 
     void RaftBootstrap::BootstrapRaftServer() const {

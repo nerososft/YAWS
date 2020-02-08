@@ -5,10 +5,10 @@
 #include "../../include/timer/TimeKeeperImpl.h"
 #include <ctime>
 
-namespace Raft {
+namespace Timer {
     TimeKeeperImpl::~TimeKeeperImpl() noexcept = default;
 
-    TimeKeeperImpl::TimeKeeperImpl(Raft::TimeKeeperImpl &&) noexcept = default;
+    TimeKeeperImpl::TimeKeeperImpl(Timer::TimeKeeperImpl &&) noexcept = default;
 
     TimeKeeperImpl &TimeKeeperImpl::operator=(TimeKeeperImpl &&) noexcept = default;
 

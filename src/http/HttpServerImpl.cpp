@@ -9,16 +9,13 @@
 #include <unistd.h>
 
 #include <utility>
-#include <iostream>
 #include <memory>
-#include <sstream>
 
-namespace Raft {
-
+namespace Http {
 
     HttpServerImpl::~HttpServerImpl() noexcept = default;
 
-    HttpServerImpl::HttpServerImpl(Raft::HttpServerImpl &&) noexcept = default;
+    HttpServerImpl::HttpServerImpl(Http::HttpServerImpl &&) noexcept = default;
 
     HttpServerImpl &HttpServerImpl::operator=(HttpServerImpl &&) noexcept = default;
 
@@ -32,8 +29,6 @@ namespace Raft {
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("OPTIONS", OPTIONS));
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("TRACE", TRACE));
         httpMethodMap.insert(std::pair<std::string, HttpMethod>("PATCH", PATCH));
-
-        InitRouter();
     }
 
     bool HttpServerImpl::Configure(const IHttpServer::Configuration &configuration) {
@@ -87,46 +82,13 @@ namespace Raft {
         }
     }
 
-    void HttpServerImpl::SetSocketOps(std::shared_ptr<SocketImpl> socketOps) {
+    void HttpServerImpl::SetSocketOps(std::shared_ptr<Connect::SocketImpl> socketOps) {
         this->socket = std::move(socketOps);
     }
 
     void HttpServerImpl::SetRunning(bool running) {
         this->isRunning = running;
     }
-
-    void HttpServerImpl::InitRouter() {
-        // TODO : may be can use micro to simplify,Like GET("/dashboard",HttpServerImpl::Dashboard)
-        router.insert(std::pair<Route, std::function<HandlerResponse(HttpRequest)>>({"/dashboard", GET}, std::bind(&HttpServerImpl::Dashboard, this, std::placeholders::_1)));
-    }
-
-    HandlerResponse HttpServerImpl::Dashboard(HttpRequest request) {
-        Raft::FileLoader fileLoader;
-        Raft::Template::TemplateEngine templateEngine(fileLoader);
-
-        try {
-            templateEngine.Load("www/html/dashboard.html");
-            templateEngine.SetBlock("configs").Repeat(5);
-
-            for (int i = 0; i < 5; i++) {
-                templateEngine.SetBlock("configs")[i].Set("status", "OK");
-                templateEngine.SetBlock("configs")[i].Set("role", "Follower");
-                templateEngine.SetBlock("configs")[i].Set("id", "Follower");
-                templateEngine.SetBlock("configs")[i].Set("host", "Follower");
-                templateEngine.SetBlock("configs")[i].Set("port", "Follower");
-                templateEngine.SetBlock("configs")[i].Set("term", "Follower");
-                templateEngine.SetBlock("configs")[i].Set("commissionId", "Follower");
-            }
-
-            std::stringbuf buf;
-            std::ostream sout(&buf);
-            templateEngine.Render(sout);
-            return {OK, buf.str()};
-        } catch (std::logic_error error) {
-            return {OK, error.what()};
-        }
-    }
-
 
     bool Route::operator<(const Route &rhs) const {
         if (uri < rhs.uri)

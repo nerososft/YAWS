@@ -5,7 +5,7 @@
 #include <iostream>
 #include "../../include/templateEngine/Loader.h"
 
-namespace Raft {
+namespace Loader {
     Result FileLoader::Load(const std::string &fileName) {
         std::ifstream input;
         input.open(fileName);

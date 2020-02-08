@@ -10,7 +10,7 @@
 #include <map>
 #include <netinet/in.h>
 
-namespace Raft {
+namespace Connect {
     struct Connection {
         sockaddr_in sockaddrIn;
         int socketFd;

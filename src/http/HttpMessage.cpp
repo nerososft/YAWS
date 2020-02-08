@@ -5,16 +5,16 @@
 #include "../../include/http/HttpMessage.h"
 
 namespace {
-    std::shared_ptr<Raft::HttpMessage> CreateBaseMessage() {
-        return std::make_shared<Raft::HttpMessage>();
+    std::shared_ptr<Http::HttpMessage> CreateBaseMessage() {
+        return std::make_shared<Http::HttpMessage>();
     }
 }
 
 
-namespace Raft {
+namespace Http {
     HttpMessage::~HttpMessage() noexcept = default;
 
-    HttpMessage::HttpMessage(Raft::HttpMessage &&) noexcept = default;
+    HttpMessage::HttpMessage(Http::HttpMessage &&) noexcept = default;
 
     HttpMessage &HttpMessage::operator=(HttpMessage &&) noexcept = default;
 

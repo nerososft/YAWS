@@ -4,11 +4,11 @@
 
 #include "../../include/connect/SocketOps.h"
 
-namespace Raft {
+namespace Connect {
 
     SocketOps::~SocketOps() noexcept = default;
 
-    SocketOps::SocketOps(Raft::SocketOps &&) noexcept = default;
+    SocketOps::SocketOps(Connect::SocketOps &&) noexcept = default;
 
     SocketOps &SocketOps::operator=(SocketOps &&) noexcept = default;
 

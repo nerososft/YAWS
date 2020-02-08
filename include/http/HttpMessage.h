@@ -9,7 +9,7 @@
 #include <functional>
 #include "HttpMessageImpl.h"
 
-namespace Raft {
+namespace Http {
     class HttpMessage {
     public:
         ~HttpMessage() noexcept;

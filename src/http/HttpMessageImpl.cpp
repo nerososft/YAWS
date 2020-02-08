@@ -14,7 +14,7 @@
 static const char SPACE = ' ';
 static const char *const SYMBOL_COLON = ":";
 
-namespace Raft {
+namespace Http {
 
     static std::string responseReasonMap[] = {
             [CONTINUE]="Continue",
@@ -81,7 +81,7 @@ namespace Raft {
 
     HttpMessageImpl::~HttpMessageImpl() noexcept = default;
 
-    HttpMessageImpl::HttpMessageImpl(Raft::HttpMessageImpl &&) noexcept = default;
+    HttpMessageImpl::HttpMessageImpl(Http::HttpMessageImpl &&) noexcept = default;
 
     HttpMessageImpl &HttpMessageImpl::operator=(HttpMessageImpl &&) noexcept = default;
 

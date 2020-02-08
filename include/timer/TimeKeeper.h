@@ -9,7 +9,7 @@
 #include "TimeKeeperImpl.h"
 #include "ITimeKeeper.h"
 
-namespace Raft {
+namespace Timer {
     class TimeKeeper : public ITimeKeeper {
     public:
         ~TimeKeeper() noexcept;

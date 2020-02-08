@@ -13,12 +13,12 @@
 #include "HttpMessage.h"
 #include "../connect/ISocket.h"
 
-namespace Raft {
+namespace Http {
 
     class IHttpServer {
     public:
         struct Configuration {
-            ISocket::SocketConfiguration socketConfiguration;
+            Connect::ISocket::SocketConfiguration socketConfiguration;
         };
 
         using SendMessageDelegate = std::function<void(std::shared_ptr<HttpMessage> message,

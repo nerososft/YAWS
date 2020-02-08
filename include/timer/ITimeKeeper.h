@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace Raft {
+namespace Timer {
     class ITimeKeeper {
     public:
         virtual double GetCurrentTime() = 0;
