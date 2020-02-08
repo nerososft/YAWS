@@ -19,60 +19,17 @@
                 <th>Term</th>
                 <th>CommissionId</th>
             </tr>
+            {% block configs %}
             <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
+                <th>{{ status }}</th>
+                <th>{{ role }}</th>
+                <th>{{ id }}</th>
+                <th>{{ host }}</th>
+                <th>{{ port }}</th>
+                <th>{{ term }}</th>
+                <th>{{ commissionId }}</th>
             </tr>
-            <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
-            </tr>
-            <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
-            </tr>
-            <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
-            </tr>
-            <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
-            </tr>
-            <tr>
-                <th>OK</th>
-                <th>Follower</th>
-                <th>2</th>
-                <th>127.0.0.1</th>
-                <th>8898</th>
-                <th>3</th>
-                <th>1220</th>
-            </tr>
+            {% endBlock %}
         </table>
     </div>
 </div>

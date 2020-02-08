@@ -222,8 +222,8 @@ namespace Raft {
                     return *dynamic_cast<Template::Block *> (fragment);
                 }
             }
-            LogError("[TemplateEngine] Block not found (%s)", key.c_str())
-            throw "Block not found";
+            LogError("[TemplateEngine] Block '%s' not found.", key.c_str())
+            throw std::logic_error("[TemplateError] Block '" + key + "' not found");
         }
 
         Block::Block(const std::string &key) : key(key), enable(true), resized(false) {

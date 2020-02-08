@@ -103,12 +103,28 @@ namespace Raft {
     HandlerResponse HttpServerImpl::Dashboard(HttpRequest request) {
         Raft::FileLoader fileLoader;
         Raft::Template::TemplateEngine templateEngine(fileLoader);
-        templateEngine.Load("www/html/dashboard.html");
 
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {OK, buf.str()};
+        try {
+            templateEngine.Load("www/html/dashboard.html");
+            templateEngine.SetBlock("configs").Repeat(5);
+
+            for (int i = 0; i < 5; i++) {
+                templateEngine.SetBlock("configs")[i].Set("status", "OK");
+                templateEngine.SetBlock("configs")[i].Set("role", "Follower");
+                templateEngine.SetBlock("configs")[i].Set("id", "Follower");
+                templateEngine.SetBlock("configs")[i].Set("host", "Follower");
+                templateEngine.SetBlock("configs")[i].Set("port", "Follower");
+                templateEngine.SetBlock("configs")[i].Set("term", "Follower");
+                templateEngine.SetBlock("configs")[i].Set("commissionId", "Follower");
+            }
+
+            std::stringbuf buf;
+            std::ostream sout(&buf);
+            templateEngine.Render(sout);
+            return {OK, buf.str()};
+        } catch (std::logic_error error) {
+            return {OK, error.what()};
+        }
     }
 
 

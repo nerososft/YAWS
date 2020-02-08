@@ -1,4 +1,3 @@
-#include <iostream>
 #include <sstream>
 #include "include/Bootstrap.h"
 #include "include/raft/RaftMessageImpl.h"
