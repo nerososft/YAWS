@@ -3,7 +3,9 @@ project(Raft)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SRC_LIST ${SEC_LIST} src/raft/RaftMessage.cpp
+SET(Sources
+        src/common/Common.cpp
+        src/raft/RaftMessage.cpp
         src/raft/RaftMessageImpl.cpp
         src/timer/TimeKeeper.cpp
         src/timer/TimeKeeperImpl.cpp
@@ -22,7 +24,8 @@ set(SRC_LIST ${SEC_LIST} src/raft/RaftMessage.cpp
         src/app/Dashboard.cpp
         src/app/AppConfig.cpp
         src/Bootstrap.cpp
-        main.cpp
-        )
+        main.cpp)
+
+set(SRC_LIST ${SEC_LIST} ${Sources})
 
 add_executable(Raft ${SRC_LIST})

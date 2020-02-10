@@ -86,12 +86,6 @@ namespace Http {
         HttpMessageImpl &operator=(HttpMessageImpl &&) noexcept;
 
         std::map<std::string, std::string> httpRequestHeader;
-    private:
-        void WriteMem(char *mem, uint32_t offset, char value);
-
-        char ReadMem(char *mem, uint32_t offset);
-
-        uint32_t ReadMemU32(char *mem, uint32_t offset);
 
     public:
         std::string EncodeMessage(HttpResponseStatus responseStatus, std::string responseBody);

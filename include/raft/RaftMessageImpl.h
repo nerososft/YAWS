@@ -66,14 +66,6 @@ namespace Raft {
         bool isElectionMessage = false;
 
     private:
-        void WriteMem(char *mem, uint32_t offset, char value);
-
-        char ReadMem(char *mem, uint32_t offset);
-
-        uint32_t ReadMemU32(char *mem, uint32_t offset);
-
-
-    private:
         std::map<int, char*> raftMessageType;
 
     public:
