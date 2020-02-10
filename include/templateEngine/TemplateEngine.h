@@ -145,6 +145,8 @@ namespace Template {
 
         virtual void Render(std::ostream &output) const;
 
+        std::string RenderToText();
+
     private:
         Loader::Loader &loader;
 

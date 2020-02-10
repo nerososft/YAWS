@@ -50,10 +50,7 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
             templateEngine.SetBlock("configs")[i].Set("commissionId", nodeModels[i].commissionId);
         }
 
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {Http::OK, buf.str()};
+        return {Http::OK, templateEngine.RenderToText()};
     } catch (std::logic_error error) {
         return {Http::OK, error.what()};
     }
@@ -73,10 +70,7 @@ Http::HandlerResponse App::Dashboard::About(Http::HttpRequest request) {
         templateEngine.Set("aboutClass", "active");
         templateEngine.Set("logEntryClass", "");
 
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {Http::OK, buf.str()};
+        return {Http::OK, templateEngine.RenderToText()};
     } catch (std::logic_error error) {
         return {Http::OK, error.what()};
     }
@@ -96,10 +90,7 @@ Http::HandlerResponse App::Dashboard::Config(Http::HttpRequest request) {
         templateEngine.Set("aboutClass", "");
         templateEngine.Set("logEntryClass", "");
 
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {Http::OK, buf.str()};
+        return {Http::OK, templateEngine.RenderToText()};
     } catch (std::logic_error error) {
         return {Http::OK, error.what()};
     }
@@ -119,10 +110,7 @@ Http::HandlerResponse App::Dashboard::LogEntry(Http::HttpRequest request) {
         templateEngine.Set("aboutClass", "");
         templateEngine.Set("logEntryClass", "active");
 
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {Http::OK, buf.str()};
+        return {Http::OK, templateEngine.RenderToText()};
     } catch (std::logic_error error) {
         return {Http::OK, error.what()};
     }

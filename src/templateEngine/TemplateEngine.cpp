@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/2/7.
 //
 #include <iostream>
+#include <sstream>
 #include "../../include/templateEngine/TemplateEngine.h"
 #include "../../include/log/Log.h"
 
@@ -354,5 +355,13 @@ namespace Template {
     void TemplateEngine::Render(std::ostream &output) const {
         Node::Render(output, *this);
     }
+
+    std::string TemplateEngine::RenderToText() {
+        std::stringbuf buf;
+        std::ostream sout(&buf);
+        Render(sout);
+        return buf.str();
+    }
+
 }
 
