@@ -4,16 +4,8 @@
 //
 
 #include "../../include/http/HttpMessageImpl.h"
-#include "../../include/log/Log.h"
 #include <memory>
 #include <map>
-#include <iostream>
-
-#define CR '\r'
-#define LF '\n'
-#define CR_LF '\r\n'
-static const char SPACE = ' ';
-static const char *const SYMBOL_COLON = ":";
 
 namespace Http {
 
