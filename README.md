@@ -14,7 +14,7 @@ http://localhost:8899/dashboard
 ```
 
 
-# WebApp
+# WebApp Demo
 ## define app
 let define a HelloWorldApp:
 ```c++
