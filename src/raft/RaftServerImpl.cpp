@@ -23,9 +23,10 @@ namespace Raft {
     void RaftServerImpl::SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber) {
         char *encodedMessage = message->raftMessage->EncodeMessage();
         // get EndPoint from config
-        Connect::EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
-        std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-        socket->Send(endPoint, encodedMessage);
+        if (this->sharedProperties->configuration.endPoints.count(receivedInstanceNumber)) {
+            Connect::EndPoint endPoint = this->sharedProperties->configuration.endPoints.find(receivedInstanceNumber)->second;
+            socket->Send(endPoint, encodedMessage);
+        }
     }
 
     void RaftServerImpl::ResetElectionTimer() {
@@ -53,7 +54,7 @@ namespace Raft {
     void RaftServerImpl::ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                         unsigned int senderInstanceNumber) {
 
-        LogInfo("[Raft] Receive Message, type %d[%s]\n", message->raftMessage->type, message->getMessageType())
+        LogInfo("[Raft] Received Message, type %d [%s]\n", message->raftMessage->type, message->getMessageType())
 
         const double now = timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {

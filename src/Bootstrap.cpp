@@ -73,6 +73,7 @@ namespace Bootstrap {
                 }
             }
             is.close();
+            LogInfo("[Config] Nodes loaded, size %d\n", config.endpoints.size());
         } else {
             LogError("[Config] Config file laod failed. %s \n", configFile)
         }
@@ -86,7 +87,7 @@ namespace Bootstrap {
 
         LoadConfigFile();
 
-        BootstrapRaftServer();
+//        BootstrapRaftServer();
         BootstrapHttpServer();
         while (isRunning) {}
     }
@@ -100,9 +101,8 @@ namespace Bootstrap {
     }
 
     void RaftBootstrap::AttachApps() const {
-        App::Dashboard dashboard;
-        dashboard.SetServer(httpServer);
-        dashboard.Init();
+        App::AppConfig appConfig;
+        appConfig.AttachApps(httpServer);
     }
 
     void RaftBootstrap::ConfigHttpServer() const {

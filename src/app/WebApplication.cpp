@@ -11,3 +11,4 @@ void App::WebApplication::AddRoute(Http::Route route, std::function<Http::Handle
 void App::WebApplication::SetServer(std::shared_ptr<Http::HttpServer> server) {
     this->httpServer = server;
 }
+

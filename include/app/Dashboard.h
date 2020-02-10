@@ -9,6 +9,7 @@
 
 #include "WebApplication.h"
 #include "../http/HttpServerImpl.h"
+#include "AppConfig.h"
 
 namespace App {
     class Dashboard : public WebApplication {
@@ -34,8 +35,6 @@ namespace App {
         Http::HandlerResponse LogEntry(Http::HttpRequest request);
 
         Http::HandlerResponse About(Http::HttpRequest request);
-
-
     };
 }
 #endif //RAFT_DASHBOARD_H

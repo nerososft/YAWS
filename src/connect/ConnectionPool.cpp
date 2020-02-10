@@ -17,7 +17,6 @@ namespace Connect {
     }
 
     Connection *ConnectionPool::GetConnection(EndPoint endPoint) {
-        LogInfo("[ConnectionPool] Get connection, host:%s, port:%d\n", endPoint.host.c_str(), endPoint.port)
         if (connections.count(endPoint)) {
             return connections.find(endPoint)->second;
         }
@@ -31,7 +30,6 @@ namespace Connect {
         this->connections.insert(
                 std::pair<EndPoint, Connection *>({endPoint.host, endPoint.port}, connection)
         );
-        LogInfo("[ConnectionPool] Add connection, host:%s, port:%d\n", endPoint.host.c_str(), endPoint.port)
     }
 
 }
