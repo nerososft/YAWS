@@ -6,6 +6,7 @@
 #define RAFT_APPCONFIG_H
 
 #include "../http/HttpServer.h"
+#include "WebApplication.h"
 
 namespace App {
     class AppConfig {

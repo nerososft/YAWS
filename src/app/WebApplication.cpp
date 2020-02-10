@@ -4,6 +4,10 @@
 
 #include "../../include/app/WebApplication.h"
 
+void App::WebApplication::Init() {
+
+}
+
 void App::WebApplication::AddRoute(Http::Route route, std::function<Http::HandlerResponse(Http::HttpRequest)> handler) {
     this->httpServer->AddRoute(route, handler);
 }

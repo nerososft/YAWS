@@ -12,7 +12,7 @@
 namespace App {
     class WebApplication {
     public:
-        virtual void Init() = 0;
+        virtual void Init();
 
         void SetServer(std::shared_ptr<Http::HttpServer> server);
 
