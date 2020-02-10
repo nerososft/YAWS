@@ -30,9 +30,11 @@ namespace App {
 ## initial
 add app in AppConfig::AttachApps:
 ```c++
-App::HelloWorldApp helloWorldApp;
-helloWorldApp.SetServer(httpServer);
-helloWorldApp.Init();
+void App::AppConfig::AttachApps(std::shared_ptr<Http::HttpServer> httpServer) {
+    App::HelloWorldApp helloWorldApp;
+    helloWorldApp.SetServer(httpServer);
+    helloWorldApp.Init();
+}
 ```
 ## router
 add router in App's Init method:
