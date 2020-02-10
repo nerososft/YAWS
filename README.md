@@ -75,10 +75,7 @@ Http::HandlerResponse App::HelloWorldApp::sayHelloWorld(Http::HttpRequest reques
         templateEngine.Load("www/html/helloworld.html");
         templateEngine.Set("helloworld", "hello, world!");
      
-        std::stringbuf buf;
-        std::ostream sout(&buf);
-        templateEngine.Render(sout);
-        return {Http::OK, buf.str()};
+        return {Http::OK, templateEngine.RenderToText()};
     } catch (std::logic_error error) {
         return {Http::OK, error.what()};
     }
