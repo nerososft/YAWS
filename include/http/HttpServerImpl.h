@@ -13,26 +13,6 @@
 #include <pthread/pthread.h>
 
 namespace Http {
-    enum HttpMethod {
-        GET,
-        HEAD,
-        POST,
-        PUT,
-        DELETE,
-        CONNECT,
-        OPTIONS,
-        TRACE,
-        PATCH,
-    };
-
-    struct HttpRequest {
-        std::string uri;
-        HttpMethod httpMethod;
-        std::map<std::string, std::string> header;
-        std::map<std::string, std::string> params;
-        std::string body;
-    };
-
     struct Route {
         std::string uri;
         HttpMethod method;
@@ -92,9 +72,6 @@ namespace Http {
         bool isRunning = false;
 
         std::map<Route, std::function<HandlerResponse(HttpRequest)>> router;
-
-    private:
-        std::map<std::string, HttpMethod> httpMethodMap;
 
     private:
         void Handler(char *buffer, int fdc);

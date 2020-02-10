@@ -10,6 +10,9 @@
 #include "HttpMessageImpl.h"
 
 namespace Http {
+
+    class HttpMessageImpl;
+
     class HttpMessage {
     public:
         ~HttpMessage() noexcept;

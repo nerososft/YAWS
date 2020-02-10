@@ -4,9 +4,10 @@
 //
 
 #include "../../include/http/HttpMessageImpl.h"
+#include "../../include/log/Log.h"
 #include <memory>
-#include <iostream>
 #include <map>
+#include <iostream>
 
 #define CR '\r'
 #define LF '\n'
@@ -85,9 +86,19 @@ namespace Http {
 
     HttpMessageImpl &HttpMessageImpl::operator=(HttpMessageImpl &&) noexcept = default;
 
-    HttpMessageImpl::HttpMessageImpl() {}
+    HttpMessageImpl::HttpMessageImpl() {
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("GET", GET));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("HEAD", HEAD));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("POST", POST));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("PUT", PUT));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("DELETE", DELETE));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("CONNECT", CONNECT));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("OPTIONS", OPTIONS));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("TRACE", TRACE));
+        httpMethodMap.insert(std::pair<std::string, HttpMethod>("PATCH", PATCH));
+    }
 
-    std::string HttpMessageImpl::EncodeMessage(HttpResponseStatus responseStatus, std::string responseBody) {
+    std::string HttpMessageImpl::EncodeMessage(HttpResponseStatus responseStatus, const std::string &responseBody) {
         std::string response;
 
         // statusLine
@@ -108,49 +119,146 @@ namespace Http {
         return response;
     }
 
+    /**
+       * GET /resource HTTP/1.1\n\n
+       * header1: value1\r\n
+       * header2: value2\r\n
+       * ...
+       * headern: valuen\r\n
+       * \r\n
+       * content
+       */
     std::shared_ptr<HttpMessageImpl> HttpMessageImpl::DecodeMessage(char *buf) {
-        std::shared_ptr<HttpMessageImpl> httpMessage = std::make_shared<HttpMessageImpl>();
-        httpMessage->httpRequestHeader = this->ParseHeader(buf);
-        return httpMessage;
-    }
 
-    std::map<std::string, std::string> HttpMessageImpl::ParseHeader(const char *msg) {
+        std::string request(buf);
         std::map<std::string, std::string> httpRequestHeader;
 
-        char *head = (char *) msg;
-        char *mid;
-        char *tail = head;
+        HttpRequest httpRequest;
 
-        // Find request type
-        while (*head++ != SPACE);
-        httpRequestHeader["Type"] = std::string((char *) msg).substr(0, (head - 1) - tail);
+        /**
+         * PROCESS_METHOD->PROCESS_RESOURCE->PROCESS_PROTOCOL->PROCESS_HEADER_NAME->PROCESS_HEADER_VALUE->PROCESS_CONTENT
+         *                                                    |                                          |
+         *                                                     <-----------------------------------------
+         */
+        enum ProcessState {
+            PROCESS_METHOD,
+            PROCESS_RESOURCE,
+            PROCESS_PROTOCOL,
+            PROCESS_HEADER_NAME,
+            PROCESS_HEADER_VALUE,
+            PROCESS_CONTENT
+        };
 
-        // Find path
-        tail = head;
-        while (*head++ != SPACE);
-        httpRequestHeader["Path"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
+        ProcessState processState = ProcessState::PROCESS_METHOD;
 
-        // Find HTTP version
-        tail = head;
-        while (*head++ != CR);
-        httpRequestHeader["Version"] = std::string((char *) msg).substr(tail - (char *) msg, (head - 1) - tail);
+        int index = 0;
+        std::string buffer;
+        size_t length = request.size();
+        auto consume = [&]() -> char {
+            assert(index < length);
+            return buf[index++];
+        };
 
-        // Map all headers from a key to a value
-        while (true) {
-            tail = head + 1;
-            while (*head++ != CR);
-            mid = strstr(tail, SYMBOL_COLON);
+        auto peek = [&](uint32_t offset) -> char {
+            assert(index + offset < length);
+            return buf[index + offset];
+        };
 
-            // Look for the failed strstr
-            if (tail > mid)
-                break;
+        auto transformState = [&](ProcessState nextState) {
+            buffer.clear();
+            processState = nextState;
+        };
 
-            httpRequestHeader[std::string((char *) msg).substr(tail - (char *) msg, (mid) - tail)] = std::string((char *) msg).substr(mid + 2 - (char *) msg, (head - 3) - mid);
+        std::string currentHeaderName;
+        while (index < length) {
+            char currentChr = consume();
+            switch (processState) {
+                case PROCESS_METHOD:
+                    if (currentChr == ' ') {
+                        httpRequest.httpMethod = httpMethodMap.find(buffer)->second;
+                        transformState(PROCESS_RESOURCE);
+                    } else {
+                        buffer.push_back(currentChr);
+                    }
+                    break;
+                case PROCESS_RESOURCE:
+                    if (currentChr == ' ') {
+                        httpRequest.uri = buffer;
+                        transformState(PROCESS_PROTOCOL);
+                    } else {
+                        buffer.push_back(currentChr);
+                    }
+                    break;
+                case PROCESS_PROTOCOL:
+                    if (currentChr == '\r' && consume() == '\n') {
+                        httpRequest.protocol = buffer;
+                        transformState(PROCESS_HEADER_NAME);
+                    } else {
+                        buffer.push_back(currentChr);
+                    }
+                    break;
+                case PROCESS_HEADER_NAME:
+                    if (currentChr == ':' && consume() == ' ') {
+                        currentHeaderName = buffer;
+                        transformState(PROCESS_HEADER_VALUE);
+                    } else {
+                        buffer.push_back(currentChr);
+                    }
+                    break;
+                case PROCESS_HEADER_VALUE:
+                    if (currentChr == '\r' && consume() == '\n') {
+                        httpRequest.header.insert(std::pair<std::string, std::string>(currentHeaderName, buffer));
+                        buffer.clear();
+                        if (peek(0) == '\r' && peek(1) == '\n') {
+                            consume();
+                            consume();
+                            processState = PROCESS_CONTENT;
+                        } else {
+                            processState = PROCESS_HEADER_NAME;
+                        }
+                    } else {
+                        buffer.push_back(currentChr);
+                    }
+                    break;
+                case PROCESS_CONTENT:
+                    buffer.push_back(currentChr);
+                    if (index == length) {
+                        httpRequest.body = buffer;
+                    }
+                    break;
+            }
         }
 
-        return httpRequestHeader;
+
+        std::shared_ptr<HttpMessageImpl> httpMessage = std::make_shared<HttpMessageImpl>();
+        httpMessage->request = httpRequest;
+        return httpMessage;
     }
 
     void HttpMessageImpl::SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const {
     }
+
+    std::string HttpMessageImpl::methodToString(HttpMethod method) {
+        switch (method) {
+            case GET:
+                return "GET";
+            case HEAD:
+                return "HEAD";
+            case POST:
+                return "POST";
+            case PUT:
+                return "PUT";
+            case DELETE:
+                return "DELETE";
+            case CONNECT:
+                return "CONNECT";
+            case OPTIONS:
+                return "OPTIONS";
+            case TRACE:
+                return "TRACE";
+            case PATCH:
+                return "PATCH";
+        }
+    }
+
 }

@@ -20,15 +20,7 @@ namespace Http {
     HttpServerImpl &HttpServerImpl::operator=(HttpServerImpl &&) noexcept = default;
 
     HttpServerImpl::HttpServerImpl() {
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("GET", GET));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("HEAD", HEAD));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("POST", POST));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("PUT", PUT));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("DELETE", DELETE));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("CONNECT", CONNECT));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("OPTIONS", OPTIONS));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("TRACE", TRACE));
-        httpMethodMap.insert(std::pair<std::string, HttpMethod>("PATCH", PATCH));
+
     }
 
     bool HttpServerImpl::Configure(const IHttpServer::Configuration &configuration) {
@@ -43,18 +35,15 @@ namespace Http {
 
     void HttpServerImpl::ReceiveMessage(std::shared_ptr<HttpMessage> message,
                                         unsigned int fdc) {
-        std::string uri = message->httpMessage->httpRequestHeader["Path"];
-        HttpMethod method = httpMethodMap[message->httpMessage->httpRequestHeader["Type"]];
-        LogInfo("[HttpServer] Request %s %s\n", message->httpMessage->httpRequestHeader["Type"].c_str(), message->httpMessage->httpRequestHeader["Path"].c_str())
+        std::string uri = message->httpMessage->request.uri;
+        HttpMethod method = message->httpMessage->request.httpMethod;
+        LogInfo("[HttpServer] Request %s %s\n", message->httpMessage->methodToString(method).c_str(), uri.c_str())
         Route route{uri, method};
         HandlerResponse responseBody;
         if (router.count(route)) {
             std::function<HandlerResponse(HttpRequest)> &handler = this->router.find(route)->second;
-            HttpRequest httpRequest;
-            httpRequest.uri = uri;
-            httpRequest.httpMethod = method;
+            HttpRequest httpRequest = message->httpMessage->request;
             httpRequest.header = message->httpMessage->httpRequestHeader;
-//            httpRequest.body = message->httpMessage.body; //TODO : decode body from http request payload
             responseBody = handler(httpRequest);
         } else { // 404 Not Found
             responseBody = {NOT_FOUND, HTTP_RESPONSE_404};

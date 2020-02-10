@@ -8,6 +8,7 @@
 #include <memory>
 #include <map>
 #include <string>
+#include "HttpMessage.h"
 
 namespace Http {
     enum HttpResponseStatus {
@@ -73,6 +74,32 @@ namespace Http {
         NETWORK_AUTHENTICATION_REQUIRED = 511,
     };
 
+    enum HttpMethod {
+        GET,
+        HEAD,
+        POST,
+        PUT,
+        DELETE,
+        CONNECT,
+        OPTIONS,
+        TRACE,
+        PATCH,
+    };
+
+    struct HttpRequest {
+        std::string uri;
+        HttpMethod httpMethod;
+        std::string protocol;
+        std::map<std::string, std::string> header;
+        std::map<std::string, std::string> params;
+        std::string body;
+    };
+
+    struct Header {
+        std::string name;
+        std::string value;
+    };
+
     class HttpMessageImpl {
     public:
         ~HttpMessageImpl() noexcept;
@@ -85,25 +112,25 @@ namespace Http {
 
         HttpMessageImpl &operator=(HttpMessageImpl &&) noexcept;
 
-        std::map<std::string, std::string> httpRequestHeader;
-
     public:
-        std::string EncodeMessage(HttpResponseStatus responseStatus, std::string responseBody);
+        std::string EncodeMessage(HttpResponseStatus responseStatus, const std::string &responseBody);
 
         std::shared_ptr<HttpMessageImpl> DecodeMessage(char *buf);
-
 
     public:
         HttpMessageImpl();
 
+        std::string methodToString(HttpMethod method);
+
     private:
         void SetProtocolPayload(const char *buf, char *baseLine, char *header, char *content, int processPhase) const;
 
-        std::map<std::string, std::string> ParseHeader(const char *buf);
+    public:
+        std::map<std::string, std::string> httpRequestHeader;
 
-    private:
+        std::map<std::string, HttpMethod> httpMethodMap;
 
-
+        HttpRequest request;
     };
 }
 

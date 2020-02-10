@@ -14,8 +14,8 @@ SET(Sources
         src/connect/SocketOps.cpp
         src/raft/RaftServerImpl.cpp
         src/raft/RaftServer.cpp
-        src/http/HttpMessage.cpp
         src/http/HttpMessageImpl.cpp
+        src/http/HttpMessage.cpp
         src/templateEngine/Loader.cpp
         src/templateEngine/TemplateEngine.cpp
         src/http/HttpServerImpl.cpp

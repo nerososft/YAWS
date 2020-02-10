@@ -73,7 +73,7 @@ namespace Bootstrap {
                 }
             }
             is.close();
-            LogInfo("[Config] Nodes loaded, size %d\n", config.endpoints.size());
+            LogInfo("[Config] Nodes loaded, size %lu\n", config.endpoints.size());
         } else {
             LogError("[Config] Config file laod failed. %s \n", configFile)
         }

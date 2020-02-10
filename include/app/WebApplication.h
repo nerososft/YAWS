@@ -6,7 +6,7 @@
 #define RAFT_WEBAPPLICATION_H
 
 #include <map>
-#include "../http/HttpServerImpl.h";
+#include "../http/HttpServerImpl.h"
 #include "../http/HttpServer.h"
 
 namespace App {
