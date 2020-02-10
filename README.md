@@ -13,7 +13,6 @@ get RaftServer status form broswer
 http://localhost:8899/dashboard
 ```
 
-
 # WebApp Demo
 ## Define app
 let define a HelloWorldApp:
@@ -27,6 +26,7 @@ namespace App {
     };
 }
 ```
+
 ## Init
 add app and attach app to server in AppConfig::AttachApps:
 ```c++
@@ -36,6 +36,7 @@ void App::AppConfig::AttachApps(std::shared_ptr<Http::HttpServer> httpServer) {
     helloWorldApp.Init();
 }
 ```
+
 ## Router
 add route in App's Init method:
 ```c++
@@ -43,6 +44,7 @@ void App::HelloWorldApp::Init() {
     this->AddRoute({"/helloworld", Http::GET}, std::bind(&HelloWorldApp::sayHelloWorld, this, std::placeholders::_1));
 }
 ```
+
 ## Controller
 implement sayHelloWorld function:
 ```c++
@@ -50,7 +52,8 @@ Http::HandlerResponse App::HelloWorldApp::sayHelloWorld(Http::HttpRequest reques
     return {Http::OK,"hello, world!"};
 }
 ```
-## Template engine
+
+## Template Engine
 can render html template in controller:
 
 template define: add a html file in /www/html directory,like:
