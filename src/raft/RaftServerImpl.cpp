@@ -115,7 +115,7 @@ namespace Raft {
     }
 
     void RaftServerImpl::StartElection(double now) {
-        LogInfo("[Raft] start Election\n")
+        LogInfo("[Raft] start Election, now: %f\n", now)
         ++sharedProperties->configuration.currentTerm;
 
         sharedProperties->votedThisTerm = true;
@@ -229,8 +229,8 @@ namespace Raft {
             LogError("Caught %s\n", error.what())
             char *buf = "Not A Raft RaftMessage.";
             write(fdc, buf, strlen(buf));
+            close(fdc);
         }
-        close(fdc);
     }
 
     void RaftServerImpl::ServerWorker() {

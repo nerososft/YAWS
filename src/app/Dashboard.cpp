@@ -2,7 +2,6 @@
 // Created by XingfengYang on 2020/2/8.
 //
 
-#include <sstream>
 #include "../../include/app/Dashboard.h"
 #include "../../include/templateEngine/Loader.h"
 #include "../../include/templateEngine/TemplateEngine.h"
@@ -20,7 +19,6 @@ Http::HandlerResponse App::Dashboard::Home(Http::HttpRequest request) {
         templateEngine.Set("configClass", "");
         templateEngine.Set("aboutClass", "");
         templateEngine.Set("logEntryClass", "");
-
 
         std::vector<NodeModel> nodeModels;
         nodeModels.push_back({"statusGreen", "OK", "Follower", "12", "127.0.0.1", "8890", "5", "3453"});

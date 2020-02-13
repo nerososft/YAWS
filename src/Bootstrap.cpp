@@ -87,7 +87,7 @@ namespace Bootstrap {
 
         LoadConfigFile();
 
-//        BootstrapRaftServer();
+        BootstrapRaftServer();
         BootstrapHttpServer();
         while (isRunning) {}
     }
