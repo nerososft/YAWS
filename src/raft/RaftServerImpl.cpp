@@ -7,7 +7,6 @@
 #include "../../include/raft/RaftMessageImpl.h"
 
 #include "../../include/log/Log.h"
-#include "../../include/common/Common.h"
 #include <unistd.h>
 
 #include <map>
@@ -118,7 +117,7 @@ namespace Raft {
     }
 
     void RaftServerImpl::StartElection(double now) {
-        LogInfo("[Raft] start Election, now: %f\n", now)
+        LogInfo("[Raft] start Election, nodeId: %d, now: %f\n", sharedProperties->configuration.selfInstanceNumber, now)
         ++sharedProperties->configuration.currentTerm;
 
         sharedProperties->votedThisTerm = true;
@@ -227,7 +226,7 @@ namespace Raft {
             std::shared_ptr<RaftMessageImpl> raftMessageImpl = std::make_shared<RaftMessageImpl>();
             std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
             raftMessage->raftMessage = raftMessageImpl->DecodeMessage(buffer);
-
+            LogInfo("[Raft] Handler: receive message from %d\n", raftMessage->raftMessage->nodeId);
             ReceiveMessage(raftMessage, raftMessage->raftMessage->nodeId);
         } catch (std::logic_error &error) {
             LogError("Caught %s\n", error.what())

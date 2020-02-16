@@ -6,11 +6,8 @@
 
 namespace Common {
     unsigned int GetHashCode(const std::string &str) {
-        unsigned int hash = 0;
-        for (char i : str) {
-            hash = hash * 31 + static_cast<int>(i);
-        }
-        return hash;
+        std::hash<std::string> str_hash;
+        return str_hash(str);
     }
 
     void Split(const std::string &str, std::vector<std::string> &container, char delim) {
@@ -40,10 +37,10 @@ namespace Common {
 
     uint32_t ReadMemU32(char *mem, uint32_t offset) {
         return (
-                ((uint32_t)ReadMem(mem, offset)) << 24 |
-                ((uint32_t)ReadMem(mem, offset + 1)) << 16 |
-                ((uint32_t)ReadMem(mem, offset + 2)) << 8 |
-                ((uint32_t)ReadMem(mem, offset + 3))
+                ((uint32_t) ReadMem(mem, offset)) << 24 |
+                ((uint32_t) ReadMem(mem, offset + 1)) << 16 |
+                ((uint32_t) ReadMem(mem, offset + 2)) << 8 |
+                ((uint32_t) ReadMem(mem, offset + 3))
         );
     }
 }

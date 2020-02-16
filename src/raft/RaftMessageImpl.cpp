@@ -129,7 +129,6 @@ namespace Raft {
         raftMessage->nodeId = Common::ReadMemU32(buf, 8);
         raftMessage->contentLength = Common::ReadMemU32(buf, 12);
 
-
         return raftMessage;
     }
 
