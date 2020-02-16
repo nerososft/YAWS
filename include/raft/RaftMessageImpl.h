@@ -59,7 +59,8 @@ namespace Raft {
             LogEntryHeader logEntryDetails;
         };
         Type type = Type::Unknown;
-        size_t conntentLength = 0;
+        size_t contentLength = 0;
+        unsigned int nodeId;
         char *content;
 
     public:

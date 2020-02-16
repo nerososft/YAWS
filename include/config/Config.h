@@ -47,18 +47,20 @@ namespace Connect {
 
     struct Config {
         std::string id;
+        std::string host;
         int raftPort;
         int httpPort;
         std::map<unsigned int, EndPoint> endpoints;
 
         friend std::ostream &operator<<(std::ostream &os, const Config &config) {
-            os << "{id: " << config.id << ", raftPort: " << config.raftPort << ", httpPort: " << config.httpPort << ", endpoints: [";
+            os << "{id: " << config.id << ", host: " << config.host << ", raftPort: " << config.raftPort << ", httpPort: " << config.httpPort << ", endpoints: [";
             for (auto it = config.endpoints.begin(); it != config.endpoints.end(); ++it) {
                 os << "{nodeId: " << it->first << ", endpoint: " << it->second << "}";
             }
             os << "]}";
             return os;
         }
+
     };
 }
 #endif // !__RAFT_CONFIG_H__

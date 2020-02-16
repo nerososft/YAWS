@@ -33,11 +33,12 @@ namespace Raft {
 //        char voteGranted[2];
 //    };
 //    unsigned int term = 0;
+//    unsigned int nodeId;
 //    unsigned int contentSize = 0;
 //    char crc[4];
 //    char *buf;
     char *RaftMessageImpl::EncodeMessage() {
-        char *requestBuffer = (char *) malloc(64 + this->conntentLength * sizeof(char));
+        char *requestBuffer = (char *) malloc(64 + this->contentLength * sizeof(char));
 
         // raft request header
         Common::WriteMem(requestBuffer, 0, MAGIC_NUMBER); // write magic number to first byte
@@ -78,17 +79,21 @@ namespace Raft {
             default:
                 break;
         }
+        Common::WriteMem(requestBuffer, 8, (char) (this->nodeId >> 24));
+        Common::WriteMem(requestBuffer, 9, (char) (this->nodeId >> 16));
+        Common::WriteMem(requestBuffer, 10, (char) (this->nodeId >> 8));
+        Common::WriteMem(requestBuffer, 11, (char) (nodeId)); // write content to bytes 8-11
 
-        Common::WriteMem(requestBuffer, 8, (char) (this->conntentLength >> 24));
-        Common::WriteMem(requestBuffer, 9, (char) (this->conntentLength >> 16));
-        Common::WriteMem(requestBuffer, 10, (char) (this->conntentLength >> 8));
-        Common::WriteMem(requestBuffer, 11, (char) (this->conntentLength)); // write content to bytes 8-11
+        Common::WriteMem(requestBuffer, 12, (char) (this->contentLength >> 24));
+        Common::WriteMem(requestBuffer, 13, (char) (this->contentLength >> 16));
+        Common::WriteMem(requestBuffer, 14, (char) (this->contentLength >> 8));
+        Common::WriteMem(requestBuffer, 15, (char) (this->contentLength)); // write content to bytes 12-15
 
         // crc
         // X32+X26+X23+X22+X16+X12+X11+X10+X8+X7+X5+X4+X2+X1+1
 
         // content
-        Common::WriteMem(requestBuffer, 64 + conntentLength, '\0'); // write EOF  to last type
+        Common::WriteMem(requestBuffer, 64 + contentLength, '\0'); // write EOF  to last type
         return requestBuffer;
     }
 
@@ -121,7 +126,8 @@ namespace Raft {
             default:
                 break;
         }
-        raftMessage->conntentLength = Common::ReadMemU32(buf, 8);
+        raftMessage->nodeId = Common::ReadMemU32(buf, 8);
+        raftMessage->contentLength = Common::ReadMemU32(buf, 12);
 
 
         return raftMessage;

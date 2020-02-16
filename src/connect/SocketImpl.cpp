@@ -140,11 +140,38 @@ namespace Connect {
 
             int sock = this->Connect(endPoint.host, endPoint.port);
             this->connectionPool->AddConnection(endPoint, sock);
-            send(sock, buf, strlen(buf), 0);
+            ssize_t size = send(sock, buf, strlen(buf), 0);
+            if (size < 0) {
+                LogError("[Socket] Send Message to node [%s:%d] Failed.\n", endPoint.host.c_str(), endPoint.port)
+            }
         } else {
             LogInfo("[Socket] Start Send message to node [%s:%d]\n", endPoint.host.c_str(), endPoint.port)
             send(connection->socketFd, buf, strlen(buf), 0);
         }
 
+    }
+
+    void SocketImpl::getEndPointFromFdc(int fdc, EndPoint &endPoint) {
+        socklen_t len;
+        struct sockaddr_storage address{};
+        char ipStr[INET6_ADDRSTRLEN];
+        int port;
+
+        len = sizeof address;
+        getpeername(fdc, (struct sockaddr *) &address, &len);
+
+        // deal with both IPv4 and IPv6:
+        if (address.ss_family == AF_INET) {
+            struct sockaddr_in *s = (struct sockaddr_in *) &address;
+            port = ntohs(s->sin_port);
+            inet_ntop(AF_INET, &s->sin_addr, ipStr, sizeof ipStr);
+        } else { // AF_INET6
+            struct sockaddr_in6 *s = (struct sockaddr_in6 *) &address;
+            port = ntohs(s->sin6_port);
+            inet_ntop(AF_INET6, &s->sin6_addr, ipStr, sizeof ipStr);
+        }
+
+        endPoint.port = port;
+        endPoint.host = ipStr;
     }
 }

@@ -115,6 +115,7 @@ Http::HandlerResponse App::Dashboard::LogEntry(Http::HttpRequest request) {
 }
 
 void App::Dashboard::Init() {
+    this->AddRoute({"/", Http::GET}, std::bind(&Dashboard::Home, this, std::placeholders::_1));
     this->AddRoute({"/dashboard", Http::GET}, std::bind(&Dashboard::Home, this, std::placeholders::_1));
     this->AddRoute({"/about", Http::GET}, std::bind(&Dashboard::About, this, std::placeholders::_1));
     this->AddRoute({"/config", Http::GET}, std::bind(&Dashboard::Config, this, std::placeholders::_1));

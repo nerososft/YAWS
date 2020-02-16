@@ -11,15 +11,17 @@
 void should_encode_decode_raft_message() {
     auto *raftMessage = new Raft::RaftMessageImpl();
     raftMessage->type = Raft::Type::RequestVote;
+    raftMessage->nodeId = 10086;
     raftMessage->requestVoteDetails.candidateId = 2;
     raftMessage->requestVoteDetails.term = 2;
-    raftMessage->conntentLength = 1024;
+    raftMessage->contentLength = 1024;
 
     char *encodeMessage = raftMessage->EncodeMessage();
     assert(*encodeMessage != '\0');
 
     std::shared_ptr<Raft::RaftMessageImpl> message = raftMessage->DecodeMessage(encodeMessage);
-    assert(message->conntentLength == 1024);
+    assert(message->contentLength == 1024);
+    assert(message->nodeId == 10086);
     assert(message->type == Raft::Type::RequestVote);
     assert(message->requestVoteDetails.candidateId == 2);
     assert(message->requestVoteDetails.term == 2);
@@ -41,7 +43,7 @@ void should_decode_http_message_header() {
     std::shared_ptr<Http::HttpMessageImpl> message = httpMessage->DecodeMessage(msg);
 
     assert(message->request.httpMethod == Http::GET);
-    assert(message->request.uri  == "/");
+    assert(message->request.uri == "/");
     assert(message->request.protocol == "HTTP/1.1");
     assert(message->request.header["Host"] == "192.241.213.46:6880");
     assert(message->request.header["Upgrade-Insecure-Requests"] == "1");
@@ -50,7 +52,7 @@ void should_decode_http_message_header() {
     assert(message->request.header["Accept-Language"] == "en-us");
     assert(message->request.header["Accept-Encoding"] == "gzip, deflate");
     assert(message->request.header["Connection"] == "keep-alive");
-    assert(message->request.body  == "xxx");
+    assert(message->request.body == "xxx");
 
 }
 
@@ -203,7 +205,6 @@ int main(int argc, char *argv[]) {
     TEST("should_render_html_template", should_render_html_template)
     TEST("should_render_multi_html_template", should_render_multi_html_template)
     TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
-
     auto *bootstrap = new Bootstrap::RaftBootstrap();
     bootstrap->Run(argc, argv);
 }

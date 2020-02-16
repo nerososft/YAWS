@@ -45,6 +45,9 @@ namespace Bootstrap {
                     if (strcmp(Common::Trim(configs[0]).c_str(), "id") == 0) {
                         config.id = configs[1];
                     }
+                    if (strcmp(Common::Trim(configs[0]).c_str(), "host") == 0) {
+                        config.host = Common::Trim(configs[1]);
+                    }
                     if (strcmp(Common::Trim(configs[0]).c_str(), "raft_port") == 0) {
                         char *pEnd;
                         config.raftPort = (int) std::strtol(configs[1].c_str(), &pEnd, 10);
@@ -57,17 +60,19 @@ namespace Bootstrap {
                     // add nodes to mem
                     if (strcmp(Common::Trim(configs[0]).c_str(), "nodes") == 0) {
                         // transform host port pair to int number[nodeId]. use Hash
-                        unsigned int nodeId = Common::GetHashCode(configs[1]);
-
                         std::vector<std::string> host;
                         Common::Split(configs[1], host, ':');
-                        LogWarnning("[Config]: %s-%s:%s, nodeId: %d\n", configs[0].c_str(), host[0].c_str(), host[1].c_str(), nodeId)
+                        std::string configName = configs[0];
+                        std::string hostAddress = Common::Trim(host[0]);
+                        std::string port = Common::Trim(host[1]);
+                        unsigned int nodeId = Common::GetHashCode(hostAddress + port);
+                        LogWarnning("[Config]: %s-%s:%s, nodeId: %d\n", configName.c_str(), hostAddress.c_str(), port.c_str(), nodeId)
 
                         // add nodes to memory config
                         Connect::EndPoint endPoint{};
                         endPoint.host = Common::Trim(host[0]);
                         char *pEnd;
-                        endPoint.port = (unsigned int) std::strtol(host[1].c_str(), &pEnd, 10);
+                        endPoint.port = (unsigned int) std::strtol(port.c_str(), &pEnd, 10);
                         config.endpoints.insert(std::pair<unsigned int, Connect::EndPoint>(nodeId, endPoint));
                     }
                 }
@@ -123,8 +128,7 @@ namespace Bootstrap {
 
         // should be hash from self ip and port
         // TODO : hash (ip:port) is not a good idea, because it means every node's config should use either WAN ip or LAN ip
-        configuration.selfInstanceNumber = Common::GetHashCode("127.0.0.1:" + std::to_string(config.raftPort));
-
+        configuration.selfInstanceNumber = Common::GetHashCode(config.host + std::to_string(config.raftPort));
         configuration.socketConfiguration.port = config.raftPort;
         configuration.endPoints = config.endpoints;
         raftServer->Configure(configuration);

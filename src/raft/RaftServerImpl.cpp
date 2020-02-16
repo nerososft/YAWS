@@ -7,6 +7,7 @@
 #include "../../include/raft/RaftMessageImpl.h"
 
 #include "../../include/log/Log.h"
+#include "../../include/common/Common.h"
 #include <unistd.h>
 
 #include <map>
@@ -54,12 +55,13 @@ namespace Raft {
     void RaftServerImpl::ReceiveMessage(std::shared_ptr<RaftMessage> message,
                                         unsigned int senderInstanceNumber) {
 
-        LogInfo("[Raft] Received Message, type %d [%s]\n", message->raftMessage->type, message->getMessageType())
+        LogInfo("[Raft] Received Message from %d, type %d [%s]\n", senderInstanceNumber, message->raftMessage->type, message->getMessageType())
 
         const double now = timeKeeper->GetCurrentTime();
         switch (message->raftMessage->type) {
             case Type::RequestVote: {
                 const auto response = RaftMessage::CreateMessage();
+                response->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
                 response->raftMessage->type = Type::RequestVoteResults;
                 response->raftMessage->requestVoteResultsDetails.term = std::max(
                         message->raftMessage->requestVoteDetails.term,
@@ -80,6 +82,7 @@ namespace Raft {
                     sharedProperties->configuration.currentTerm = message->raftMessage->requestVoteDetails.term;
                     RevertToFollower();
                 }
+
                 SendMessage(response, senderInstanceNumber, now);
             }
                 break;
@@ -123,6 +126,7 @@ namespace Raft {
         sharedProperties->votesForUs = 1;
 
         const auto message = RaftMessage::CreateMessage();
+        message->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->type = Type::RequestVote;
         message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
@@ -146,6 +150,7 @@ namespace Raft {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->votesForUs = 1;
         const auto message = RaftMessage::CreateMessage();
+        message->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->type = Type::HeartBeat;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
@@ -183,8 +188,7 @@ namespace Raft {
         int rpcTimeoutMilliseconds = (int) (sharedProperties->configuration.rpcTimeout * 1000.0);
         std::future<void> workerAskedToStop = stopWorker.get_future();
         std::unique_lock<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
-        while (workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::ready ||
-               workerAskedToStop.wait_for(std::chrono::seconds(0)) == std::future_status::timeout) {
+        while (workerAskedToStop.wait_for(std::chrono::seconds(0)) != std::future_status::ready) {
 
             (void) workerAskedToStopOrWeakUp.wait_for(
                     lock,
@@ -224,11 +228,11 @@ namespace Raft {
             std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
             raftMessage->raftMessage = raftMessageImpl->DecodeMessage(buffer);
 
-            ReceiveMessage(raftMessage, 0);
-        } catch (std::logic_error error) {
+            ReceiveMessage(raftMessage, raftMessage->raftMessage->nodeId);
+        } catch (std::logic_error &error) {
             LogError("Caught %s\n", error.what())
-            char *buf = "Not A Raft RaftMessage.";
-            write(fdc, buf, strlen(buf));
+            std::string buf = "Not A Raft RaftMessage.";
+            write(fdc, buf.c_str(), buf.length());
             close(fdc);
         }
     }

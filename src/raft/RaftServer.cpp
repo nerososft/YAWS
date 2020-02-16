@@ -37,7 +37,8 @@ namespace Raft {
         this->socketOps->SetUp();
         this->socketOps->Bind();
         this->socketOps->Listen();
-        LogInfo("[RaftServer] Raft Protocol listen at port: %d\n", raftServer->sharedProperties->configuration.socketConfiguration.port)
+        LogInfo("[RaftServer] Raft Protocol listen at port: %d ,nodeId:%d\n", raftServer->sharedProperties->configuration.socketConfiguration.port,
+                raftServer->sharedProperties->configuration.selfInstanceNumber)
         raftServer->SetSocketOps(this->socketOps);
         raftServer->SetRunning(true);
         raftServer->serverWorker = std::thread(&RaftServerImpl::ServerWorker, raftServer.get());

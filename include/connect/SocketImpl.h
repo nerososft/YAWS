@@ -44,6 +44,9 @@ namespace Connect {
 
         int Send(EndPoint endPoint, char *buf) override;
 
+    public:
+        void getEndPointFromFdc(int fdc,EndPoint &endPoint);
+
 
     public:
         int fd = 0;
