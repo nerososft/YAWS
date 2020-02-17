@@ -4,9 +4,34 @@
 #include "include/log/Log.h"
 #include "include/templateEngine/Loader.h"
 #include "include/templateEngine/TemplateEngine.h"
+#include "include/json/Json.h"
 
 #define TEST(text, func){ PrintColor4(" [Test]: %s [TESTING]\n",text); func(); PrintColor3(" [Test]: %s [Ok]\n",text)}
 
+
+void should_encode_json() {
+    Serialization::Json jsonNull;
+    assert(jsonNull.ToString() == "null");
+    Serialization::Json jsonTrue(true);
+    assert(jsonTrue.ToString() == "true");
+    Serialization::Json jsonFalse(false);
+    assert(jsonFalse.ToString() == "false");
+    Serialization::Json jsonStr(std::string("hello, world"));
+    assert(jsonStr.ToString() == "\"hello, world\"");
+    Serialization::Json jsonStr1("hello, world");
+    assert(jsonStr1.ToString() == "\"hello, world\"");
+}
+
+void should_decode_json() {
+    Serialization::Json jsonNull;
+    assert(jsonNull.FromString("null") == nullptr);
+    Serialization::Json jsonTrue;
+    assert(jsonTrue.FromString("true") == true);
+    Serialization::Json jsonFalse;
+    assert(jsonFalse.FromString("false") == false);
+    Serialization::Json jsonStr;
+    assert(jsonStr.FromString("\"hello, world\"") == std::string("hello, world"));
+}
 
 void should_encode_decode_raft_message() {
     auto *raftMessage = new Raft::RaftMessageImpl();
@@ -201,11 +226,13 @@ void should_render_multi_html_file_template() {
 
 
 int main(int argc, char *argv[]) {
-    TEST("should_encode_raft_message", should_encode_decode_raft_message)
-    TEST("should_decode_http_message_header", should_decode_http_message_header)
-    TEST("should_render_html_template", should_render_html_template)
-    TEST("should_render_multi_html_template", should_render_multi_html_template)
-    TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
-    auto *bootstrap = new Bootstrap::RaftBootstrap();
-    bootstrap->Run(argc, argv);
+    TEST("should_encode_json", should_encode_json)
+    TEST("should_decode_json", should_decode_json)
+//    TEST("should_encode_raft_message", should_encode_decode_raft_message)
+//    TEST("should_decode_http_message_header", should_decode_http_message_header)
+//    TEST("should_render_html_template", should_render_html_template)
+//    TEST("should_render_multi_html_template", should_render_multi_html_template)
+//    TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
+//    auto *bootstrap = new Bootstrap::RaftBootstrap();
+//    bootstrap->Run(argc, argv);
 }

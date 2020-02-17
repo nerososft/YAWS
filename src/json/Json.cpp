@@ -3,24 +3,34 @@
 //
 #include "../../include/json/Json.h"
 
+#include <utility>
+#include "../../include/common/Common.h"
+
 namespace Serialization {
     enum class Type {
-        Invalid,
         Null,
         Boolean,
         String,
     };
 
     struct Json::Impl {
-        Type type = Type::Invalid;
+        Type type = Type::Null;
 
         union {
             bool booleanValue;
-            std::string strValue;
+            std::string *strValue;
         };
 
 
-        ~Impl() {}
+        ~Impl() {
+            switch (type) {
+                case Type::String:
+                    delete strValue;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         Impl(Impl &&) = delete;
 
@@ -28,9 +38,7 @@ namespace Serialization {
 
         Impl &operator=(Impl &&) = delete;
 
-        Impl() {
-
-        }
+        Impl() = default;
     };
 
     Json::~Json() noexcept = default;
@@ -50,9 +58,14 @@ namespace Serialization {
         impl->booleanValue = value;
     }
 
-    Json::Json(std::string &value) : impl(new Impl) {
+    Json::Json(const char *value) : impl(new Impl) {
         impl->type = Type::String;
-        impl->strValue = value;
+        impl->strValue = new std::string(value);
+    }
+
+    Json::Json(const std::string &value) : impl(new Impl) {
+        impl->type = Type::String;
+        impl->strValue = new std::string(value);
     }
 
     bool Json::operator==(const Json &other) {
@@ -64,6 +77,8 @@ namespace Serialization {
                     return true;
                 case Type::Boolean:
                     return impl->booleanValue == other.impl->booleanValue;
+                case Type::String:
+                    return *impl->strValue == *other.impl->strValue;
                 default:
                     return true;
             }
@@ -76,6 +91,8 @@ namespace Serialization {
                 return "null";
             case Type::Boolean:
                 return impl->booleanValue ? "true" : "false";
+            case Type::String:
+                return "\"" + Common::Escape(*impl->strValue) + "\"";
             default:
                 return "???";
         }
@@ -88,6 +105,8 @@ namespace Serialization {
             return true;
         } else if (fromStr == "false") {
             return false;
+        } else if (!fromStr.empty() && fromStr[0] == '"' && fromStr[fromStr.length() - 1] == '"') {
+            return Common::UnEscape(fromStr.substr(1, fromStr.length() - 2));
         } else {
             return Json();
         }

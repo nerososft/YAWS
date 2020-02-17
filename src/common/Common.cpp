@@ -27,6 +27,38 @@ namespace Common {
         return str;
     }
 
+    const std::set<char> CHARACTERS_TO_ESCAPE_IN_QUOTED_STRING{
+            '"', '\\', '\b', '\f', '\n', '\r', '\t',
+    };
+
+    std::string &Escape(const std::string &str) {
+        std::string output;
+        for (size_t i = 0; i < str.length(); ++i) {
+            if (CHARACTERS_TO_ESCAPE_IN_QUOTED_STRING.find(i) != CHARACTERS_TO_ESCAPE_IN_QUOTED_STRING.end()) {
+                output += '\\';
+            } else if (str[i] < 0x20 || str[i] == '"' || str[i] == '\\') {
+
+            }else {
+                output += str[i];
+            }
+        }
+        return output;
+    }
+
+    std::string &UnEscape(const std::string &str) {
+        std::string output;
+        bool escape = false;
+        for (size_t i = 0; i < str.length(); ++i) {
+            if (!escape && (str[i] == '\\')) {
+                escape = true;
+            } else {
+                output += str[i];
+                escape = false;
+            }
+        }
+        return output;
+    }
+
     void WriteMem(char *mem, uint32_t offset, char value) {
         *(mem + offset) = value;
     }

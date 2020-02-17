@@ -29,7 +29,9 @@ namespace Serialization {
 
         Json(bool value);
 
-        Json(std::string &value);
+        Json(const char* value);
+
+        Json(const std::string &value);
 
         bool operator==(const Json &other);
 

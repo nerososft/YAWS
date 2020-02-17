@@ -7,6 +7,7 @@
 
 #include <string>
 #include <sstream>
+#include <set>
 
 
 namespace Common {
@@ -15,6 +16,10 @@ namespace Common {
     void Split(const std::string &str, std::vector<std::string> &container, char delim);
 
     std::string &Trim(std::string &str);
+
+    std::string &Escape(const std::string &str);
+
+    std::string &UnEscape(const std::string &str);
 
     void WriteMem(char *mem, uint32_t offset, char value);
 
