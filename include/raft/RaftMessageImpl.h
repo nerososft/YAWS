@@ -60,7 +60,7 @@ namespace Raft {
         };
         Type type = Type::Unknown;
         size_t contentLength = 0;
-        unsigned int nodeId;
+        unsigned int nodeId = 0;
         char *content;
 
     public:

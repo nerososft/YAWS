@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 SET(Sources
         src/common/Common.cpp
+        src/json/Json.cpp
         src/raft/RaftMessage.cpp
         src/raft/RaftMessageImpl.cpp
         src/timer/TimeKeeper.cpp

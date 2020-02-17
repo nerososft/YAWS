@@ -21,6 +21,7 @@ namespace Raft {
     }
 
     void RaftServerImpl::SendMessageImpl(std::shared_ptr<RaftMessage> message, unsigned int receivedInstanceNumber) {
+        message->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
         char *encodedMessage = message->raftMessage->EncodeMessage();
         // get EndPoint from config
         if (this->sharedProperties->configuration.endPoints.count(receivedInstanceNumber)) {
@@ -60,7 +61,6 @@ namespace Raft {
         switch (message->raftMessage->type) {
             case Type::RequestVote: {
                 const auto response = RaftMessage::CreateMessage();
-                response->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
                 response->raftMessage->type = Type::RequestVoteResults;
                 response->raftMessage->requestVoteResultsDetails.term = std::max(
                         message->raftMessage->requestVoteDetails.term,
@@ -125,7 +125,6 @@ namespace Raft {
         sharedProperties->votesForUs = 1;
 
         const auto message = RaftMessage::CreateMessage();
-        message->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->type = Type::RequestVote;
         message->raftMessage->requestVoteDetails.candidateId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
@@ -149,7 +148,6 @@ namespace Raft {
         std::lock_guard<decltype(sharedProperties->mutex)> lock(sharedProperties->mutex);
         sharedProperties->votesForUs = 1;
         const auto message = RaftMessage::CreateMessage();
-        message->raftMessage->nodeId = sharedProperties->configuration.selfInstanceNumber;
         message->raftMessage->type = Type::HeartBeat;
         message->raftMessage->requestVoteDetails.term = sharedProperties->configuration.currentTerm;
 
@@ -226,7 +224,7 @@ namespace Raft {
             std::shared_ptr<RaftMessageImpl> raftMessageImpl = std::make_shared<RaftMessageImpl>();
             std::shared_ptr<RaftMessage> raftMessage = std::make_shared<RaftMessage>();
             raftMessage->raftMessage = raftMessageImpl->DecodeMessage(buffer);
-            LogInfo("[Raft] Handler: receive message from %d\n", raftMessage->raftMessage->nodeId);
+            LogInfo("[Raft] Handler: receive message from ID: %d\n", raftMessage->raftMessage->nodeId);
             ReceiveMessage(raftMessage, raftMessage->raftMessage->nodeId);
         } catch (std::logic_error &error) {
             LogError("Caught %s\n", error.what())
