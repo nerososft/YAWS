@@ -11,6 +11,7 @@
 #define ASSERT_NEQ(left, right){ assert(left!=right); }
 #define ASSERT_TRUE(value){ assert(value); }
 #define ASSERT_FALSE(value){ assert(!value); }
+#define ASSERT_EQ_FLOAT(left, right) {assert(abs(left-right)<0.0001);}
 
 
 void should_encode_json() {
@@ -33,6 +34,9 @@ void should_encode_json() {
     Serialization::Json jsonInteger(10086);
     ASSERT_EQ(jsonInteger.ToString(), "10086");
 
+    Serialization::Json jsonInteger1(-10086);
+    ASSERT_EQ(jsonInteger1.ToString(), "-10086");
+
     Serialization::Json jsonFloat(3.1415926);
 //    ASSERT_EQ(jsonFloat.ToString(), "3.1415926");
 }
@@ -53,8 +57,22 @@ void should_decode_json() {
     Serialization::Json jsonInteger;
     ASSERT_EQ((int) jsonInteger.FromString("10086"), 10086);
 
+    Serialization::Json jsonInteger1;
+    ASSERT_EQ((int) jsonInteger1.FromString("-10086"), -10086);
+
     Serialization::Json jsonFloat;
-//    ASSERT_EQ((double) jsonFloat.FromString("3.1415926"), 3.1415926);
+    ASSERT_EQ_FLOAT((double) jsonFloat.FromString("3.1415926"), 3.1415926);
+
+    Serialization::Json jsonFloat1;
+    ASSERT_EQ_FLOAT((double) jsonFloat1.FromString("-3.1415926"), -3.1415926);
+
+    Serialization::Json jsonFloat3;
+    ASSERT_EQ_FLOAT((double) jsonFloat3.FromString("0.7"), 0.7);
+
+    Serialization::Json jsonFloat2;
+    ASSERT_EQ_FLOAT((double) jsonFloat2.FromString("3.14e-4"), 3.14e-4);
+
+
 }
 
 void should_encode_decode_raft_message() {
@@ -253,10 +271,10 @@ int main(int argc, char *argv[]) {
     TEST("should_encode_json", should_encode_json)
     TEST("should_decode_json", should_decode_json)
 //    TEST("should_encode_raft_message", should_encode_decode_raft_message)
-//    TEST("should_decode_http_message_header", should_decode_http_message_header)
-//    TEST("should_render_html_template", should_render_html_template)
-//    TEST("should_render_multi_html_template", should_render_multi_html_template)
-//    TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
-//    auto *bootstrap = new Bootstrap::RaftBootstrap();
-//    bootstrap->Run(argc, argv);
+    TEST("should_decode_http_message_header", should_decode_http_message_header)
+    TEST("should_render_html_template", should_render_html_template)
+    TEST("should_render_multi_html_template", should_render_multi_html_template)
+    TEST("should_render_multi_html_file_template", should_render_multi_html_file_template)
+    auto *bootstrap = new Bootstrap::RaftBootstrap();
+    bootstrap->Run(argc, argv);
 }
