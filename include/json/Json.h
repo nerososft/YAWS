@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include "../common/Common.h"
 
 namespace Serialization {
     class Json {
@@ -22,6 +23,14 @@ namespace Serialization {
 
         Json &operator=(Json &&) noexcept;
 
+        operator bool() const;
+
+        operator std::string() const;
+
+        operator int() const;
+
+        operator double() const;
+
     public:
         Json();
 
@@ -29,20 +38,28 @@ namespace Serialization {
 
         Json(bool value);
 
-        Json(const char* value);
+        Json(const char *value);
+
+        Json(int value);
+
+        Json(double value);
 
         Json(const std::string &value);
 
         bool operator==(const Json &other);
 
-        std::string ToString() const;
+        std::string ToString(const Common::EncodingOptions &options = Common::EncodingOptions()) const;
 
-        static Json FromString(const std::string &fromStr);
+        Json FromString(const std::string &fromStr);
 
     private:
         struct Impl;
 
         std::unique_ptr<struct Impl> impl;
+
+        Json ParseFloat(const std::string &str);
+
+        Json ParseInteger(const std::string &str);
     };
 }
 

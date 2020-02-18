@@ -7,30 +7,54 @@
 #include "include/json/Json.h"
 
 #define TEST(text, func){ PrintColor4(" [Test]: %s [TESTING]\n",text); func(); PrintColor3(" [Test]: %s [Ok]\n",text)}
+#define ASSERT_EQ(left, right){ assert(left==right); }
+#define ASSERT_NEQ(left, right){ assert(left!=right); }
+#define ASSERT_TRUE(value){ assert(value); }
+#define ASSERT_FALSE(value){ assert(!value); }
 
 
 void should_encode_json() {
-    Serialization::Json jsonNull;
-    assert(jsonNull.ToString() == "null");
+    Serialization::Json jsonNull(nullptr);
+    ASSERT_EQ(jsonNull.ToString(), "null")
+
     Serialization::Json jsonTrue(true);
-    assert(jsonTrue.ToString() == "true");
+    ASSERT_EQ(jsonTrue.ToString(), "true");
+    ASSERT_TRUE(Serialization::Json(true));
+
     Serialization::Json jsonFalse(false);
-    assert(jsonFalse.ToString() == "false");
+    ASSERT_EQ(jsonFalse.ToString(), "false");
+    ASSERT_FALSE(Serialization::Json(false));
+
     Serialization::Json jsonStr(std::string("hello, world"));
-    assert(jsonStr.ToString() == "\"hello, world\"");
+    ASSERT_EQ(jsonStr.ToString(), "\"hello, world\"");
     Serialization::Json jsonStr1("hello, world");
-    assert(jsonStr1.ToString() == "\"hello, world\"");
+    ASSERT_EQ(jsonStr1.ToString(), "\"hello, world\"");
+
+    Serialization::Json jsonInteger(10086);
+    ASSERT_EQ(jsonInteger.ToString(), "10086");
+
+    Serialization::Json jsonFloat(3.1415926);
+//    ASSERT_EQ(jsonFloat.ToString(), "3.1415926");
 }
 
 void should_decode_json() {
     Serialization::Json jsonNull;
-    assert(jsonNull.FromString("null") == nullptr);
+    ASSERT_EQ(jsonNull.FromString("null"), nullptr);
+
     Serialization::Json jsonTrue;
-    assert(jsonTrue.FromString("true") == true);
+    ASSERT_EQ((bool) jsonTrue.FromString("true"), true);
+
     Serialization::Json jsonFalse;
-    assert(jsonFalse.FromString("false") == false);
+    ASSERT_EQ((bool) jsonFalse.FromString("false"), false);
+
     Serialization::Json jsonStr;
-    assert(jsonStr.FromString("\"hello, world\"") == std::string("hello, world"));
+    ASSERT_EQ(jsonStr.FromString("\"hello, world\""), std::string("hello, world"));
+
+    Serialization::Json jsonInteger;
+    ASSERT_EQ((int) jsonInteger.FromString("10086"), 10086);
+
+    Serialization::Json jsonFloat;
+//    ASSERT_EQ((double) jsonFloat.FromString("3.1415926"), 3.1415926);
 }
 
 void should_encode_decode_raft_message() {
@@ -42,15 +66,15 @@ void should_encode_decode_raft_message() {
     raftMessage->contentLength = 1024;
 
     char *encodeMessage = raftMessage->EncodeMessage();
-    assert(*encodeMessage != '\0');
+    ASSERT_NEQ(*encodeMessage, '\0');
 
     std::shared_ptr<Raft::RaftMessageImpl> message = raftMessage->DecodeMessage(encodeMessage);
-    assert(message->type == Raft::Type::RequestVote);
-    assert(message->requestVoteDetails.candidateId == 2);
-    assert(message->requestVoteDetails.term == 2);
+    ASSERT_EQ(message->type, Raft::Type::RequestVote);
+    ASSERT_EQ(message->requestVoteDetails.candidateId, 2);
+    ASSERT_EQ(message->requestVoteDetails.term, 2);
     LogError("%d\n", message->nodeId)
-    assert(message->nodeId == 10086);
-    assert(message->contentLength == 1024);
+    ASSERT_EQ(message->nodeId, 10086);
+    ASSERT_EQ(message->contentLength, 1024);
 }
 
 void should_decode_http_message_header() {
@@ -68,17 +92,17 @@ void should_decode_http_message_header() {
 
     std::shared_ptr<Http::HttpMessageImpl> message = httpMessage->DecodeMessage(msg);
 
-    assert(message->request.httpMethod == Http::GET);
-    assert(message->request.uri == "/");
-    assert(message->request.protocol == "HTTP/1.1");
-    assert(message->request.header["Host"] == "192.241.213.46:6880");
-    assert(message->request.header["Upgrade-Insecure-Requests"] == "1");
-    assert(message->request.header["Accept"] == "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-    assert(message->request.header["User-Agent"] == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8");
-    assert(message->request.header["Accept-Language"] == "en-us");
-    assert(message->request.header["Accept-Encoding"] == "gzip, deflate");
-    assert(message->request.header["Connection"] == "keep-alive");
-    assert(message->request.body == "xxx");
+    ASSERT_EQ(message->request.httpMethod, Http::GET);
+    ASSERT_EQ(message->request.uri, "/");
+    ASSERT_EQ(message->request.protocol, "HTTP/1.1");
+    ASSERT_EQ(message->request.header["Host"], "192.241.213.46:6880");
+    ASSERT_EQ(message->request.header["Upgrade-Insecure-Requests"], "1");
+    ASSERT_EQ(message->request.header["Accept"], "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+    ASSERT_EQ(message->request.header["User-Agent"], "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8");
+    ASSERT_EQ(message->request.header["Accept-Language"], "en-us");
+    ASSERT_EQ(message->request.header["Accept-Encoding"], "gzip, deflate");
+    ASSERT_EQ(message->request.header["Connection"], "keep-alive");
+    ASSERT_EQ(message->request.body, "xxx");
 
 }
 
@@ -107,38 +131,38 @@ void should_render_html_template() {
     std::ostream sout(&buf);
     templateEngine.Render(sout);
 
-    assert(buf.str() == "<html xmlns=\"http://www.w3.org/1999/html\" xmlns=\"http://www.w3.org/1999/html\" lang=\"html\">\n"
-                        "<body>\n"
-                        "<p>Items:</p>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title1</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title2</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "    <div>\n"
-                        "        <p>Detail: detail2</p>\n"
-                        "    </div>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title3</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "    <div>\n"
-                        "        <p>Detail: detail3</p>\n"
-                        "    </div>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "</body>\n"
-                        "</html>\n");
+    ASSERT_EQ(buf.str(), "<html xmlns=\"http://www.w3.org/1999/html\" xmlns=\"http://www.w3.org/1999/html\" lang=\"html\">\n"
+                         "<body>\n"
+                         "<p>Items:</p>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title1</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title2</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "    <div>\n"
+                         "        <p>Detail: detail2</p>\n"
+                         "    </div>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title3</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "    <div>\n"
+                         "        <p>Detail: detail3</p>\n"
+                         "    </div>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "</body>\n"
+                         "</html>\n");
 }
 
 void should_render_multi_html_template() {
@@ -157,9 +181,9 @@ void should_render_multi_html_template() {
     std::ostream sout(&buf);
     templateEngine.Render(sout);
 
-    assert(buf.str() == "<div>my title</div>\n"
-                        "<p>Hi,I am nero yang</p>\n"
-                        "<p>Hello, World</p>");
+    ASSERT_EQ(buf.str(), "<div>my title</div>\n"
+                         "<p>Hi,I am nero yang</p>\n"
+                         "<p>Hello, World</p>");
 }
 
 void should_render_multi_html_file_template() {
@@ -188,40 +212,40 @@ void should_render_multi_html_file_template() {
     std::ostream sout(&buf);
     templateEngine.Render(sout);
 
-    assert(buf.str() == "<html xmlns=\"http://www.w3.org/1999/html\" xmlns=\"http://www.w3.org/1999/html\" lang=\"html\">\n"
-                        "<body>\n"
-                        "<p>Items:</p>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title1</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title2</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "    <div>\n"
-                        "        <p>Detail: detail2</p>\n"
-                        "    </div>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "<div>\n"
-                        "    <h4>Title: title3</h4>\n"
-                        "    <p>Text: Lorem Ipsum</p>\n"
-                        "    \n"
-                        "    <div>\n"
-                        "        <p>Detail: detail3</p>\n"
-                        "    </div>\n"
-                        "    \n"
-                        "</div>\n"
-                        "\n"
-                        "<p>Hi,I am nero yang</p>\n"
-                        "\n"
-                        "</body>\n"
-                        "</html>\n");
+    ASSERT_EQ(buf.str(), "<html xmlns=\"http://www.w3.org/1999/html\" xmlns=\"http://www.w3.org/1999/html\" lang=\"html\">\n"
+                         "<body>\n"
+                         "<p>Items:</p>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title1</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title2</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "    <div>\n"
+                         "        <p>Detail: detail2</p>\n"
+                         "    </div>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "<div>\n"
+                         "    <h4>Title: title3</h4>\n"
+                         "    <p>Text: Lorem Ipsum</p>\n"
+                         "    \n"
+                         "    <div>\n"
+                         "        <p>Detail: detail3</p>\n"
+                         "    </div>\n"
+                         "    \n"
+                         "</div>\n"
+                         "\n"
+                         "<p>Hi,I am nero yang</p>\n"
+                         "\n"
+                         "</body>\n"
+                         "</html>\n");
 }
 
 

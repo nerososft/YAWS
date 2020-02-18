@@ -17,9 +17,14 @@ namespace Common {
 
     std::string &Trim(std::string &str);
 
-    std::string &Escape(const std::string &str);
 
-    std::string &UnEscape(const std::string &str);
+    struct EncodingOptions {
+        bool escapeNonAscii = false;
+    };
+
+    std::string Escape(const std::string &str, const EncodingOptions &options);
+
+    std::string UnEscape(const std::string &str);
 
     void WriteMem(char *mem, uint32_t offset, char value);
 
