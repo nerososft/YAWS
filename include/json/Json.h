@@ -11,15 +11,23 @@
 #include "../common/Common.h"
 
 namespace Serialization {
+    enum class Type {
+        INVALID,
+        Null,
+        Boolean,
+        String,
+        Integer,
+        Float,
+        Array,
+    };
+
     class Json {
     public:
         ~Json() noexcept;
 
-        Json(const Json &) = delete;
-
         Json(Json &&) noexcept;
 
-        Json &operator=(const Json &) = delete;
+        Json &operator=(const Json &) = default;
 
         Json &operator=(Json &&) noexcept;
 
@@ -46,11 +54,19 @@ namespace Serialization {
 
         Json(const std::string &value);
 
+        Json(std::vector<std::shared_ptr<Json>> arrayValue);
+
         bool operator==(const Json &other);
 
         std::string ToString(const Common::EncodingOptions &options = Common::EncodingOptions()) const;
 
         Json FromString(const std::string &fromStr);
+
+        Type GetType() const;
+
+        size_t GetSize() const;
+
+        std::shared_ptr<Json> operator[](size_t index) const;
 
     private:
         struct Impl;
@@ -60,6 +76,10 @@ namespace Serialization {
         Json ParseFloat(const std::string &str);
 
         Json ParseInteger(const std::string &str);
+
+        Json ParseArray(const std::string &str);
+
+        std::string ParseValueStr(const std::string &str, size_t &offset);
     };
 }
 

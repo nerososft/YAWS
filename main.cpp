@@ -72,7 +72,16 @@ void should_decode_json() {
     Serialization::Json jsonFloat2;
     ASSERT_EQ_FLOAT((double) jsonFloat2.FromString("3.14e-4"), 3.14e-4);
 
-
+    Serialization::Json jsonArray;
+    const Serialization::Json &json = jsonArray.FromString("[1,\"hello\",true]");
+    ASSERT_EQ(json.GetType(), Serialization::Type::Array);
+    ASSERT_EQ(json.GetSize(), 3);
+    ASSERT_EQ(json[0]->GetType(), Serialization::Type::Integer);
+    ASSERT_EQ((int) *json[0], 1);
+    ASSERT_EQ(json[1]->GetType(), Serialization::Type::String);
+    ASSERT_EQ((std::string) *json[1], "hello");
+    ASSERT_EQ(json[2]->GetType(), Serialization::Type::Boolean);
+    ASSERT_EQ((bool) *json[2], true);
 }
 
 void should_encode_decode_raft_message() {

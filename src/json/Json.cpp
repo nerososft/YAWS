@@ -4,18 +4,11 @@
 #include "../../include/json/Json.h"
 
 #include <cmath>
+#include <utility>
+#include <vector>
+#include <stack>
 
 namespace Serialization {
-
-    enum class Type {
-        INVALID,
-        Null,
-        Boolean,
-        String,
-        Integer,
-        Float,
-    };
-
     struct Json::Impl {
         Type type = Type::INVALID;
 
@@ -24,6 +17,7 @@ namespace Serialization {
             std::string *strValue;
             int intValue;
             double floatValue;
+            std::vector<std::shared_ptr<Json>> *arrayValue;
         };
 
 
@@ -31,6 +25,10 @@ namespace Serialization {
             switch (type) {
                 case Type::String:
                     delete strValue;
+                    break;
+
+                case Type::Array:
+                    delete arrayValue;
                     break;
                 default:
                     break;
@@ -83,6 +81,11 @@ namespace Serialization {
         impl->floatValue = value;
     }
 
+    Json::Json(std::vector<std::shared_ptr<Json>> arrayValue) : impl(new Impl) {
+        impl->type = Type::Array;
+        impl->arrayValue = new std::vector<std::shared_ptr<Json>>(std::move(arrayValue));
+    }
+
     bool Json::operator==(const Json &other) {
         if (impl->type != other.impl->type) {
             return false;
@@ -109,8 +112,8 @@ namespace Serialization {
             return Json();
         } else if (fromStr[0] == '{') {
             return Json(); // TODO : parse Object
-        } else if (fromStr[0] == '[') {
-            return Json(); // TODO : parse Array
+        } else if (fromStr[0] == '[' && fromStr[fromStr.length() - 1] == ']') {
+            return ParseArray(fromStr.substr(1, fromStr.length() - 2));
         } else if (fromStr[0] == '"' && fromStr[fromStr.length() - 1] == '"') {
             return Common::UnEscape(fromStr.substr(1, fromStr.length() - 2));
         } else if (fromStr == "null") {
@@ -127,6 +130,59 @@ namespace Serialization {
             }
         }
     }
+
+    Json Json::ParseArray(const std::string &str) {
+        std::vector<std::shared_ptr<Json>> newArrayValue;
+        size_t offset = 0;
+        while (offset < str.length()) {
+            const auto valueStr = ParseValueStr(str, offset);
+            if (offset == std::string::npos) {
+                break;
+            }
+            newArrayValue.push_back(std::make_shared<Json>(FromString(valueStr)));
+        }
+        return Json(newArrayValue);
+    }
+
+    std::string Json::ParseValueStr(const std::string &str, size_t &offset) {
+        std::stack<char> expectedDelimiters;
+        std::vector<char> values;
+        auto ss = str.substr(offset);
+        if (ss.empty()) {
+            offset = std::string::npos;
+            return "";
+        }
+        bool isInsideStr = false;
+        for (const auto ch:ss) {
+            values.push_back(ch);
+            if (!expectedDelimiters.empty() && ch == expectedDelimiters.top()) {
+                isInsideStr = false;
+                expectedDelimiters.pop();
+                continue;
+            }
+            if (!isInsideStr) {
+                if (ch == '\"') {
+                    isInsideStr = true;
+                    expectedDelimiters.push('\"');
+                } else if (ch == '[') {
+                    expectedDelimiters.push(']');
+                } else if (ch == ',' && expectedDelimiters.empty()) {
+                    break;
+                }
+            }
+        }
+
+        if (expectedDelimiters.empty()) {
+            offset += values.size();
+            if (values.back() == ',') {
+                values.pop_back();
+            }
+            return std::string(values.begin(), values.end());
+        }
+
+        return "";
+    }
+
 
     Json Json::ParseFloat(const std::string &str) {
         enum ParseState {
@@ -345,4 +401,23 @@ namespace Serialization {
         }
         return 0;
     }
+
+    Type Json::GetType() const {
+        return this->impl->type;
+    }
+
+    size_t Json::GetSize() const {
+        if (this->impl->type == Type::Array) {
+            return this->impl->arrayValue->size();
+        }
+        return 0;
+    }
+
+    std::shared_ptr<Json> Json::operator[](size_t index) const {
+        if (this->impl->type == Type::Array) {
+            return (*this->impl->arrayValue)[index];
+        }
+        return std::shared_ptr<Json>();
+    }
+
 }
