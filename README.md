@@ -84,4 +84,4 @@ Http::HandlerResponse App::HelloWorldApp::sayHelloWorld(Http::HttpRequest reques
     }
 }
 ```
-more complex template pls see the code.
+more complex template plsease see the code.
