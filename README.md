@@ -1,14 +1,11 @@
-# YaRaft
-Yet Another Raft Implement
-
-[What is Raft?](https://raft.github.io/)
+# YAWS
+Yet Another Web Server
 
 ![C/C++ CI](https://github.com/nerososft/YaRaft/workflows/C/C++%20CI/badge.svg)
 
-Not just Raft.
+Not just Web Server.
 
-## Dashboard
-get RaftServer status form broswer
+## Test
 ```
 http://localhost:8899/dashboard
 ```
